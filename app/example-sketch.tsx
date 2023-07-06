@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Image } from 'p5'
+import { Image, Renderer } from 'p5'
 
 import useStatefulSketch from './p5/useStatefulSketch'
 import SketchRenderer from './p5/SketchRenderer'
@@ -23,6 +23,7 @@ export default function ExampleSketch() {
     const emoji = p.random(['🤓', '🤔', '🤡'])
     const url = `https://emojicdn.elk.sh/${emoji}?style=google`
 
+    let canvas: Renderer
     let img: Image
 
     p.preload = function () {
@@ -30,7 +31,10 @@ export default function ExampleSketch() {
     }
 
     p.setup = function () {
-      p.createCanvas(w, h)
+      canvas = p.createCanvas(w, h)
+      canvas.mouseClicked(function () {
+        setSize(50)
+      })
     }
 
     p.draw = function () {
@@ -40,6 +44,11 @@ export default function ExampleSketch() {
       p.imageMode(p.CENTER)
       p.image(img, w / 2, h / 2, s, s)
     }
+
+    // non va bene perchè il listener è su window e non sull'elemento dello sketch
+    // p.mouseClicked = function () {
+    //   setSize(50)
+    // }
   })
 
   return (
