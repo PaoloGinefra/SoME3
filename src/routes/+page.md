@@ -1,5 +1,6 @@
 <script>
   import ExampleSketch from './example-sketch.svelte'
+  import ExampleSketchVanilla from './ExampleSketchVanilla.svelte'
 </script>
 
 # Titolo
@@ -10,6 +11,8 @@ testo testo testo
 - punto 2
 - punto 3
 
+# Sketch con p5
+
 ## Primo sketch
 
 <ExampleSketch />
@@ -17,3 +20,11 @@ testo testo testo
 ## Secondo sketch
 
 <ExampleSketch />
+
+## Sketch con canvas vanilla
+
+<ExampleSketchVanilla />
+
+## Secondo sketch
+
+<ExampleSketchVanilla />
