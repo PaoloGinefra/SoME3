@@ -45,25 +45,25 @@ let KochFlake_LSys: LSystem = {
   ,
   drawingRules: [
     {
-      targetChar: "F",
+      targetChars: "F",
       drawing: (params, p, t = 1) => {
         let k = params[0] * 3 / 2;
         let l = k / (1 + Math.cos(p.PI / 3 * t))
         l = params[0];
-        p.stroke(0, 0, 0, 255)
+        p.stroke('#0070A9')
         p.strokeWeight(1);
         p.line(0, 0, l, 0);
         p.translate(l, 0);
       }
     },
     {
-      targetChar: "+",
+      targetChars: "+",
       drawing: (params, p, t: number = 1) => {
         p.rotate(p.PI / 3 * t);
       }
     },
     {
-      targetChar: "-",
+      targetChars: "-",
       drawing: (params, p, t: number = 1) => {
         p.rotate(-p.PI / 3 * t);
       }
