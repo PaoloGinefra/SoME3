@@ -13,7 +13,7 @@ export interface Production{
 
 export interface DrawingRule{
     targetChar: string;
-    drawing: (params: number[], p : p5) => void;
+    drawing: (params: number[], p : p5, t?:number) => void;
 }
 
 export interface LSystem{

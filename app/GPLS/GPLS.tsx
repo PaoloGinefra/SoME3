@@ -70,13 +70,45 @@ export default class GPLS{
         return newString;
     }
 
-    static drawString(p:p5, string: Symbol[], drawingRules: DrawingRule[]){
+    /**
+     * Draws a string
+     * @param p
+     * @param string
+     * @param drawingRules
+     * @returns
+     */
+    static drawString(p:p5, string: Symbol[], drawingRules: DrawingRule[], t:number = 1){
+        let stepOffset = 1
+        let offset = -stepOffset;
+
+        let offsetPeriod = 1
         for(let i = 0; i < string.length; i++){
+            let symbol = string[i];
+            if(symbol.char == '(')
+                offset+= stepOffset;
+            else if(symbol.char == ')')
+                offset-= stepOffset;
+
+            for(let j = 0; j < drawingRules.length; j++){
+                let drawingRule = drawingRules[j];
+                if(symbol.char == drawingRule.targetChar){
+                    drawingRule.drawing(symbol.params, p, p.constrain(t - offset, 0, 1));
+                    break;
+                }
+            }
+
+            offset += offsetPeriod * 5 / string.length;
+        }
+    }
+
+    static drawStringGradually(p:p5, string: Symbol[], drawingRules: DrawingRule[], t : number = 1){
+        t = Math.min(t, string.length);
+        for(let i = 0; i < t; i++){
             let symbol = string[i];
             for(let j = 0; j < drawingRules.length; j++){
                 let drawingRule = drawingRules[j];
                 if(symbol.char == drawingRule.targetChar){
-                    drawingRule.drawing(symbol.params, p);
+                    drawingRule.drawing(symbol.params, p, t);
                     break;
                 }
             }
