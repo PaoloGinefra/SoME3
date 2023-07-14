@@ -24,5 +24,17 @@
   },
   "devDependencies": {
     "@types/p5": "^1.6.2"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaoloGinefra/SoME3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaoloGinefra/SoME3/issues"
+  },
+  "homepage": "https://github.com/PaoloGinefra/SoME3#readme"
 }
