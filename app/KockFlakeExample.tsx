@@ -12,6 +12,8 @@ import type p5 from 'p5'
 import GPLS from './GPLS/GPLS'
 import { Symbol, Production, DrawingRule, LSystem } from './GPLS/GPLS_interfaces'
 
+import Grid from './utils/Grid'
+
 let KochFlake_LSys: LSystem = {
   axiom: [
     { char: "F", params: [400] },
@@ -71,16 +73,6 @@ let KochFlake_LSys: LSystem = {
   ]
 }
 
-function drawGrid(p: p5, gridSize: number, w: number, h: number) {
-  for (let x = 0; x < w; x += gridSize) {
-    for (let y = 0; y < h; y += gridSize) {
-      p.stroke(0, 0, 0, 20)
-      p.strokeWeight(2)
-      p.point(x, y)
-    }
-  }
-}
-
 export default function KochFlake() {
   const sketch = useStatefulSketch({}, (state, p) => {
     const w = 700
@@ -92,10 +84,18 @@ export default function KochFlake() {
 
     let String: Symbol[] = KochFlake_LSys.axiom
 
-    let gridSize = 10;
+    let grid = new Grid(w, h, 20, 0.2, 0.1, p);
+
+
+    p.preload = function () {
+      grid.preload();
+    }
 
     p.setup = function () {
       canvas = p.createCanvas(w, h)
+      grid.setup();
+
+
       p.background(251, 234, 205)
       p.translate(50, h / 2)
       GPLS.drawString(p, String, KochFlake_LSys.drawingRules);
@@ -118,7 +118,7 @@ export default function KochFlake() {
 
     p.draw = function () {
       p.background(251, 234, 205)
-      drawGrid(p, gridSize, w, h)
+      grid.draw();
       p.translate(50, h - 50)
       p.push()
       GPLS.drawString(p, String, KochFlake_LSys.drawingRules, t);
