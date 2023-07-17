@@ -58,7 +58,7 @@ export default class Grid {
     draw() {
         this.screen.clear(0, 0, 0, 0);
         this.shader.setUniform('u_resolution', [this.w, this.h]);
-        this.shader.setUniform('u_gridSize', this.gridSize);
+        this.shader.setUniform('u_gridSize', this.gridSize * 2);
         this.shader.setUniform('u_dotSize', this.dotSize);
         this.shader.setUniform('u_dotOpacity', this.dotOpacity);
         this.screen.shader(this.shader);
