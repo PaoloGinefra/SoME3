@@ -10,7 +10,7 @@ import classes from '../Examples/example-sketch.module.css'
 
 import type p5 from 'p5'
 import Grid from '../utils/Grid'
-import { Console } from 'console'
+import GPLS from '../GPLS/GPLS'
 
 export default function L_Maker() {
 
@@ -41,6 +41,8 @@ export default function L_Maker() {
 
             canvas.mouseClicked(function () {
                 points.push(p.createVector(quantizeCoord(p.mouseX), quantizeCoord(p.mouseY)))
+                let s = GPLS.pointSequence2Axiom(points)
+                GPLS.printString(s)
             })
         }
 

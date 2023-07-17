@@ -114,4 +114,16 @@ export default class GPLS {
             }
         }
     }
+
+    static pointSequence2Axiom(pointSequence: p5.Vector[]): Symbol[] {
+        let axiom: Symbol[] = [];
+        let prevHeading = 0;
+        for (let i = 1; i < pointSequence.length; i++) {
+            let v = pointSequence[i].copy().sub(pointSequence[i - 1]);
+            axiom.push({ char: '+', params: [v.heading() - prevHeading] });
+            axiom.push({ char: 'F', params: [v.mag()] });
+            prevHeading = v.heading();
+        }
+        return axiom;
+    }
 }
