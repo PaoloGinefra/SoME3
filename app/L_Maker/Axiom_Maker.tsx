@@ -13,13 +13,19 @@ import Grid from '../utils/Grid'
 import GPLS from '../GPLS/GPLS'
 import { Symbol, Production, DrawingRule, LSystem } from "../GPLS/GPLS_interfaces";
 
+import ModeButton from './Inreface/ModeButtons'
+import Modes from './Inreface/Modes'
+import { stat } from 'fs'
+
 interface Axiom_Maker_State {
     axiom: Symbol[];
     setAxiom: (s: Symbol[]) => void;
 }
 
 export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
-    const sketch = useStatefulSketch({ axiom }, (state, p) => {
+    const [mode, setMode] = useState<string>('Move');
+
+    const sketch = useStatefulSketch({ axiom, mode }, (state, p) => {
         const w = 800
         const h = 500
         const gridSize = 10
@@ -30,6 +36,23 @@ export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
         let points: p5.Vector[] = [];
 
         let pointColor = p.color('#4b8b2f60');
+
+        const modesFunctions: any = {
+            'MouseClick': {
+                'Add': () => {
+                    points.push(p.createVector(quantizeCoord(p.mouseX), quantizeCoord(p.mouseY)))
+                    let s = GPLS.pointSequence2String(points)
+                    setAxiom(s);
+                },
+            },
+            'Draw': {
+                'Clear': () => {
+                    points = []
+                    setAxiom([])
+                }
+            }
+        }
+
 
         function quantizeCoord(x: number) {
             return Math.round(x / gridSize) * gridSize;
@@ -44,16 +67,17 @@ export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
             grid.setup()
 
             canvas.mouseClicked(function () {
-                points.push(p.createVector(quantizeCoord(p.mouseX), quantizeCoord(p.mouseY)))
-                let s = GPLS.pointSequence2String(points)
-                setAxiom(s);
-                GPLS.printString(state.current.axiom);
+                if (state.current.mode in modesFunctions['MouseClick'])
+                    modesFunctions['MouseClick'][state.current.mode]();
             })
         }
 
         p.draw = function () {
             p.background(251, 234, 205)
             grid.draw()
+
+            if (state.current.mode in modesFunctions['Draw'])
+                modesFunctions['Draw'][state.current.mode]();
 
 
             //draw lines between points
@@ -86,6 +110,7 @@ export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
     return (
         <div className={classes['container']}>
             <SketchRenderer sketch={sketch} />
+            <ModeButton mode={mode} setMode={setMode} />
         </div>
     )
 }
