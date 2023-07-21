@@ -78,6 +78,8 @@ export default class GPLS {
      * @returns
      */
     static drawString(p: p5, string: Symbol[], drawingRules: DrawingRule[], t: number = 1) {
+        if (string.length == 0) return;
+
         let stepOffset = 1
         let offset = -stepOffset;
 
@@ -115,7 +117,7 @@ export default class GPLS {
         }
     }
 
-    static pointSequence2Axiom(pointSequence: p5.Vector[]): Symbol[] {
+    static pointSequence2String(pointSequence: p5.Vector[]): Symbol[] {
         let axiom: Symbol[] = [];
         let prevHeading = 0;
         for (let i = 1; i < pointSequence.length; i++) {
