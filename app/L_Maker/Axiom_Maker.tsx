@@ -36,26 +36,91 @@ export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
         let points: p5.Vector[] = [];
 
         let pointColor = p.color('#4b8b2f60');
+        let deletePointColor = p.color('#a53f3f60');
+        let editColor = p.color('#a3c6c260');
+
+        let touchPoint = p.createVector(0, 0)
+        let isHolding = false
+
+        let selected = -1
+
+        let offset = p.createVector(0, 0)
+        let scale = 1
 
         const modesFunctions: any = {
             'MouseClick': {
                 'Add': () => {
-                    points.push(p.createVector(quantizeCoord(p.mouseX), quantizeCoord(p.mouseY)))
+                    points.push(p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)))
                     let s = GPLS.pointSequence2String(points)
                     setAxiom(s);
                 },
+                'Delete': () => {
+                    let id = getPointIdFromMouse()
+                    console.log(id)
+                    if (id != -1) {
+                        points.splice(id, 1)
+                        let s = GPLS.pointSequence2String(points)
+                        setAxiom(s);
+                    }
+                }
+            },
+            'MouseReleased': {
+                'Move': () => {
+                    isHolding = false
+                },
+                'Edit': () => {
+                    selected = -1
+                }
+            },
+            'MousePressed': {
+                'Move': () => {
+                    touchPoint = p.createVector(p.mouseX, p.mouseY)
+                    isHolding = true
+                },
+                'Edit': () => {
+                    let id = getPointIdFromMouse();
+                    if (id != -1) {
+                        selected = id
+                    }
+                }
+            },
+            'MouseOut': {
+                'Move': () => {
+                    isHolding = false
+                },
+                'Edit': () => {
+                    selected = -1
+                }
             },
             'Draw': {
                 'Clear': () => {
                     points = []
                     setAxiom([])
-                }
+                    offset = p.createVector(0, 0)
+                },
+                'Move': () => {
+                    if (isHolding) {
+                        offset.add(p.createVector(p.mouseX, p.mouseY).sub(touchPoint))
+                        touchPoint = p.createVector(p.mouseX, p.mouseY)
+                    }
+                },
+                'Edit': () => {
+                    if (selected != -1) {
+                        points[selected] = p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
+                        let s = GPLS.pointSequence2String(points)
+                        setAxiom(s);
+                    }
+                },
             }
         }
 
 
         function quantizeCoord(x: number) {
             return Math.round(x / gridSize) * gridSize;
+        }
+
+        function getPointIdFromMouse() {
+            return points.findIndex(point => point.x == quantizeCoord(p.mouseX - offset.x) && point.y == quantizeCoord(p.mouseY - offset.y))
         }
 
         p.preload = function () {
@@ -70,11 +135,29 @@ export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
                 if (state.current.mode in modesFunctions['MouseClick'])
                     modesFunctions['MouseClick'][state.current.mode]();
             })
+
+            canvas.mousePressed(function () {
+                if (state.current.mode in modesFunctions['MousePressed'])
+                    modesFunctions['MousePressed'][state.current.mode]();
+            })
+
+            canvas.mouseReleased(function () {
+                if (state.current.mode in modesFunctions['MouseReleased'])
+                    modesFunctions['MouseReleased'][state.current.mode]();
+            })
+
+            canvas.mouseOut(function () {
+                if (state.current.mode in modesFunctions['MouseOut'])
+                    modesFunctions['MouseOut'][state.current.mode]();
+            })
         }
 
         p.draw = function () {
             p.background(251, 234, 205)
-            grid.draw()
+            grid.draw(offset, scale)
+
+            p.translate(offset.x, offset.y)
+            p.scale(scale)
 
             if (state.current.mode in modesFunctions['Draw'])
                 modesFunctions['Draw'][state.current.mode]();
@@ -87,9 +170,9 @@ export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
                 p.line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y)
             }
 
-            if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h && points.length > 0) {
+            if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h && points.length > 0 && state.current.mode == 'Add') {
                 //draw faded line between last point and mouse
-                p.line(points[points.length - 1].x, points[points.length - 1].y, quantizeCoord(p.mouseX), quantizeCoord(p.mouseY))
+                p.line(points[points.length - 1].x, points[points.length - 1].y, quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
             }
 
 
@@ -100,17 +183,23 @@ export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
                 p.circle(point.x, point.y, gridSize)
             })
 
+            //draw faded point at mouse
+            if (state.current.mode == 'Delete')
+                p.stroke(deletePointColor)
+            else if (state.current.mode == 'Edit')
+                p.stroke(editColor)
+
             if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h) {
                 //draw faded point at mouse
-                p.circle(quantizeCoord(p.mouseX), quantizeCoord(p.mouseY), gridSize)
+                p.circle(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y), gridSize)
             }
         }
     })
 
     return (
         <div className={classes['container']}>
-            <SketchRenderer sketch={sketch} />
             <ModeButton mode={mode} setMode={setMode} />
+            <SketchRenderer sketch={sketch} />
         </div>
     )
 }

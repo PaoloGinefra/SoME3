@@ -52,10 +52,12 @@ export default function L_Maker() {
 
 
     return (
-        <div className={classes['container']} onClick={() => setIterations(iterations + 1)} onMouseLeave={() => setIterations(1)}>
+        <div className={classes['container']}
+            onClick={() => { }}//setIterations(iterations + 1)}
+            onMouseLeave={() => setIterations(1)}>
             <Axiom_Maker axiom={axiom} setAxiom={setAxiom} />
             <Production_Maker productions={productions} setProductions={setProductions} />
             <L_Renderer string={String_} drawingRules={drawingRules} />
-        </div>
+        </ div>
     )
 }

@@ -55,12 +55,14 @@ export default class Grid {
     /**
      * Draws the grid
      */
-    draw() {
+    draw(offset: p5.Vector = this.p.createVector(0, 0), scale: number = 1) {
         this.screen.clear(0, 0, 0, 0);
         this.shader.setUniform('u_resolution', [this.w, this.h]);
         this.shader.setUniform('u_gridSize', this.gridSize * 2);
         this.shader.setUniform('u_dotSize', this.dotSize);
         this.shader.setUniform('u_dotOpacity', this.dotOpacity);
+        this.shader.setUniform('u_offset', offset.array());
+        this.shader.setUniform('u_scale', scale);
         this.screen.shader(this.shader);
         this.screen.strokeWeight(0);
         this.screen.rect(0, 0, this.w, this.h);
