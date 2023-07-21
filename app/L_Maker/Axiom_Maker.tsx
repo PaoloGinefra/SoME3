@@ -27,8 +27,7 @@ export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
         let canvas: Renderer
         let grid = new Grid(w, h, gridSize, 0.2, 0.1, p);
 
-        let startingPoint: p5.Vector = p.createVector(w / 2, h / 2);
-        let points: p5.Vector[] = [startingPoint];
+        let points: p5.Vector[] = [];
 
         let pointColor = p.color('#4b8b2f60');
 
@@ -64,19 +63,15 @@ export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
                 p.line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y)
             }
 
-            if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h) {
+            if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h && points.length > 0) {
                 //draw faded line between last point and mouse
                 p.line(points[points.length - 1].x, points[points.length - 1].y, quantizeCoord(p.mouseX), quantizeCoord(p.mouseY))
             }
 
-            //draw starting position as a square
-            p.fill(0)
-            p.rectMode(p.CENTER)
-            p.fill(pointColor)
-            p.strokeWeight(0)
-            p.square(startingPoint.x, startingPoint.y, 10)
 
             //draw all points
+            p.strokeWeight(gridSize)
+            p.stroke(pointColor)
             points.forEach(point => {
                 p.circle(point.x, point.y, gridSize)
             })
