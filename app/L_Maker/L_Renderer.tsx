@@ -12,6 +12,7 @@ import type p5 from 'p5'
 import Grid from '../utils/Grid'
 import GPLS from '../GPLS/GPLS'
 import { Symbol, Production, DrawingRule, LSystem } from "../GPLS/GPLS_interfaces";
+import { off } from 'process'
 
 interface L_Renderer_State {
     string: Symbol[];
@@ -28,6 +29,11 @@ export default function L_Renderer({ string, drawingRules }: L_Renderer_State) {
         let grid = new Grid(w, h, gridSize, 0.2, 0.1, p);
 
         let startingPoint: p5.Vector = p.createVector(w / 2, h / 2);
+        let offset = p.createVector(0, 0)
+        let scale = 1
+
+        let touchPoint = p.createVector(0, 0)
+        let isHolding = false;
 
         p.preload = function () {
             grid.preload()
@@ -36,12 +42,29 @@ export default function L_Renderer({ string, drawingRules }: L_Renderer_State) {
         p.setup = function () {
             canvas = p.createCanvas(w, h)
             grid.setup()
+
+            canvas.mousePressed(() => {
+                touchPoint = p.createVector(p.mouseX, p.mouseY)
+                isHolding = true
+            })
+
+            canvas.mouseReleased(() => {
+                isHolding = false
+            })
+
+            canvas.mouseOut(() => {
+                isHolding = false
+            })
         }
 
         p.draw = function () {
             p.background(251, 234, 205)
-            grid.draw()
-            p.translate(startingPoint.x, startingPoint.y);
+            if (isHolding) {
+                offset.add(p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y))
+                touchPoint = p.createVector(p.mouseX, p.mouseY)
+            }
+            grid.draw(offset, scale)
+            p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y);
             GPLS.drawString(p, state.current.string, drawingRules);
         }
     })
