@@ -39,7 +39,7 @@ export default function L_Maker() {
 
     const [String_, setString] = useState<Symbol[]>([]);
 
-    const [iterations, setIterations] = useState<number>(-1);
+    const [iterations, setIterations] = useState<number>(5);
 
     useEffect(() => {
         let string = axiom
@@ -54,10 +54,10 @@ export default function L_Maker() {
     return (
         <div className={classes['container']}
             onClick={() => { }}//setIterations(iterations + 1)}
-            onMouseLeave={() => setIterations(1)}>
+            onMouseLeave={() => setIterations(iterations)}>
             <Axiom_Maker axiom={axiom} setAxiom={setAxiom} />
             <Production_Maker productions={productions} setProductions={setProductions} />
             <L_Renderer string={String_} drawingRules={drawingRules} />
-        </ div>
+        </ div >
     )
 }

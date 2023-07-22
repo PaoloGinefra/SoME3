@@ -122,8 +122,10 @@ export default class GPLS {
         let prevHeading = 0;
         for (let i = 1; i < pointSequence.length; i++) {
             let v = pointSequence[i].copy().sub(pointSequence[i - 1]);
-            axiom.push({ char: '+', params: [v.heading() - prevHeading] });
-            axiom.push({ char: 'F', params: [v.mag()] });
+            if (v.heading() - prevHeading != 0)
+                axiom.push({ char: '+', params: [v.heading() - prevHeading] });
+            if (v.mag() != 0)
+                axiom.push({ char: 'F', params: [v.mag()] });
             prevHeading = v.heading();
         }
         return axiom;
