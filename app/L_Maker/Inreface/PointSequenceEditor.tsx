@@ -17,7 +17,13 @@ import ModeButton from './ModeButtons'
 import Modes from './Modes'
 
 interface PointSequenceEditor_State {
-    handleSequence: (p: p5, s: p5.Vector[]) => void;
+    handleSequence: (p: p5, s: Point[]) => void;
+}
+
+export interface Point {
+    position: p5.Vector;
+    push: boolean;
+    pop: boolean;
 }
 
 export default function PointSequenceEditor({ handleSequence }: PointSequenceEditor_State) {
@@ -31,7 +37,7 @@ export default function PointSequenceEditor({ handleSequence }: PointSequenceEdi
         let canvas: Renderer
         let grid = new Grid(w, h, gridSize, 0.2, 0.1, p);
 
-        let points: p5.Vector[] = [];
+        let points: Point[] = [];
 
         let pointColor = p.color('#4b8b2f60');
         let deletePointColor = p.color('#a53f3f60');
@@ -48,7 +54,13 @@ export default function PointSequenceEditor({ handleSequence }: PointSequenceEdi
         const modesFunctions: any = {
             'MouseClick': {
                 'Add': () => {
-                    points.push(p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)))
+                    points.push(
+                        {
+                            position: p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)),
+                            push: false,
+                            pop: false
+                        }
+                    )
                     handleSequence(p, points);
                 },
                 'Delete': () => {
@@ -58,7 +70,21 @@ export default function PointSequenceEditor({ handleSequence }: PointSequenceEdi
                         points.splice(id, 1)
                         handleSequence(p, points);
                     }
-                }
+                },
+                'Stack push': () => {
+                    let id = getPointIdFromMouse()
+                    if (id != -1) {
+                        points[id].push = !points[id].push
+                        handleSequence(p, points);
+                    }
+                },
+                'Stack pop': () => {
+                    let id = getPointIdFromMouse()
+                    if (id != -1) {
+                        points[id].pop = !points[id].pop
+                        handleSequence(p, points);
+                    }
+                },
             },
             'MouseReleased': {
                 'Move': () => {
@@ -102,7 +128,7 @@ export default function PointSequenceEditor({ handleSequence }: PointSequenceEdi
                 },
                 'Edit': () => {
                     if (selected != -1) {
-                        points[selected] = p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
+                        points[selected].position = p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
                         handleSequence(p, points);
                     }
                 },
@@ -115,7 +141,7 @@ export default function PointSequenceEditor({ handleSequence }: PointSequenceEdi
         }
 
         function getPointIdFromMouse() {
-            return points.findIndex(point => point.x == quantizeCoord(p.mouseX - offset.x) && point.y == quantizeCoord(p.mouseY - offset.y))
+            return points.findIndex(point => point.position.x == quantizeCoord(p.mouseX - offset.x) && point.position.y == quantizeCoord(p.mouseY - offset.y))
         }
 
         p.preload = function () {
@@ -161,21 +187,44 @@ export default function PointSequenceEditor({ handleSequence }: PointSequenceEdi
             //draw lines between points
             p.strokeWeight(gridSize / 2)
             p.stroke(0, 0, 0, 100)
-            for (let i = 0; i < points.length - 1; i++) {
-                p.line(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y)
+            let Stack: p5.Vector[] = []
+            for (let i = 1; i < points.length; i++) {
+                if (points[i].push) {
+                    Stack.push(points[i].position)
+                }
+                if (points[i - 1].pop) {
+                    let p1 = Stack.pop() ?? p.createVector(0, 0);
+                    let p2 = points[i].position
+                    if (p1 != undefined) {
+                        p.line(p1.x, p1.y, p2.x, p2.y)
+                    }
+                }
+                else
+                    p.line(points[i].position.x, points[i].position.y, points[i - 1].position.x, points[i - 1].position.y)
             }
 
             if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h && points.length > 0 && state.current.mode == 'Add') {
                 //draw faded line between last point and mouse
-                p.line(points[points.length - 1].x, points[points.length - 1].y, quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
+                p.line(points[points.length - 1].position.x, points[points.length - 1].position.y, quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
             }
 
 
             //draw all points
-            p.strokeWeight(gridSize)
-            p.stroke(pointColor)
             points.forEach(point => {
-                p.circle(point.x, point.y, gridSize)
+                if (point.push) {
+                    p.stroke(0, 0, 0, 100)
+                    p.strokeWeight(gridSize / 2)
+                    p.arc(point.position.x, point.position.y, 2 * gridSize, 2 * gridSize, p.PI / 2, p.PI * 3 / 2)
+                }
+                if (point.pop) {
+                    p.stroke(0, 0, 0, 100)
+                    p.strokeWeight(gridSize / 2)
+                    p.arc(point.position.x, point.position.y, 2 * gridSize, 2 * gridSize, p.PI * 3 / 2, p.PI / 2)
+                }
+
+                p.strokeWeight(gridSize)
+                p.stroke(pointColor)
+                p.circle(point.position.x, point.position.y, gridSize)
             })
 
             //draw faded point at mouse

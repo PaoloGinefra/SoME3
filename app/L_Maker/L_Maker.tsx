@@ -35,6 +35,18 @@ export default function L_Maker() {
                 p.rotate(params[0]);
             }
         },
+        {
+            targetChars: '[',
+            drawing: (params: number[], p: p5, t?: number) => {
+                p.push();
+            }
+        },
+        {
+            targetChars: ']',
+            drawing: (params: number[], p: p5, t?: number) => {
+                p.pop();
+            }
+        }
     ];
 
     const [String_, setString] = useState<Symbol[]>([]);

@@ -65,7 +65,9 @@ export default function L_Renderer({ string, drawingRules }: L_Renderer_State) {
             }
             grid.draw(offset, scale)
             p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y);
+            p.push()
             GPLS.drawString(p, state.current.string, drawingRules);
+            p.pop()
         }
     })
 

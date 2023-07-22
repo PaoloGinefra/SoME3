@@ -4,6 +4,8 @@ let Modes: string[] = [
     'Delete',
     'Edit',
     'Clear',
+    'Stack push',
+    'Stack pop',
 ]
 
 export default Modes;

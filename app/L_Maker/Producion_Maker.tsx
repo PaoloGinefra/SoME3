@@ -14,6 +14,7 @@ import GPLS from '../GPLS/GPLS'
 import { Symbol, Production, DrawingRule, LSystem } from "../GPLS/GPLS_interfaces";
 
 import PointSequenceEditor from './Inreface/PointSequenceEditor'
+import type { Point } from './Inreface/PointSequenceEditor'
 
 interface Production_Maker_State {
     productions: Production[];
@@ -21,11 +22,11 @@ interface Production_Maker_State {
 }
 
 export default function Production_Maker({ productions, setProductions }: Production_Maker_State) {
-    function handleSequence(p: p5, points: p5.Vector[]) {
+    function handleSequence(p: p5, points: Point[]) {
         if (points.length < 2) return;
         let s = GPLS.pointSequence2String(points)
         let len = points.length
-        let dist = p.mag(points[0].x - points[len - 1].x, points[0].y - points[len - 1].y)
+        let dist = p.mag(points[0].position.x - points[len - 1].position.x, points[0].position.y - points[len - 1].position.y)
         setProductions([
             {
                 preChar: 'F',

@@ -1,4 +1,5 @@
 import { Symbol, Production, DrawingRule, LSystem } from "./GPLS_interfaces";
+import type { Point } from "../L_Maker/Inreface/PointSequenceEditor";
 import type p5 from "p5";
 
 export default class GPLS {
@@ -117,16 +118,32 @@ export default class GPLS {
         }
     }
 
-    static pointSequence2String(pointSequence: p5.Vector[]): Symbol[] {
+    static pointSequence2String(pointSequence: Point[]): Symbol[] {
         let axiom: Symbol[] = [];
+        let prevPosition = pointSequence[0].position.copy();
         let prevHeading = 0;
+        let headingStack: number[] = [];
+        let positionStack: p5.Vector[] = [];
         for (let i = 1; i < pointSequence.length; i++) {
-            let v = pointSequence[i].copy().sub(pointSequence[i - 1]);
+            let v = pointSequence[i].position.copy().sub(prevPosition);
             if (v.heading() - prevHeading != 0)
                 axiom.push({ char: '+', params: [v.heading() - prevHeading] });
             if (v.mag() != 0)
                 axiom.push({ char: 'F', params: [v.mag()] });
-            prevHeading = v.heading();
+            if (pointSequence[i].push) {
+                axiom.push({ char: '[', params: [] });
+                headingStack.push(prevHeading);
+                positionStack.push(pointSequence[i].position.copy())
+            }
+            if (pointSequence[i].pop) {
+                axiom.push({ char: ']', params: [] });
+                prevHeading = headingStack.pop() ?? 0;
+                prevPosition = positionStack.pop() ?? pointSequence[i].position.copy();
+            }
+            else {
+                prevHeading = v.heading();
+                prevPosition = pointSequence[i].position.copy();
+            }
         }
         return axiom;
     }

@@ -14,6 +14,7 @@ import GPLS from '../GPLS/GPLS'
 import { Symbol, Production, DrawingRule, LSystem } from "../GPLS/GPLS_interfaces";
 
 import PointSequenceEditor from './Inreface/PointSequenceEditor'
+import type { Point } from './Inreface/PointSequenceEditor'
 
 interface Axiom_Maker_State {
     axiom: Symbol[];
@@ -21,7 +22,7 @@ interface Axiom_Maker_State {
 }
 
 export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
-    function handleSequence(p: p5, points: p5.Vector[]) {
+    function handleSequence(p: p5, points: Point[]) {
         setAxiom(GPLS.pointSequence2String(points))
     }
 
