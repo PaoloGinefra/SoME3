@@ -71,6 +71,7 @@ export default function L_Renderer({ string, drawingRules }: L_Renderer_State) {
 
     return (
         <div className={classes['container']}>
+            <h1>Rendered L-System</h1>
             <SketchRenderer sketch={sketch} />
         </div>
     )

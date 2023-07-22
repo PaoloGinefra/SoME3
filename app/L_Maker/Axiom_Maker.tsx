@@ -27,6 +27,7 @@ export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
 
     return (
         <div className={classes['container']}>
+            <h1>Axiom Editor</h1>
             <PointSequenceEditor handleSequence={handleSequence} />
         </div>
     )
