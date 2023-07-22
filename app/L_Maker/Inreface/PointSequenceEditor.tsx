@@ -173,6 +173,56 @@ export default function PointSequenceEditor({ handleSequence }: PointSequenceEdi
             })
         }
 
+        function drawLine(p: p5, p1: p5.Vector, p2: p5.Vector) {
+            p.strokeWeight(gridSize / 2)
+            p.stroke(0, 0, 0, 100)
+            p.line(p2.x, p2.y, p1.x, p1.y)
+            let point = p2.copy().lerp(p1, 0.5)
+            let dir = p2.copy().sub(p1).normalize().mult(gridSize / 2)
+            let angle = p.PI / 3
+            //draw arrow
+            p.strokeWeight(gridSize / 4)
+            p.stroke(0, 0, 0, 100)
+            dir.rotate(-angle)
+            p.line(point.x, point.y, point.x + dir.y, point.y - dir.x)
+            dir.rotate(2 * angle)
+            p.line(point.x, point.y, point.x - dir.y, point.y + dir.x)
+        }
+
+        function drawPoint(p: p5, point: Point) {
+            if (point.push) {
+                drawPush(p, point);
+            }
+            if (point.pop) {
+                drawPop(p, point);
+            }
+
+            drawCircle(p, point)
+        }
+
+
+        function drawCircle(p: p5, point: Point) {
+            p.fill(255, 255, 255)
+            p.strokeWeight(gridSize)
+            p.stroke(pointColor)
+            p.circle(point.position.x, point.position.y, gridSize)
+        }
+
+        function drawPush(p: p5, point: Point) {
+            p.stroke(0, 0, 0, 100)
+            p.strokeWeight(gridSize / 2)
+            p.fill(0, 0, 0, 0)
+            p.arc(point.position.x, point.position.y, 2 * gridSize, 2 * gridSize, p.PI / 2, p.PI * 3 / 2)
+        }
+
+        function drawPop(p: p5, point: Point) {
+            p.stroke(0, 0, 0, 100)
+            p.strokeWeight(gridSize / 2)
+            p.fill(0, 0, 0, 0)
+            p.arc(point.position.x, point.position.y, 2 * gridSize, 2 * gridSize, p.PI * 3 / 2, p.PI / 2)
+        }
+
+
         p.draw = function () {
             p.background(251, 234, 205)
             grid.draw(offset, scale)
@@ -183,59 +233,55 @@ export default function PointSequenceEditor({ handleSequence }: PointSequenceEdi
             if (state.current.mode in modesFunctions['Draw'])
                 modesFunctions['Draw'][state.current.mode]();
 
-
-            //draw lines between points
-            p.strokeWeight(gridSize / 2)
-            p.stroke(0, 0, 0, 100)
-            let Stack: p5.Vector[] = []
-            for (let i = 1; i < points.length; i++) {
-                if (points[i].push) {
-                    Stack.push(points[i].position)
-                }
-                if (points[i - 1].pop) {
-                    let p1 = Stack.pop() ?? p.createVector(0, 0);
-                    let p2 = points[i].position
-                    if (p1 != undefined) {
-                        p.line(p1.x, p1.y, p2.x, p2.y)
+            if (points.length != 0) {
+                //draw lines between points
+                let Stack: p5.Vector[] = []
+                for (let i = 1; i < points.length; i++) {
+                    p.strokeWeight(gridSize / 2)
+                    p.stroke(0, 0, 0, 100)
+                    if (points[i].push) {
+                        Stack.push(points[i].position)
                     }
+                    if (points[i - 1].pop) {
+                        let p1 = Stack.pop() ?? p.createVector(0, 0);
+                        let p2 = points[i].position
+                        drawLine(p, p1, p2)
+                    }
+                    else {
+                        drawLine(p, points[i - 1].position, points[i].position)
+                    }
+                    drawPoint(p, points[i - 1])
                 }
-                else
-                    p.line(points[i].position.x, points[i].position.y, points[i - 1].position.x, points[i - 1].position.y)
             }
 
             if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h && points.length > 0 && state.current.mode == 'Add') {
                 //draw faded line between last point and mouse
-                p.line(points[points.length - 1].position.x, points[points.length - 1].position.y, quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
+                drawLine(p, points[points.length - 1].position, p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)))
             }
+            if (points.length > 0)
+                drawPoint(p, points[points.length - 1])
 
+            p.strokeWeight(gridSize)
 
-            //draw all points
-            points.forEach(point => {
-                if (point.push) {
-                    p.stroke(0, 0, 0, 100)
-                    p.strokeWeight(gridSize / 2)
-                    p.arc(point.position.x, point.position.y, 2 * gridSize, 2 * gridSize, p.PI / 2, p.PI * 3 / 2)
-                }
-                if (point.pop) {
-                    p.stroke(0, 0, 0, 100)
-                    p.strokeWeight(gridSize / 2)
-                    p.arc(point.position.x, point.position.y, 2 * gridSize, 2 * gridSize, p.PI * 3 / 2, p.PI / 2)
-                }
-
-                p.strokeWeight(gridSize)
-                p.stroke(pointColor)
-                p.circle(point.position.x, point.position.y, gridSize)
-            })
-
-            //draw faded point at mouse
-            if (state.current.mode == 'Delete')
-                p.stroke(deletePointColor)
-            else if (state.current.mode == 'Edit')
-                p.stroke(editColor)
 
             if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h) {
-                //draw faded point at mouse
-                p.circle(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y), gridSize)
+                if (state.current.mode == 'Add' || state.current.mode == 'Delete' || state.current.mode == 'Edit') {
+                    //draw faded point at mouse
+                    if (state.current.mode == 'Delete')
+                        p.stroke(deletePointColor)
+                    else if (state.current.mode == 'Edit')
+                        p.stroke(editColor)
+                    else
+                        p.stroke(pointColor)
+                    //draw faded point at mouse
+                    p.circle(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y), gridSize)
+                }
+                else if (state.current.mode == 'Stack push') {
+                    drawPush(p, { position: p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), push: true, pop: false })
+                }
+                else if (state.current.mode == 'Stack pop') {
+                    drawPop(p, { position: p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), push: false, pop: true })
+                }
             }
         }
     })
