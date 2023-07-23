@@ -134,7 +134,7 @@ export default class GPLS {
                 axiom.push({ char: 'F', params: [v.mag()] });
             if (pointSequence[i].push) {
                 axiom.push({ char: '[', params: [] });
-                headingStack.push(prevHeading);
+                headingStack.push(v.heading());
                 positionStack.push(pointSequence[i].position.copy())
             }
             if (pointSequence[i].pop) {
