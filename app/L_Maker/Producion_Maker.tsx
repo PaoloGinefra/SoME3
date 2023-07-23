@@ -28,19 +28,26 @@ export default function Production_Maker({ productions, setProductions }: Produc
         const s = GPLS.pointSequence2String(points)
         const len = points.length
         const dist = p.mag(points[0].position.x - points[len - 1].position.x, points[0].position.y - points[len - 1].position.y)
+        const heading = points[len - 1].position.copy().sub(points[0].position).heading();
         setProductions([
             {
                 preChar: 'F',
                 condition: (params: number[]) => true,
                 successor: (params: number[]) => {
                     let newString: Symbol[] = []
+                    newString.push({
+                        char: '+',
+                        params: [-heading]
+                    })
+
                     for (let i = 0; i < s.length; i++) {
                         if (s[i].char == 'F') {
                             newString.push({
                                 char: 'F',
                                 params: [s[i].params[0] * params[0] / dist]
                             })
-                        } else {
+                        }
+                        else {
                             newString.push(s[i])
                         }
 
