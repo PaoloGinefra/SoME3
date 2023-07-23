@@ -17,6 +17,7 @@ import ModeButton from './ModeButtons'
 import Modes from './Modes'
 
 interface PointSequenceEditor_State {
+    string: Symbol[];
     handleSequence: (p: p5, s: Point[]) => void;
 }
 
@@ -26,10 +27,10 @@ export interface Point {
     pop: boolean;
 }
 
-export default function PointSequenceEditor({ handleSequence }: PointSequenceEditor_State) {
+export default function PointSequenceEditor({ string, handleSequence }: PointSequenceEditor_State) {
     const [mode, setMode] = useState<string>('Move');
 
-    const sketch = useStatefulSketch({ handleSequence, mode }, (state, p) => {
+    const sketch = useStatefulSketch({ handleSequence, mode, string }, (state, p) => {
         const w = 800
         const h = 500
         const gridSize = 10
@@ -124,6 +125,7 @@ export default function PointSequenceEditor({ handleSequence }: PointSequenceEdi
                     if (isHolding) {
                         offset.add(p.createVector(p.mouseX, p.mouseY).sub(touchPoint))
                         touchPoint = p.createVector(p.mouseX, p.mouseY)
+                        localStorage.setItem('offset', JSON.stringify(offset))
                     }
                 },
                 'Edit': () => {
@@ -141,7 +143,7 @@ export default function PointSequenceEditor({ handleSequence }: PointSequenceEdi
         }
 
         function getPointIdFromMouse() {
-            return points.findIndex(point => point.position.x == quantizeCoord(p.mouseX - offset.x) && point.position.y == quantizeCoord(p.mouseY - offset.y))
+            return points.findIndex(point => p.abs(point.position.x - quantizeCoord(p.mouseX - offset.x)) < 0.2 && p.abs(point.position.y - quantizeCoord(p.mouseY - offset.y)) < 0.2)
         }
 
         p.preload = function () {
@@ -149,6 +151,8 @@ export default function PointSequenceEditor({ handleSequence }: PointSequenceEdi
         }
 
         p.setup = function () {
+            points = GPLS.String2PointSequence(p, state.current.string, p.createVector(w / 2, h / 2));
+            console.log('Setup', points)
             canvas = p.createCanvas(w, h)
             grid.setup()
 

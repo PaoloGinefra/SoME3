@@ -149,4 +149,39 @@ export default class GPLS {
         }
         return axiom;
     }
+
+    static String2PointSequence(p: p5, string: Symbol[], startingPoint: p5.Vector): Point[] {
+        if (string.length == 0) return [];
+
+        let position = startingPoint.copy();
+        let pointSequence: Point[] = [
+            { position: startingPoint.copy(), push: false, pop: false }
+        ];
+        let heading = 0;
+        let positionStack: p5.Vector[] = [];
+        let headingStack: number[] = [];
+        for (let i = 0; i < string.length; i++) {
+            let symbol = string[i];
+            if (symbol.char == 'F') {
+                let v = p.createVector(symbol.params[0], 0).rotate(heading);
+                position.add(v);
+                pointSequence.push({ position: position.copy(), push: false, pop: false });
+            }
+            if (symbol.char == '+') {
+                heading += symbol.params[0];
+            }
+            if (symbol.char == '[') {
+                positionStack.push(position.copy());
+                headingStack.push(heading);
+                pointSequence[pointSequence.length - 1].push = true;
+            }
+            if (symbol.char == ']') {
+                position = positionStack.pop() ?? position.copy();
+                heading = headingStack.pop() ?? heading;
+                pointSequence[pointSequence.length - 1].pop = true;
+            }
+
+        }
+        return pointSequence;
+    }
 }

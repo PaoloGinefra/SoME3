@@ -54,12 +54,29 @@ export default function L_Maker() {
     const [iterations, setIterations] = useState<number>(5);
 
     useEffect(() => {
+        let axiom = JSON.parse(localStorage.getItem('axiom') || '[]');
+        let productions = localStorage.productions;
+        //let productions = JSON.parse(localStorage.getItem('productions') || '[]');
+        let iterations = JSON.parse(localStorage.getItem('iterations') || '5');
+
+        setAxiom(axiom);
+        setProductions(productions);
+        setIterations(iterations);
+
+        console.log('loaded', axiom)
+    }, [])
+
+    useEffect(() => {
         let string = axiom
         for (let i = 0; i < iterations; i++) {
             string = GPLS.applyProductions(string, productions);
         }
         setString(string);
-        console.log(string);
+
+        localStorage.setItem('axiom', JSON.stringify(axiom));
+        //localStorage.setItem('productions', JSON.stringify(productions));
+        localStorage.productions = productions;
+        localStorage.setItem('iterations', JSON.stringify(iterations));
     }, [axiom, productions, iterations])
 
 

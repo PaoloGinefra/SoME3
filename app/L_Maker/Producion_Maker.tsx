@@ -22,6 +22,9 @@ interface Production_Maker_State {
 }
 
 export default function Production_Maker({ productions, setProductions }: Production_Maker_State) {
+    let prod = productions.find(p => p.preChar == 'F')
+    console.log(prod)
+    //let string = prod ? prod.successor([100]) : []
     function handleSequence(p: p5, points: Point[]) {
         if (points.length < 2) return;
         let s = GPLS.pointSequence2String(points)
@@ -53,7 +56,7 @@ export default function Production_Maker({ productions, setProductions }: Produc
     return (
         <div className={classes['container']}>
             <h1>Production Editor (F)</h1>
-            <PointSequenceEditor handleSequence={handleSequence} />
+            <PointSequenceEditor string={[]} handleSequence={handleSequence} />
         </div>
     )
 }

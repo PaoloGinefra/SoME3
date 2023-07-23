@@ -22,6 +22,7 @@ interface Axiom_Maker_State {
 }
 
 export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
+
     function handleSequence(p: p5, points: Point[]) {
         setAxiom(GPLS.pointSequence2String(points))
     }
@@ -29,7 +30,7 @@ export default function Axiom_Maker({ axiom, setAxiom }: Axiom_Maker_State) {
     return (
         <div className={classes['container']}>
             <h1>Axiom Editor</h1>
-            <PointSequenceEditor handleSequence={handleSequence} />
+            <PointSequenceEditor string={axiom} handleSequence={handleSequence} />
         </div>
     )
 }
