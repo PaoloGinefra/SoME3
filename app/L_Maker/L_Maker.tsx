@@ -55,15 +55,15 @@ export default function L_Maker() {
 
     useEffect(() => {
         let axiom = JSON.parse(localStorage.getItem('axiom') || '[]');
-        let productions = localStorage.productions;
-        //let productions = JSON.parse(localStorage.getItem('productions') || '[]');
+        //let productions = GPLS.DeserializeProductions(localStorage.getItem('productions') || '');
         let iterations = JSON.parse(localStorage.getItem('iterations') || '5');
 
+
         setAxiom(axiom);
-        setProductions(productions);
+        //setProductions(productions);
         setIterations(iterations);
 
-        console.log('loaded', axiom)
+        console.log('loaded', productions)
     }, [])
 
     useEffect(() => {
@@ -74,9 +74,9 @@ export default function L_Maker() {
         setString(string);
 
         localStorage.setItem('axiom', JSON.stringify(axiom));
-        //localStorage.setItem('productions', JSON.stringify(productions));
-        localStorage.productions = productions;
+        //localStorage.setItem('productions', GPLS.SerializeProductions(productions));
         localStorage.setItem('iterations', JSON.stringify(iterations));
+
     }, [axiom, productions, iterations])
 
 

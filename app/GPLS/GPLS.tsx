@@ -184,4 +184,39 @@ export default class GPLS {
         }
         return pointSequence;
     }
+
+    static SerializeProductions(productions: Production[]): string {
+        if (productions.length == 0) return JSON.stringify([]);
+        let str = '';
+        for (let i = 0; i < productions.length; i++) {
+            let production = productions[i];
+            str += production.preChar + '_:_';
+            str += production.condition.toString() + '_:_';
+            str += production.successor.toString() + '_;_';
+        }
+        console.log('Serialize', str)
+        return str;
+    }
+
+    static DeserializeProductions(str: string): Production[] {
+        if (str == '') return [];
+        let productions: Production[] = [];
+        let productionStrs = str.split('_;_');
+        for (let i = 0; i < productionStrs.length; i++) {
+            let productionStr = productionStrs[i];
+            if (productionStr == '') continue;
+
+            let production: Production = {
+                preChar: '',
+                condition: (params: number[]) => true,
+                successor: (params: number[]) => []
+            };
+            let parts = productionStr.split('_:_');
+            production.preChar = parts[0];
+            production.condition = eval('(' + parts[1] + ')');
+            production.successor = eval('(' + parts[2] + ')');
+            productions.push(production);
+        }
+        return productions;
+    }
 }

@@ -22,14 +22,12 @@ interface Production_Maker_State {
 }
 
 export default function Production_Maker({ productions, setProductions }: Production_Maker_State) {
-    let prod = productions.find(p => p.preChar == 'F')
-    console.log(prod)
-    //let string = prod ? prod.successor([100]) : []
+
     function handleSequence(p: p5, points: Point[]) {
         if (points.length < 2) return;
-        let s = GPLS.pointSequence2String(points)
-        let len = points.length
-        let dist = p.mag(points[0].position.x - points[len - 1].position.x, points[0].position.y - points[len - 1].position.y)
+        const s = GPLS.pointSequence2String(points)
+        const len = points.length
+        const dist = p.mag(points[0].position.x - points[len - 1].position.x, points[0].position.y - points[len - 1].position.y)
         setProductions([
             {
                 preChar: 'F',
