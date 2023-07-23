@@ -32,7 +32,7 @@ export default function L_Maker() {
         {
             targetChars: '+',
             drawing: (params: number[], p: p5, t: number = 1) => {
-                p.rotate(params[0] * t);
+                p.rotate(params[0] * (1 - p.cos(t * p.PI)) / 2);
             }
         },
         {
