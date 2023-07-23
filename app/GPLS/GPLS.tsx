@@ -87,9 +87,9 @@ export default class GPLS {
         let offsetPeriod = 1
         for (let i = 0; i < string.length; i++) {
             let symbol = string[i];
-            if (symbol.char == '(')
+            if (symbol.char == '[')
                 offset += stepOffset;
-            else if (symbol.char == ')')
+            else if (symbol.char == ']')
                 offset -= stepOffset;
 
             for (let j = 0; j < drawingRules.length; j++) {
@@ -100,7 +100,8 @@ export default class GPLS {
                 }
             }
 
-            offset += offsetPeriod * 5 / string.length;
+            if (symbol.char == 'F' || symbol.char == '+')
+                offset += offsetPeriod * 5 / string.length;
         }
     }
 
@@ -119,6 +120,7 @@ export default class GPLS {
     }
 
     static pointSequence2String(pointSequence: Point[]): Symbol[] {
+        if (pointSequence.length == 0) return [];
         let axiom: Symbol[] = [];
         let prevPosition = pointSequence[0].position.copy();
         let prevHeading = 0;

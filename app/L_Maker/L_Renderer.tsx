@@ -13,14 +13,19 @@ import Grid from '../utils/Grid'
 import GPLS from '../GPLS/GPLS'
 import { Symbol, Production, DrawingRule, LSystem } from "../GPLS/GPLS_interfaces";
 import { off } from 'process'
+import { stat } from 'fs/promises'
 
 interface L_Renderer_State {
     string: Symbol[];
     drawingRules: DrawingRule[];
+    iteration: number;
+    setIteration: (n: number) => void;
 }
 
-export default function L_Renderer({ string, drawingRules }: L_Renderer_State) {
-    const sketch = useStatefulSketch({ string, drawingRules }, (state, p) => {
+export default function L_Renderer({ string, drawingRules, iteration, setIteration }: L_Renderer_State) {
+    const [t, setT] = useState<number>(0)
+
+    const sketch = useStatefulSketch({ string, drawingRules, t }, (state, p) => {
         const w = 800
         const h = 500
         const gridSize = 10
@@ -34,6 +39,7 @@ export default function L_Renderer({ string, drawingRules }: L_Renderer_State) {
 
         let touchPoint = p.createVector(0, 0)
         let isHolding = false;
+
 
         p.preload = function () {
             grid.preload()
@@ -57,6 +63,7 @@ export default function L_Renderer({ string, drawingRules }: L_Renderer_State) {
             })
         }
 
+
         p.draw = function () {
             p.background(251, 234, 205)
             if (isHolding) {
@@ -66,14 +73,31 @@ export default function L_Renderer({ string, drawingRules }: L_Renderer_State) {
             grid.draw(offset, scale)
             p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y);
             p.push()
-            GPLS.drawString(p, state.current.string, drawingRules);
+            GPLS.drawString(p, state.current.string, drawingRules, state.current.t);
+
             p.pop()
+
+            setT(state.current.t + p.deltaTime / 1000)
         }
     })
 
     return (
         <div className={classes['container']}>
             <h1>Rendered L-System</h1>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: "100px" }}>
+                <div>
+                    <label htmlFor="sizeSlider">Iterations</label>
+                    <input
+                        id="sizeSlider"
+                        type="range"
+                        min={0}
+                        max={5}
+                        value={iteration}
+                        onChange={(e) => setIteration(parseInt(e.target.value))}
+                    />
+                </div>
+                <button onClick={() => { setT(0) }}>Animate</button>
+            </div>
             <SketchRenderer sketch={sketch} />
         </div>
     )

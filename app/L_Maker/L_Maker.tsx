@@ -22,17 +22,17 @@ export default function L_Maker() {
     const drawingRules: DrawingRule[] = [
         {
             targetChars: 'F',
-            drawing: (params: number[], p: p5, t?: number) => {
+            drawing: (params: number[], p: p5, t: number = 1) => {
                 p.stroke(0, 0, 0, 255);
                 p.strokeWeight(1);
-                p.line(0, 0, params[0], 0);
-                p.translate(params[0], 0);
+                p.line(0, 0, params[0] * t, 0);
+                p.translate(params[0] * t, 0);
             }
         },
         {
             targetChars: '+',
-            drawing: (params: number[], p: p5, t?: number) => {
-                p.rotate(params[0]);
+            drawing: (params: number[], p: p5, t: number = 1) => {
+                p.rotate(params[0] * t);
             }
         },
         {
@@ -69,7 +69,7 @@ export default function L_Maker() {
             onMouseLeave={() => setIterations(iterations)}>
             <Axiom_Maker axiom={axiom} setAxiom={setAxiom} />
             <Production_Maker productions={productions} setProductions={setProductions} />
-            <L_Renderer string={String_} drawingRules={drawingRules} />
+            <L_Renderer string={String_} drawingRules={drawingRules} iteration={iterations} setIteration={setIterations} />
         </ div >
     )
 }
