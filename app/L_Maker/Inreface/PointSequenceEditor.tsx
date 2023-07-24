@@ -243,9 +243,7 @@ export default function PointSequenceEditor({ string, handleSequence }: PointSeq
                 for (let i = 1; i < points.length; i++) {
                     p.strokeWeight(gridSize / 2)
                     p.stroke(0, 0, 0, 100)
-                    if (points[i].push) {
-                        Stack.push(points[i].position)
-                    }
+
                     if (points[i - 1].pop) {
                         let p1 = Stack.pop() ?? p.createVector(0, 0);
                         let p2 = points[i].position
@@ -255,6 +253,10 @@ export default function PointSequenceEditor({ string, handleSequence }: PointSeq
                         drawLine(p, points[i - 1].position, points[i].position)
                     }
                     drawPoint(p, points[i - 1])
+
+                    if (points[i].push) {
+                        Stack.push(points[i].position)
+                    }
                 }
             }
 
