@@ -15,13 +15,15 @@ import { Symbol, Production, DrawingRule, LSystem } from "../GPLS/GPLS_interface
 import Axiom_Maker from './Axiom_Maker'
 import Production_Maker from './Producion_Maker';
 import L_Renderer from './L_Renderer'
+import AlphabetEditor from './AlphabetEditor'
 
 export default function L_Maker() {
+    const [alphabet, setAlphabet] = useState<string>('F');
     const [axiom, setAxiom] = useState<Symbol[]>([]);
     const [productions, setProductions] = useState<Production[]>([]);
     const drawingRules: DrawingRule[] = [
         {
-            targetChars: 'F',
+            targetChars: alphabet,
             drawing: (params: number[], p: p5, t: number = 1) => {
                 p.stroke(0, 0, 0, 255);
                 p.strokeWeight(1);
@@ -84,6 +86,7 @@ export default function L_Maker() {
         <div className={classes['container']}
             onClick={() => { }}//setIterations(iterations + 1)}
             onMouseLeave={() => setIterations(iterations)}>
+            <AlphabetEditor alphabet={alphabet} setAlphabet={setAlphabet} />
             <Axiom_Maker axiom={axiom} setAxiom={setAxiom} />
             <Production_Maker productions={productions} setProductions={setProductions} />
             <L_Renderer string={String_} drawingRules={drawingRules} iteration={iterations} setIteration={setIterations} />
