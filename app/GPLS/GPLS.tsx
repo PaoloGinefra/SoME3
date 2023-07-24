@@ -82,7 +82,7 @@ export default class GPLS {
         if (string.length == 0) return;
 
         let stepOffset = 1
-        let offset = -stepOffset;
+        let offset = 0;
 
         let offsetPeriod = 1
         for (let i = 0; i < string.length; i++) {
