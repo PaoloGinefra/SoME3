@@ -6,6 +6,7 @@ let Modes: string[] = [
     'Clear',
     'Stack push',
     'Stack pop',
+    'Color',
 ]
 
 export default Modes;

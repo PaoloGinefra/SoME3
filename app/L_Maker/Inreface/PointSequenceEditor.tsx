@@ -16,9 +16,12 @@ import { Symbol, Production, DrawingRule, LSystem } from "../../GPLS/GPLS_interf
 import ModeButton from './ModeButtons'
 import Modes from './Modes'
 
+import CharPicker from './CharPicker'
+
 interface PointSequenceEditor_State {
     string: Symbol[];
     handleSequence: (p: p5, s: Point[]) => void;
+    alphabet: string;
 }
 
 export interface Point {
@@ -27,8 +30,9 @@ export interface Point {
     pop: boolean;
 }
 
-export default function PointSequenceEditor({ string, handleSequence }: PointSequenceEditor_State) {
+export default function PointSequenceEditor({ string, handleSequence, alphabet }: PointSequenceEditor_State) {
     const [mode, setMode] = useState<string>('Move');
+    const [char, setChar] = useState<string>('F');
 
     const sketch = useStatefulSketch({ handleSequence, mode, string }, (state, p) => {
         const w = 800
@@ -297,6 +301,7 @@ export default function PointSequenceEditor({ string, handleSequence }: PointSeq
     return (
         <div className={classes['container']}>
             <ModeButton mode={mode} setMode={setMode} />
+            {mode == 'Color' ? <CharPicker alphabet={alphabet} currentChar={char} setcurrentChar={setChar} /> : null}
             <SketchRenderer sketch={sketch} />
         </div>
     )

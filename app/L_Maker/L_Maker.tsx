@@ -87,8 +87,8 @@ export default function L_Maker() {
             onClick={() => { }}//setIterations(iterations + 1)}
             onMouseLeave={() => setIterations(iterations)}>
             <AlphabetEditor alphabet={alphabet} setAlphabet={setAlphabet} />
-            <Axiom_Maker axiom={axiom} setAxiom={setAxiom} />
-            <Production_Maker productions={productions} setProductions={setProductions} />
+            <Axiom_Maker axiom={axiom} setAxiom={setAxiom} alphabet={alphabet} />
+            <Production_Maker productions={productions} setProductions={setProductions} alphabet={alphabet} />
             <L_Renderer string={String_} drawingRules={drawingRules} iteration={iterations} setIteration={setIterations} />
         </ div >
     )

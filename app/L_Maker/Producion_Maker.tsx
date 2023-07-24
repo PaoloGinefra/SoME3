@@ -19,9 +19,10 @@ import type { Point } from './Inreface/PointSequenceEditor'
 interface Production_Maker_State {
     productions: Production[];
     setProductions: (p: Production[]) => void;
+    alphabet: string;
 }
 
-export default function Production_Maker({ productions, setProductions }: Production_Maker_State) {
+export default function Production_Maker({ productions, setProductions, alphabet }: Production_Maker_State) {
 
     function handleSequence(p: p5, points: Point[]) {
         if (points.length < 2) return;
@@ -61,7 +62,7 @@ export default function Production_Maker({ productions, setProductions }: Produc
     return (
         <div className={classes['container']}>
             <h1>Production Editor (F)</h1>
-            <PointSequenceEditor string={[]} handleSequence={handleSequence} />
+            <PointSequenceEditor string={[]} handleSequence={handleSequence} alphabet={alphabet} />
         </div>
     )
 }
