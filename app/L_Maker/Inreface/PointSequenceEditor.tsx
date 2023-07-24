@@ -20,21 +20,23 @@ import CharPicker from './CharPicker'
 
 interface PointSequenceEditor_State {
     string: Symbol[];
-    handleSequence: (p: p5, s: Point[]) => void;
+    handleSequence: (s: Point[]) => void;
     alphabet: string;
+    preChar?: string;
 }
 
 export interface Point {
     position: p5.Vector;
     push: boolean;
     pop: boolean;
+    char: string;
 }
 
-export default function PointSequenceEditor({ string, handleSequence, alphabet }: PointSequenceEditor_State) {
+export default function PointSequenceEditor({ string, handleSequence, alphabet, preChar }: PointSequenceEditor_State) {
     const [mode, setMode] = useState<string>('Move');
     const [char, setChar] = useState<string>('F');
 
-    const sketch = useStatefulSketch({ handleSequence, mode, string }, (state, p) => {
+    const sketch = useStatefulSketch({ handleSequence, mode, string, char, alphabet, preChar }, (state, p) => {
         const w = 800
         const h = 500
         const gridSize = 10
@@ -56,6 +58,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet }
         let offset = p.createVector(0, 0)
         let scale = 1
 
+        let pastString = state.current.string;
         const modesFunctions: any = {
             'MouseClick': {
                 'Add': () => {
@@ -63,24 +66,25 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet }
                         {
                             position: p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)),
                             push: false,
-                            pop: false
+                            pop: false,
+                            char: state.current.preChar ?? 'F'
                         }
                     )
-                    handleSequence(p, points);
+                    handleSequence(points);
                 },
                 'Delete': () => {
                     let id = getPointIdFromMouse()
                     console.log(id)
                     if (id != -1) {
                         points.splice(id, 1)
-                        handleSequence(p, points);
+                        handleSequence(points);
                     }
                 },
                 'Stack push': () => {
                     let id = getPointIdFromMouse()
                     if (id != -1) {
                         points[id].push = !points[id].push
-                        handleSequence(p, points);
+                        handleSequence(points);
                         setMode('Stack pop')
                     }
                 },
@@ -88,10 +92,17 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet }
                     let id = getPointIdFromMouse()
                     if (id != -1) {
                         points[id].pop = !points[id].pop
-                        handleSequence(p, points);
+                        handleSequence(points);
                         setMode('Stack push')
                     }
                 },
+                'Color': () => {
+                    let id = getPointIdFromMouse()
+                    if (id != -1) {
+                        points[id].char = state.current.char
+                        handleSequence(points);
+                    }
+                }
             },
             'MouseReleased': {
                 'Move': () => {
@@ -124,8 +135,9 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet }
             'Draw': {
                 'Clear': () => {
                     points = []
-                    handleSequence(p, points);
+                    handleSequence(points);
                     offset = p.createVector(0, 0)
+                    setMode('Add')
                 },
                 'Move': () => {
                     if (isHolding) {
@@ -137,7 +149,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet }
                 'Edit': () => {
                     if (selected != -1) {
                         points[selected].position = p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
-                        handleSequence(p, points);
+                        handleSequence(points);
                     }
                 },
             }
@@ -157,7 +169,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet }
         }
 
         p.setup = function () {
-            points = GPLS.String2PointSequence(p, state.current.string, p.createVector(w / 2, h / 2));
+            points = GPLS.String2PointSequence(p, state.current.string, p.createVector(w / 2, h / 2), state.current.alphabet);
             console.log('Setup', points)
             canvas = p.createCanvas(w, h)
             grid.setup()
@@ -208,6 +220,12 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet }
             }
 
             drawCircle(p, point)
+
+            p.textAlign(p.CENTER, p.CENTER)
+            p.textSize(gridSize * 2 / 3)
+            p.fill(0, 0, 0, 255)
+            p.noStroke()
+            p.text(point.char, point.position.x, point.position.y)
         }
 
 
@@ -234,6 +252,10 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet }
 
 
         p.draw = function () {
+            if (JSON.stringify(state.current.string) != JSON.stringify(pastString)) {
+                console.log('preChar changed')
+                points = GPLS.String2PointSequence(p, state.current.string, p.createVector(w / 2, h / 2), state.current.alphabet);
+            }
             p.background(251, 234, 205)
             grid.draw(offset, scale)
 
@@ -289,13 +311,15 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet }
                     p.circle(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y), gridSize)
                 }
                 else if (state.current.mode == 'Stack push') {
-                    drawPush(p, { position: p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), push: true, pop: false })
+                    drawPush(p, { position: p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), push: true, pop: false, char: 'F' })
                 }
                 else if (state.current.mode == 'Stack pop') {
-                    drawPop(p, { position: p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), push: false, pop: true })
+                    drawPop(p, { position: p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), push: false, pop: true, char: 'F' })
                 }
             }
+            pastString = [...state.current.string];
         }
+
     })
 
     return (

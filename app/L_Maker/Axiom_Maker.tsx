@@ -24,7 +24,7 @@ interface Axiom_Maker_State {
 
 export default function Axiom_Maker({ axiom, setAxiom, alphabet }: Axiom_Maker_State) {
 
-    function handleSequence(p: p5, points: Point[]) {
+    function handleSequence(points: Point[]) {
         setAxiom(GPLS.pointSequence2String(points))
     }
 

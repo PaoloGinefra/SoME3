@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Image, Renderer } from 'p5'
 
 import useStatefulSketch from '../p5/useStatefulSketch'
@@ -16,6 +16,8 @@ import { Symbol, Production, DrawingRule, LSystem } from "../GPLS/GPLS_interface
 import PointSequenceEditor from './Inreface/PointSequenceEditor'
 import type { Point } from './Inreface/PointSequenceEditor'
 
+import CharPicker from './Inreface/CharPicker'
+
 interface Production_Maker_State {
     productions: Production[];
     setProductions: (p: Production[]) => void;
@@ -24,45 +26,80 @@ interface Production_Maker_State {
 
 export default function Production_Maker({ productions, setProductions, alphabet }: Production_Maker_State) {
 
-    function handleSequence(p: p5, points: Point[]) {
+    const [preChar, setPreChar] = useState<string>('F');
+    const [points, setPoints] = useState<Point[]>([]);
+    const [str, setStr] = useState<Symbol[]>([]);
+
+    useEffect(() => {
+        setStr(productions.find((p) => p.preChar == preChar)?.successor([100]) ?? [])
+        console.log("oldStuff", productions.find((p) => p.preChar == preChar)?.successor([100]) ?? [])
+    }, [preChar])
+
+    useEffect(() => {
+        handleSequence()
+    }, [points])
+
+
+    function handleSequence() {
         if (points.length < 2) return;
+
+        console.log("pre Char in handle Sequence", preChar)
+
         const s = GPLS.pointSequence2String(points)
         const len = points.length
-        const dist = p.mag(points[0].position.x - points[len - 1].position.x, points[0].position.y - points[len - 1].position.y)
+        const dist = points[0].position.copy().sub(points[len - 1].position).mag();
         const heading = points[len - 1].position.copy().sub(points[0].position).heading();
-        setProductions([
-            {
-                preChar: 'F',
-                condition: (params: number[]) => true,
-                successor: (params: number[]) => {
-                    let newString: Symbol[] = []
-                    newString.push({
-                        char: '+',
-                        params: [-heading]
-                    })
 
-                    for (let i = 0; i < s.length; i++) {
-                        if (s[i].char == 'F') {
-                            newString.push({
-                                char: 'F',
-                                params: [s[i].params[0] * params[0] / dist]
-                            })
-                        }
-                        else {
-                            newString.push(s[i])
-                        }
+        let newProduction = {
+            preChar: preChar,
+            condition: (params: number[]) => true,
+            successor: (params: number[]) => {
+                let newString: Symbol[] = []
+                newString.push({
+                    char: '+',
+                    params: [-heading]
+                })
 
+                for (let i = 0; i < s.length; i++) {
+                    if (alphabet.includes(s[i].char)) {
+                        newString.push({
+                            char: s[i].char,
+                            params: [s[i].params[0] * params[0] / dist]
+                        })
                     }
-                    return newString
+                    else {
+                        newString.push(s[i])
+                    }
+
                 }
+                return newString
             }
-        ])
+        }
+
+
+        //Set the new production
+        let i = productions.findIndex((p) => p.preChar == preChar)
+        if (i != -1) {
+            productions[i] = newProduction
+            productions = [...productions]
+        }
+        else {
+            productions = [...productions, newProduction]
+        }
+        setProductions(productions)
     }
+
 
     return (
         <div className={classes['container']}>
             <h1>Production Editor (F)</h1>
-            <PointSequenceEditor string={[]} handleSequence={handleSequence} alphabet={alphabet} />
+            <CharPicker alphabet={alphabet} currentChar={preChar} setcurrentChar={setPreChar} />
+            <PointSequenceEditor string={str} preChar={preChar} handleSequence={(points_: Point[]) => {
+                console.log("newStuff", points_)
+                setPoints([...points_])
+            }
+            } alphabet={alphabet} />
+
         </div>
     )
 }

@@ -21,7 +21,7 @@ export default function L_Maker() {
     const [alphabet, setAlphabet] = useState<string>('F');
     const [axiom, setAxiom] = useState<Symbol[]>([]);
     const [productions, setProductions] = useState<Production[]>([]);
-    const drawingRules: DrawingRule[] = [
+    const [drawingRules, setDrawingRules] = useState<DrawingRule[]>([
         {
             targetChars: alphabet,
             drawing: (params: number[], p: p5, t: number = 1) => {
@@ -49,7 +49,7 @@ export default function L_Maker() {
                 p.pop();
             }
         }
-    ];
+    ]);
 
     const [String_, setString] = useState<Symbol[]>([]);
 
@@ -59,11 +59,16 @@ export default function L_Maker() {
         let axiom = JSON.parse(localStorage.getItem('axiom') || '[]');
         //let productions = GPLS.DeserializeProductions(localStorage.getItem('productions') || '');
         let iterations = JSON.parse(localStorage.getItem('iterations') || '5');
+        let alphabet = localStorage.getItem('alphabet') || 'F';
 
 
         setAxiom(axiom);
         //setProductions(productions);
         setIterations(iterations);
+        setAlphabet(alphabet);
+
+        drawingRules[0].targetChars = alphabet;
+        setDrawingRules(drawingRules);
 
         console.log('loaded', productions)
     }, [])
@@ -80,6 +85,12 @@ export default function L_Maker() {
         localStorage.setItem('iterations', JSON.stringify(iterations));
 
     }, [axiom, productions, iterations])
+
+    useEffect(() => {
+        localStorage.setItem('alphabet', alphabet);
+        drawingRules[0].targetChars = alphabet;
+        setDrawingRules(drawingRules);
+    }, [alphabet])
 
 
     return (

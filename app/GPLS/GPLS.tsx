@@ -131,7 +131,7 @@ export default class GPLS {
             if (v.heading() - prevHeading != 0)
                 axiom.push({ char: '+', params: [v.heading() - prevHeading] });
             if (v.mag() != 0)
-                axiom.push({ char: 'F', params: [v.mag()] });
+                axiom.push({ char: pointSequence[i].char, params: [v.mag()] });
             if (pointSequence[i].push) {
                 axiom.push({ char: '[', params: [] });
                 headingStack.push(v.heading());
@@ -147,25 +147,26 @@ export default class GPLS {
                 prevPosition = pointSequence[i].position.copy();
             }
         }
+        console.log(axiom)
         return axiom;
     }
 
-    static String2PointSequence(p: p5, string: Symbol[], startingPoint: p5.Vector): Point[] {
+    static String2PointSequence(p: p5, string: Symbol[], startingPoint: p5.Vector, alphabet: string): Point[] {
         if (string.length == 0) return [];
 
         let position = startingPoint.copy();
         let pointSequence: Point[] = [
-            { position: startingPoint.copy(), push: false, pop: false }
+            { position: startingPoint.copy(), push: false, pop: false, char: string[0].char }
         ];
         let heading = 0;
         let positionStack: p5.Vector[] = [];
         let headingStack: number[] = [];
         for (let i = 0; i < string.length; i++) {
             let symbol = string[i];
-            if (symbol.char == 'F') {
+            if (alphabet.includes(symbol.char)) {
                 let v = p.createVector(symbol.params[0], 0).rotate(heading);
                 position.add(v);
-                pointSequence.push({ position: position.copy(), push: false, pop: false });
+                pointSequence.push({ position: position.copy(), push: false, pop: false, char: symbol.char });
             }
             if (symbol.char == '+') {
                 heading += symbol.params[0];
