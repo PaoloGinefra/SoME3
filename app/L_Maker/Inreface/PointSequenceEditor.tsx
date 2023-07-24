@@ -77,6 +77,7 @@ export default function PointSequenceEditor({ string, handleSequence }: PointSeq
                     if (id != -1) {
                         points[id].push = !points[id].push
                         handleSequence(p, points);
+                        setMode('Stack pop')
                     }
                 },
                 'Stack pop': () => {
@@ -84,6 +85,7 @@ export default function PointSequenceEditor({ string, handleSequence }: PointSeq
                     if (id != -1) {
                         points[id].pop = !points[id].pop
                         handleSequence(p, points);
+                        setMode('Stack push')
                     }
                 },
             },
