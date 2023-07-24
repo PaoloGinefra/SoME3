@@ -283,6 +283,14 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
             if (points.length != 0) {
                 //draw lines between points
                 let Stack: p5.Vector[] = []
+
+                if (points[0].push)
+                    Stack.push(points[0].position)
+
+                if (points[0].pop)
+                    Stack.pop()
+
+
                 for (let i = 1; i < points.length; i++) {
                     p.strokeWeight(gridSize / 2)
                     p.stroke(0, 0, 0, 100)
