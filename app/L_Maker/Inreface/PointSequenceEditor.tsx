@@ -58,7 +58,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
         let offset = p.createVector(0, 0)
         let scale = 1
 
-        let pastString = state.current.string;
+        let pastString: Symbol[] = [];
         const modesFunctions: any = {
             'MouseClick': {
                 'Add': () => {
@@ -195,20 +195,35 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
             })
         }
 
-        function drawLine(p: p5, p1: p5.Vector, p2: p5.Vector) {
-            p.strokeWeight(gridSize / 2)
-            p.stroke(0, 0, 0, 100)
-            p.line(p2.x, p2.y, p1.x, p1.y)
-            let point = p2.copy().lerp(p1, 0.5)
-            let dir = p2.copy().sub(p1).normalize().mult(gridSize / 2)
+        function drawArrow(p: p5, p1: p5.Vector, p2: p5.Vector, dir: p5.Vector, percent: number) {
+            let point = p2.copy().lerp(p1, percent)
             let angle = p.PI / 3
+            let dirCopy = dir.copy()
             //draw arrow
             p.strokeWeight(gridSize / 4)
             p.stroke(0, 0, 0, 100)
-            dir.rotate(-angle)
-            p.line(point.x, point.y, point.x + dir.y, point.y - dir.x)
-            dir.rotate(2 * angle)
-            p.line(point.x, point.y, point.x - dir.y, point.y + dir.x)
+            dirCopy.rotate(-angle)
+            p.line(point.x, point.y, point.x + dirCopy.y, point.y - dirCopy.x)
+            dirCopy.rotate(2 * angle)
+            p.line(point.x, point.y, point.x - dirCopy.y, point.y + dirCopy.x)
+
+        }
+
+        function drawLine(p: p5, p1: p5.Vector, p2: p5.Vector, char: string) {
+            p.strokeWeight(gridSize / 2)
+            p.stroke(0, 0, 0, 100)
+            p.line(p2.x, p2.y, p1.x, p1.y)
+            let dir = p2.copy().sub(p1).normalize().mult(gridSize / 2)
+
+            drawArrow(p, p1, p2, dir, 0.2)
+
+            let point = p2.copy().lerp(p1, 0.5)
+            p.textAlign(p.CENTER, p.CENTER)
+            p.textSize(gridSize)
+            p.fill(0, 0, 0, 255)
+            p.noStroke()
+            p.textStyle(p.BOLD)
+            p.text(char, point.x, point.y)
         }
 
         function drawPoint(p: p5, point: Point) {
@@ -222,10 +237,10 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
             drawCircle(p, point)
 
             p.textAlign(p.CENTER, p.CENTER)
-            p.textSize(gridSize * 2 / 3)
+            p.textSize(gridSize)
             p.fill(0, 0, 0, 255)
             p.noStroke()
-            p.text(point.char, point.position.x, point.position.y)
+            p.text('+', point.position.x, point.position.y)
         }
 
 
@@ -275,10 +290,10 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                     if (points[i - 1].pop) {
                         let p1 = Stack.pop() ?? p.createVector(0, 0);
                         let p2 = points[i].position
-                        drawLine(p, p1, p2)
+                        drawLine(p, p1, p2, points[i].char)
                     }
                     else {
-                        drawLine(p, points[i - 1].position, points[i].position)
+                        drawLine(p, points[i - 1].position, points[i].position, points[i].char)
                     }
                     drawPoint(p, points[i - 1])
 
