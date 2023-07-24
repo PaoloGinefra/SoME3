@@ -305,7 +305,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
             if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h && points.length > 0 && state.current.mode == 'Add') {
                 //draw faded line between last point and mouse
-                drawLine(p, points[points.length - 1].position, p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)))
+                drawLine(p, points[points.length - 1].position, p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), state.current.preChar ?? '')
             }
             if (points.length > 0)
                 drawPoint(p, points[points.length - 1])
@@ -315,6 +315,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
             if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h) {
                 if (state.current.mode == 'Add' || state.current.mode == 'Delete' || state.current.mode == 'Edit') {
+                    p.fill(255, 255, 255)
                     //draw faded point at mouse
                     if (state.current.mode == 'Delete')
                         p.stroke(deletePointColor)

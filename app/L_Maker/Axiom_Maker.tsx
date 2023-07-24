@@ -20,9 +20,10 @@ interface Axiom_Maker_State {
     axiom: Symbol[];
     setAxiom: (s: Symbol[]) => void;
     alphabet: string;
+    startingAxiom: Symbol[];
 }
 
-export default function Axiom_Maker({ axiom, setAxiom, alphabet }: Axiom_Maker_State) {
+export default function Axiom_Maker({ axiom, setAxiom, alphabet, startingAxiom }: Axiom_Maker_State) {
 
     function handleSequence(points: Point[]) {
         setAxiom(GPLS.pointSequence2String(points))
@@ -31,7 +32,7 @@ export default function Axiom_Maker({ axiom, setAxiom, alphabet }: Axiom_Maker_S
     return (
         <div className={classes['container']}>
             <h1>Axiom Editor</h1>
-            <PointSequenceEditor string={axiom} handleSequence={handleSequence} alphabet={alphabet} />
+            <PointSequenceEditor string={startingAxiom} handleSequence={handleSequence} alphabet={alphabet} />
         </div>
     )
 }

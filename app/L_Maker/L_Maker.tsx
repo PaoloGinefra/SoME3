@@ -55,6 +55,8 @@ export default function L_Maker() {
 
     const [iterations, setIterations] = useState<number>(5);
 
+    const [startingAxiom, setStartingAxiom] = useState<Symbol[]>([]);
+
     useEffect(() => {
         let axiom = JSON.parse(localStorage.getItem('axiom') || '[]');
         //let productions = GPLS.DeserializeProductions(localStorage.getItem('productions') || '');
@@ -69,6 +71,8 @@ export default function L_Maker() {
 
         drawingRules[0].targetChars = alphabet;
         setDrawingRules(drawingRules);
+
+        setStartingAxiom(axiom)
 
         console.log('loaded', productions)
     }, [])
@@ -98,7 +102,7 @@ export default function L_Maker() {
             onClick={() => { }}//setIterations(iterations + 1)}
             onMouseLeave={() => setIterations(iterations)}>
             <AlphabetEditor alphabet={alphabet} setAlphabet={setAlphabet} />
-            <Axiom_Maker axiom={axiom} setAxiom={setAxiom} alphabet={alphabet} />
+            <Axiom_Maker axiom={axiom} setAxiom={setAxiom} alphabet={alphabet} startingAxiom={startingAxiom} />
             <Production_Maker productions={productions} setProductions={setProductions} alphabet={alphabet} />
             <L_Renderer string={String_} drawingRules={drawingRules} iteration={iterations} setIteration={setIterations} />
         </ div >
