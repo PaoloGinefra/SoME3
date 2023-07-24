@@ -161,7 +161,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
         }
 
         function getPointIdFromMouse() {
-            return points.findIndex(point => p.abs(point.position.x - quantizeCoord(p.mouseX - offset.x)) < 0.2 && p.abs(point.position.y - quantizeCoord(p.mouseY - offset.y)) < 0.2)
+            return points.findIndex(point => p.abs(point.position.x - quantizeCoord(p.mouseX - offset.x)) < gridSize / 2 && p.abs(point.position.y - quantizeCoord(p.mouseY - offset.y)) < gridSize / 2)
         }
 
         p.preload = function () {
