@@ -31,7 +31,7 @@ export default function Production_Maker({ productions, setProductions, alphabet
     const [str, setStr] = useState<Symbol[]>([]);
 
     useEffect(() => {
-        setStr(productions.find((p) => p.preChar == preChar)?.successor([100]) ?? [])
+        setStr(productions.find((p) => p.preChar == preChar)?.successor([500]) ?? [])
         console.log("oldStuff", productions.find((p) => p.preChar == preChar)?.successor([100]) ?? [])
     }, [preChar])
 
