@@ -52,6 +52,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
         let deletePointColor = p.color('#a53f3f60');
         let editColor = p.color('#a3c6c260');
         let referenceColor = p.color('#ffcb8564');
+        let lineColor = p.color(0, 0, 0, 80)
 
         let touchPoint = p.createVector(0, 0)
         let isHolding = false
@@ -243,7 +244,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
         function drawLine(p: p5, p1: p5.Vector, p2: p5.Vector, char: string) {
             p.strokeWeight(gridSize / 2)
-            p.stroke(0, 0, 0, 100)
+            p.stroke(lineColor)
             p.line(p2.x, p2.y, p1.x, p1.y)
             let dir = p2.copy().sub(p1).normalize().mult(gridSize / 2)
 
