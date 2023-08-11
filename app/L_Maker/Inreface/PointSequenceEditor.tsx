@@ -138,8 +138,6 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                     if (state.current.referenceToggle && p.abs(refernceTail.x - quantizeCoord(p.mouseX - offset.x)) < gridSize / 2 && p.abs(refernceTail.y - quantizeCoord(p.mouseY - offset.y)) < gridSize / 2) {
                         isReferenceSelected = true
                     }
-
-                    console.log('Print', points)
                 }
             },
             'MouseOut': {
@@ -195,7 +193,9 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
         }
 
         p.setup = function () {
-            points = GPLS.String2PointSequence(p, state.current.string, p.createVector(w / 2, h / 2), state.current.alphabet);
+            let dist = p.dist(refernceHead.x, refernceHead.y, refernceTail.x, refernceTail.y)
+            let heading = p.createVector(refernceTail.x - refernceHead.x, refernceTail.y - refernceHead.y).heading()
+            points = GPLS.String2PointSequence(p, state.current.string, refernceHead, dist, heading, state.current.alphabet);
             //insert reference pointsa at the beginning
             if (referenceToggle)
                 points.splice(0, 0, { position: refernceHead, push: false, pop: false, char: '' }, { position: refernceTail, push: false, pop: false, char: '' })
@@ -320,7 +320,12 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
         p.draw = function () {
             if (JSON.stringify(state.current.string) != JSON.stringify(pastString)) {
                 console.log('preChar changed')
-                points = GPLS.String2PointSequence(p, state.current.string, p.createVector(w / 2, h / 2), state.current.alphabet);
+                let dist = p.dist(refernceHead.x, refernceHead.y, refernceTail.x, refernceTail.y)
+                let heading = p.createVector(refernceTail.x - refernceHead.x, refernceTail.y - refernceHead.y).heading()
+                points = GPLS.String2PointSequence(p, state.current.string, refernceHead, dist, heading, state.current.alphabet);
+                if (referenceToggle)
+                    points.splice(0, 0, { position: refernceHead, push: false, pop: false, char: '' }, { position: refernceTail, push: false, pop: false, char: '' })
+
             }
             p.background(251, 234, 205)
             grid.draw(offset, scale)
