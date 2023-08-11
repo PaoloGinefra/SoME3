@@ -87,9 +87,9 @@ export default class GPLS {
         let offsetPeriod = 1
         for (let i = 0; i < string.length; i++) {
             let symbol = string[i];
-            if (symbol.char == '[')
+            if (symbol.char == '[' && increasingOffest)
                 offset += stepOffset;
-            else if (symbol.char == ']')
+            else if (symbol.char == ']' && increasingOffest)
                 offset -= stepOffset;
 
             for (let j = 0; j < drawingRules.length; j++) {
