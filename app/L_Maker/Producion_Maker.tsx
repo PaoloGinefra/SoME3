@@ -44,11 +44,11 @@ export default function Production_Maker({ productions, setProductions, alphabet
         if (points.length < 2) return;
 
         console.log("pre Char in handle Sequence", preChar)
-
+        const references = points.splice(0, 2)
         const s = GPLS.pointSequence2String(points)
         const len = points.length
-        const dist = points[0].position.copy().sub(points[len - 1].position).mag();
-        const heading = points[len - 1].position.copy().sub(points[0].position).heading();
+        const dist = references[0].position.copy().sub(references[1].position).mag();
+        const heading = references[1].position.copy().sub(references[0].position).heading();
 
         let newProduction = {
             preChar: preChar,

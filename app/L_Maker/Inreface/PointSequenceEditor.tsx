@@ -38,15 +38,13 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
     const [char, setChar] = useState<string>('F');
     const [referenceOn, setReferenceOn] = useState<boolean>(referenceToggle);
 
-    const sketch = useStatefulSketch({ handleSequence, mode, string, char, alphabet, preChar }, (state, p) => {
+    const sketch = useStatefulSketch({ handleSequence, mode, string, char, alphabet, preChar, referenceOn, referenceToggle }, (state, p) => {
         const w = 800
         const h = 500
         const gridSize = 10
 
         let canvas: Renderer
         let grid = new Grid(w, h, gridSize, 0.2, 0.1, p);
-
-        let points: Point[] = [];
 
         let pointColor = p.color('#4b8b2f60');
         let deletePointColor = p.color('#a53f3f60');
@@ -66,6 +64,9 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
         let refernceHead = p.createVector(w / 2, h / 2)
         let refernceTail = p.createVector(w / 2 + 200, h / 2)
 
+        let points: Point[] = [];
+
+
         let pastString: Symbol[] = [];
         const modesFunctions: any = {
             'MouseClick': {
@@ -84,7 +85,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                     let id = getPointIdFromMouse()
                     console.log(id)
                     if (id != -1) {
-                        points.splice(id, 1)
+                        points.splice(id + (state.current.referenceToggle ? 2 : 0), 1)
                         handleSequence(points);
                     }
                 },
@@ -128,15 +129,17 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                 },
                 'Edit': () => {
                     let id = getPointIdFromMouse();
-                    if (id != -1) {
+                    if (id > -1 + (referenceToggle ? 2 : 0)) {
                         selected = id
                         return;
                     }
 
                     //check for reference
-                    if (p.abs(refernceTail.x - quantizeCoord(p.mouseX - offset.x)) < gridSize / 2 && p.abs(refernceTail.y - quantizeCoord(p.mouseY - offset.y)) < gridSize / 2) {
+                    if (state.current.referenceToggle && p.abs(refernceTail.x - quantizeCoord(p.mouseX - offset.x)) < gridSize / 2 && p.abs(refernceTail.y - quantizeCoord(p.mouseY - offset.y)) < gridSize / 2) {
                         isReferenceSelected = true
                     }
+
+                    console.log('Print', points)
                 }
             },
             'MouseOut': {
@@ -149,7 +152,10 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
             },
             'Draw': {
                 'Clear': () => {
-                    points = []
+                    if (referenceToggle)
+                        points = points.splice(0, 2)
+                    else
+                        points = []
                     handleSequence(points);
                     offset = p.createVector(0, 0)
                     setMode('Add')
@@ -168,6 +174,8 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                     }
                     else if (isReferenceSelected) {
                         refernceTail = p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
+                        points[1].position = refernceTail
+                        handleSequence(points);
                     }
                 },
             }
@@ -188,6 +196,9 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
         p.setup = function () {
             points = GPLS.String2PointSequence(p, state.current.string, p.createVector(w / 2, h / 2), state.current.alphabet);
+            //insert reference pointsa at the beginning
+            if (referenceToggle)
+                points.splice(0, 0, { position: refernceHead, push: false, pop: false, char: '' }, { position: refernceTail, push: false, pop: false, char: '' })
             console.log('Setup', points)
             canvas = p.createCanvas(w, h)
             grid.setup()
@@ -318,7 +329,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
             p.scale(scale)
 
             //Drawing Reference
-            if (referenceToggle) {
+            if (referenceToggle && state.current.referenceOn) {
                 p.strokeWeight(gridSize)
                 p.stroke(referenceColor)
                 p.line(refernceHead.x, refernceHead.y, refernceTail.x, refernceTail.y)
@@ -341,7 +352,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                 modesFunctions['Draw'][state.current.mode]();
 
 
-            if (points.length != 0) {
+            if (points.length != (referenceToggle ? 2 : 0)) {
                 //draw lines between points
                 let Stack: p5.Vector[] = []
 
@@ -352,7 +363,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                     Stack.pop()
 
 
-                for (let i = 1; i < points.length; i++) {
+                for (let i = 1 + (referenceToggle ? 2 : 0); i < points.length; i++) {
                     p.strokeWeight(gridSize / 2)
                     p.stroke(0, 0, 0, 100)
 
@@ -372,11 +383,11 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                 }
             }
 
-            if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h && points.length > 0 && state.current.mode == 'Add') {
+            if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h && points.length > (referenceToggle ? 2 : 0) && state.current.mode == 'Add') {
                 //draw faded line between last point and mouse
                 drawLine(p, points[points.length - 1].position, p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), state.current.preChar ?? '')
             }
-            if (points.length > 0)
+            if (points.length > (referenceToggle ? 2 : 0))
                 drawPoint(p, points[points.length - 1])
 
             p.strokeWeight(gridSize)
