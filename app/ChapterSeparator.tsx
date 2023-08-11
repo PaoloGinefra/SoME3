@@ -1,8 +1,4 @@
 export default function ChapterSeparator() {
   // TODO: implement chapter separator
-  return (
-    <p>
-      <b>Chapter separator</b>
-    </p>
-  )
+  return <p className="font-bold italic">Chapter separator</p>
 }
