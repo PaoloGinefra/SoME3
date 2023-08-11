@@ -78,19 +78,16 @@ export default class GPLS {
      * @param drawingRules
      * @returns
      */
-    static drawString(p: p5, string: Symbol[], drawingRules: DrawingRule[], t: number = 1, increasingOffest: boolean = true) {
+    static drawString(p: p5, string: Symbol[], drawingRules: DrawingRule[], t: number = 1, increasingOffest: boolean = true, offsetPerChar = 1, offsetPerBracket = 1) {
         if (string.length == 0) return;
-
-        let stepOffset = 1
         let offset = 0;
 
-        let offsetPeriod = 1
         for (let i = 0; i < string.length; i++) {
             let symbol = string[i];
             if (symbol.char == '[' && increasingOffest)
-                offset += stepOffset;
+                offset += offsetPerBracket;
             else if (symbol.char == ']' && increasingOffest)
-                offset -= stepOffset;
+                offset -= offsetPerBracket;
 
             for (let j = 0; j < drawingRules.length; j++) {
                 let drawingRule = drawingRules[j];
@@ -101,7 +98,7 @@ export default class GPLS {
             }
 
             if (increasingOffest && (symbol.char == 'F' || symbol.char == '+'))
-                offset += offsetPeriod * 5 / string.length;
+                offset += offsetPerChar;
         }
     }
 
