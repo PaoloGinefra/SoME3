@@ -340,6 +340,13 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                 else if (state.current.mode == 'Stack pop') {
                     drawPop(p, { position: p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), push: false, pop: true, char: 'F' })
                 }
+                else if (state.current.mode == 'Color') {
+                    p.textAlign(p.CENTER, p.CENTER)
+                    p.textSize(gridSize)
+                    p.fill(0, 0, 0, 255)
+                    p.noStroke()
+                    p.text(state.current.char ?? '', quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
+                }
             }
             pastString = [...state.current.string];
         }
