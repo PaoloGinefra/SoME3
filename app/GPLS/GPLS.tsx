@@ -78,7 +78,7 @@ export default class GPLS {
      * @param drawingRules
      * @returns
      */
-    static drawString(p: p5, string: Symbol[], drawingRules: DrawingRule[], t: number = 1) {
+    static drawString(p: p5, string: Symbol[], drawingRules: DrawingRule[], t: number = 1, increasingOffest: boolean = true) {
         if (string.length == 0) return;
 
         let stepOffset = 1
@@ -100,7 +100,7 @@ export default class GPLS {
                 }
             }
 
-            if (symbol.char == 'F' || symbol.char == '+')
+            if (increasingOffest && (symbol.char == 'F' || symbol.char == '+'))
                 offset += offsetPeriod * 5 / string.length;
         }
     }
