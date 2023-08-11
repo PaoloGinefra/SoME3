@@ -14,21 +14,16 @@ const drawingRules: DrawingRule[] = [
   {
     targetChars: 'F',
     drawing: (params, p, t = 1) => {
-      // TODO: animate with t
-
       const [len] = params
       p.stroke('#0070A9')
       p.strokeWeight(1)
-      p.line(0, 0, len, 0)
-      p.translate(len, 0)
+      p.line(0, 0, len * t, 0)
+      p.translate(len * t, 0)
     },
   },
   {
     targetChars: '+',
     drawing: (params, p, t: number = 1) => {
-      // FIXME: why is t=0 ???
-      t = 1
-
       const [angle] = params
       p.rotate(angle * t)
     },
@@ -36,9 +31,6 @@ const drawingRules: DrawingRule[] = [
   {
     targetChars: '-',
     drawing: (params, p, t: number = 1) => {
-      // FIXME: why is t=0 ???
-      t = 1
-
       const [angle] = params
       p.rotate(-angle * t)
     },
@@ -55,7 +47,7 @@ export default function ExampleSketch() {
   const setParam = (ruleChar: string, value: number) =>
     setInputState({ ...inputState, [ruleChar]: value })
 
-  const [inputString, setInputString] = useState('F+F-F')
+  const [inputString, setInputString] = useState('+F--F++F--F++F--F++F--F++F--F++F--F++F--F++F')
 
   const lookup: Record<string, number> = {
     ...inputState,
@@ -70,6 +62,8 @@ export default function ExampleSketch() {
     const w = 700
     const h = 550
 
+    let t = 0
+
     let canvas: Renderer
 
     p.preload = function () {}
@@ -81,12 +75,15 @@ export default function ExampleSketch() {
     p.draw = function () {
       p.background(251, 234, 205)
 
+      // TODO: moveable grid
       p.translate(50, h - 50)
       p.push()
 
-      GPLS.drawString(p, state.current.string, drawingRules, 1)
+      GPLS.drawString(p, state.current.string, drawingRules, t, true)
 
       p.pop()
+
+      t += 0.01
     }
   })
 
@@ -144,6 +141,9 @@ export default function ExampleSketch() {
           value={inputString}
           onChange={(e) => setInputString(e.target.value)}
         />
+        <br />
+
+        <button>Draw</button>
       </fieldset>
 
       <SketchRenderer sketch={sketch} />
