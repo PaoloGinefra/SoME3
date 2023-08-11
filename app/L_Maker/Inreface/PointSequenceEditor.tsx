@@ -23,6 +23,7 @@ interface PointSequenceEditor_State {
     handleSequence: (s: Point[]) => void;
     alphabet: string;
     preChar?: string;
+    referenceToggle: boolean;
 }
 
 export interface Point {
@@ -32,9 +33,10 @@ export interface Point {
     char: string;
 }
 
-export default function PointSequenceEditor({ string, handleSequence, alphabet, preChar }: PointSequenceEditor_State) {
+export default function PointSequenceEditor({ string, handleSequence, alphabet, preChar, referenceToggle }: PointSequenceEditor_State) {
     const [mode, setMode] = useState<string>('Move');
     const [char, setChar] = useState<string>('F');
+    const [referenceOn, setReferenceOn] = useState<boolean>(referenceToggle);
 
     const sketch = useStatefulSketch({ handleSequence, mode, string, char, alphabet, preChar }, (state, p) => {
         const w = 800
@@ -49,14 +51,19 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
         let pointColor = p.color('#4b8b2f60');
         let deletePointColor = p.color('#a53f3f60');
         let editColor = p.color('#a3c6c260');
+        let referenceColor = p.color('#ffcb8564');
 
         let touchPoint = p.createVector(0, 0)
         let isHolding = false
 
         let selected = -1
+        let isReferenceSelected = false;
 
         let offset = p.createVector(0, 0)
         let scale = 1
+
+        let refernceHead = p.createVector(w / 2, h / 2)
+        let refernceTail = p.createVector(w / 2 + 200, h / 2)
 
         let pastString: Symbol[] = [];
         const modesFunctions: any = {
@@ -109,7 +116,8 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                     isHolding = false
                 },
                 'Edit': () => {
-                    selected = -1
+                    selected = -1;
+                    isReferenceSelected = false;
                 }
             },
             'MousePressed': {
@@ -121,6 +129,12 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                     let id = getPointIdFromMouse();
                     if (id != -1) {
                         selected = id
+                        return;
+                    }
+
+                    //check for reference
+                    if (p.abs(refernceTail.x - quantizeCoord(p.mouseX - offset.x)) < gridSize / 2 && p.abs(refernceTail.y - quantizeCoord(p.mouseY - offset.y)) < gridSize / 2) {
+                        isReferenceSelected = true
                     }
                 }
             },
@@ -151,6 +165,9 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                         points[selected].position = p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
                         handleSequence(points);
                     }
+                    else if (isReferenceSelected) {
+                        refernceTail = p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
+                    }
                 },
             }
         }
@@ -179,12 +196,27 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                     modesFunctions['MouseClick'][state.current.mode]();
             })
 
+            canvas.touchStarted(function () {
+                if (state.current.mode in modesFunctions['MouseClick'])
+                    modesFunctions['MouseClick'][state.current.mode]();
+            })
+
             canvas.mousePressed(function () {
                 if (state.current.mode in modesFunctions['MousePressed'])
                     modesFunctions['MousePressed'][state.current.mode]();
             })
 
+            canvas.touchMoved(function () {
+                if (state.current.mode in modesFunctions['MousePressed'])
+                    modesFunctions['MousePressed'][state.current.mode]();
+            })
+
             canvas.mouseReleased(function () {
+                if (state.current.mode in modesFunctions['MouseReleased'])
+                    modesFunctions['MouseReleased'][state.current.mode]();
+            })
+
+            canvas.touchEnded(function () {
                 if (state.current.mode in modesFunctions['MouseReleased'])
                     modesFunctions['MouseReleased'][state.current.mode]();
             })
@@ -243,6 +275,13 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
             p.text('+', point.position.x, point.position.y)
         }
 
+        function drawReferencePoint(p: p5, position: p5.Vector) {
+            p.fill(255, 255, 255)
+            p.strokeWeight(gridSize)
+            p.stroke(referenceColor)
+            p.circle(position.x, position.y, gridSize)
+        }
+
 
         function drawCircle(p: p5, point: Point) {
             p.fill(255, 255, 255)
@@ -277,8 +316,29 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
             p.translate(offset.x, offset.y)
             p.scale(scale)
 
+            //Drawing Reference
+            if (referenceToggle) {
+                p.strokeWeight(gridSize)
+                p.stroke(referenceColor)
+                p.line(refernceHead.x, refernceHead.y, refernceTail.x, refernceTail.y)
+
+                drawReferencePoint(p, refernceHead)
+                drawReferencePoint(p, refernceTail)
+
+                //Draw reference letter
+                let middle = refernceHead.copy().lerp(refernceTail, 0.5)
+                p.textAlign(p.CENTER, p.CENTER)
+                p.textSize(gridSize)
+                p.fill(0, 0, 0, 255)
+                p.noStroke()
+                p.textStyle(p.BOLD)
+                p.text(state.current.preChar ?? '', middle.x, middle.y)
+
+            }
+
             if (state.current.mode in modesFunctions['Draw'])
                 modesFunctions['Draw'][state.current.mode]();
+
 
             if (points.length != 0) {
                 //draw lines between points
@@ -350,6 +410,18 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
         <div className={classes['container']}>
             <ModeButton mode={mode} setMode={setMode} />
             {mode == 'Color' ? <CharPicker alphabet={alphabet} currentChar={char} setcurrentChar={setChar} /> : null}
+            {referenceToggle ?
+                <div>
+                    <input
+                        type="checkbox"
+                        checked={referenceOn}
+                        onChange={() => setReferenceOn(!referenceOn)}
+                    />
+                    {preChar} Reference
+                </div>
+
+                : null
+            }
             <SketchRenderer sketch={sketch} />
         </div>
     )

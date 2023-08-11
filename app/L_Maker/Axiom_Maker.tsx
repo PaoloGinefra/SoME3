@@ -32,7 +32,7 @@ export default function Axiom_Maker({ axiom, setAxiom, alphabet, startingAxiom }
     return (
         <div className={classes['container']}>
             <h1>Axiom Editor</h1>
-            <PointSequenceEditor string={startingAxiom} handleSequence={handleSequence} alphabet={alphabet} />
+            <PointSequenceEditor string={startingAxiom} handleSequence={handleSequence} alphabet={alphabet} referenceToggle={false} />
         </div>
     )
 }

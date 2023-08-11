@@ -98,7 +98,7 @@ export default function Production_Maker({ productions, setProductions, alphabet
                 console.log("newStuff", points_)
                 setPoints([...points_])
             }
-            } alphabet={alphabet} />
+            } alphabet={alphabet} referenceToggle={true} />
 
         </div>
     )
