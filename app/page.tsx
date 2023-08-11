@@ -1,10 +1,10 @@
 import { AchievementsProvider } from './Achievements/achievements'
-import HelloWorld from './hello.mdx'
+import Article from './article.mdx'
 
 export default function Page() {
   return (
     <AchievementsProvider>
-      <HelloWorld />
+      <Article />
     </AchievementsProvider>
   )
 }
