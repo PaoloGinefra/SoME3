@@ -9,7 +9,7 @@ import type p5 from 'p5'
 
 import Grid from '../utils/Grid'
 import Shape, { Line } from './Classes/Shapes'
-import { Square, Canvas, Shapes, ShapesNames } from './Classes/Shapes'
+import { Square, Canvas, Shapes, ShapesNames, ShapesEmojis } from './Classes/Shapes'
 
 import ButtonCarousel from '../utils/ButtonCarousel'
 
@@ -23,8 +23,8 @@ export default function DWD_editor() {
     const [undoCount, setUndoCount] = useState(0);
 
     const sketch = useStatefulSketch({ brushName, brushSize, brushRotation, showCanvasContour, undoCount, setUndoCount }, (state, p) => {
-        const w = 600
-        const h = 600
+        const w = p.windowWidth * 0.8
+        const h = 700
 
         let bgColor = p.color(251, 234, 205)
         let canvas: Renderer
@@ -37,6 +37,11 @@ export default function DWD_editor() {
         let shapes: Shape[] = []
 
         let leafImage: p5.Image
+
+        p.windowResized = function () {
+            p.resizeCanvas(p.windowWidth * 0.8, h)
+            Graphic = p.createGraphics(p.windowWidth * 0.9, h)
+        }
 
         p.preload = function () {
             grid.preload()
@@ -107,21 +112,38 @@ export default function DWD_editor() {
     })
 
     return (
-        <div className={classes['container']}>
-            <ButtonCarousel option={brushName} setOption={setBrushName} options={ShapesNames} optionsNames={ShapesNames}></ButtonCarousel>
-            <input type="range" min="1" max={600} value={brushSize} onChange={(e) => setBrushSize(parseInt(e.target.value))} />
-            <p>Size: {brushSize}</p>
+        <div className='flex flex-col align-middle justify-center'>
+            <ButtonCarousel option={brushName} setOption={setBrushName} options={ShapesNames} optionsNames={ShapesEmojis}></ButtonCarousel>
 
-            <input type="range" min={-36} max={36} step={1} onChange={(e) => setBrushRotation(parseFloat(e.target.value) / 36 * 3.141)} />
-            <p>Rotation: {Math.round(brushRotation * 180 / 3.141)} deg</p>
+            <div className='m-auto'>
+                <SketchRenderer sketch={sketch} />
+            </div>
 
-            <input type="checkbox" checked={showCanvasContour} onChange={(e) => setShowCanvasContour(e.target.checked)} />
-            <p>Show canvas contour</p>
+            <div className='flex m-auto gap-3 flex-auto my-3'>
+                <div className='flex flex-col flex-auto'>
+                    <input className='w-40 h-6 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700'
+                        type="range" min="1" max={600} value={brushSize} onChange={(e) => setBrushSize(parseInt(e.target.value))} />
+                    <p className='relative bold text-center m-auto'>Size: {brushSize}</p>
+                </div>
 
-            <button onClick={() => setUndoCount(undoCount + 1)}>Undo</button>
+                <div className='flex flex-col flex-auto'>
+                    <input className='w-40 h-6 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700'
+                        type="range" min={-36} max={36} step={1} onChange={(e) => setBrushRotation(parseFloat(e.target.value) / 36 * 3.141)} />
+                    <p className='relative bold text-center m-auto'>Rotation: {Math.round(brushRotation * 180 / 3.141)} deg</p>
+                </div>
 
+                <div className='flex flex-col flex-auto'>
+                    <input className='w-5 h-6 m-auto' type="checkbox" checked={showCanvasContour} onChange={(e) => setShowCanvasContour(e.target.checked)} />
+                    <p>Canvas contours</p>
+                </div>
 
-            <SketchRenderer sketch={sketch} />
-        </div>
+                <div className='flex flex-col flex-auto'>
+                    <button className="m-auto font-bold h-6 w-10 border-0" onClick={() => setUndoCount(undoCount + 1)}>↩</button>
+                    <p>Undo</p>
+                </div>
+
+            </div>
+
+        </div >
     )
 }

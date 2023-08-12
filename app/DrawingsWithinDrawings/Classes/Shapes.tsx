@@ -1,4 +1,5 @@
 import type p5 from "p5";
+import Image from 'next/image'
 
 export default class Shape {
     p: p5;
@@ -108,3 +109,11 @@ export class Canvas extends Shape {
 
 export let Shapes: (typeof Shape)[] = [Square, Circle, Triangle, Line, Canvas, Leaf]
 export let ShapesNames = Shapes.map((s) => s.name)
+export let ShapesEmojis = ['◻️', '⚪', '🛆', '⁄', '🖽',
+    <Image
+        src="/assets/DWD/leaf.svg"
+        className="m-auto"
+        width={25}
+        height={25}
+        alt="Picture of the author"
+    />]

@@ -125,3 +125,9 @@ button:active{
     color-scheme: dark;
   }
 }
+
+canvas {
+  border: 2px solid white;
+  border-radius: 30px;
+  overflow: hidden;
+}
