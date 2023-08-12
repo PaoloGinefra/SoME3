@@ -98,12 +98,14 @@ export default function L_Maker() {
 
 
     return (
-        <div className={classes['container']}
+        <div
             onClick={() => { }}//setIterations(iterations + 1)}
             onMouseLeave={() => setIterations(iterations)}>
             <AlphabetEditor alphabet={alphabet} setAlphabet={setAlphabet} />
-            <Axiom_Maker axiom={axiom} setAxiom={setAxiom} alphabet={alphabet} startingAxiom={startingAxiom} />
-            <Production_Maker productions={productions} setProductions={setProductions} alphabet={alphabet} />
+            <div className='flex'>
+                <Axiom_Maker axiom={axiom} setAxiom={setAxiom} alphabet={alphabet} startingAxiom={startingAxiom} />
+                <Production_Maker productions={productions} setProductions={setProductions} alphabet={alphabet} />
+            </div>
             <L_Renderer string={String_} drawingRules={drawingRules} iteration={iterations} setIteration={setIterations} />
         </ div >
     )

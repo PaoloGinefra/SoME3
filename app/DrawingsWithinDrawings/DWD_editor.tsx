@@ -23,8 +23,8 @@ export default function DWD_editor() {
     const [undoCount, setUndoCount] = useState(0);
 
     const sketch = useStatefulSketch({ brushName, brushSize, brushRotation, showCanvasContour, undoCount, setUndoCount }, (state, p) => {
-        const w = p.windowWidth * 0.8
-        const h = 700
+        let w = p.windowWidth * 0.8
+        let h = 700
 
         let bgColor = p.color(251, 234, 205)
         let canvas: Renderer
@@ -69,6 +69,8 @@ export default function DWD_editor() {
         }
 
         p.draw = function () {
+            w = p.windowWidth
+            h = p.windowHeight;
             let undoCount = state.current.undoCount
             while (undoCount > 0) {
                 shapes.pop()
@@ -133,12 +135,12 @@ export default function DWD_editor() {
                 </div>
 
                 <div className='flex flex-col flex-auto'>
-                    <input className='w-5 h-6 m-auto' type="checkbox" checked={showCanvasContour} onChange={(e) => setShowCanvasContour(e.target.checked)} />
+                    <input className='w-5 h-6 m-auto bg-gray-700' type="checkbox" checked={showCanvasContour} onChange={(e) => setShowCanvasContour(e.target.checked)} />
                     <p>Canvas contours</p>
                 </div>
 
-                <div className='flex flex-col flex-auto'>
-                    <button className="m-auto font-bold h-6 w-10 border-0" onClick={() => setUndoCount(undoCount + 1)}>↩</button>
+                <div className='flex flex-col flex-auto '>
+                    <button className="m-auto font-bold h-6 w-10 border-0 text-gray-500 hover:text-white" onClick={() => setUndoCount(undoCount + 1)}>↩</button>
                     <p>Undo</p>
                 </div>
 

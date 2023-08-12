@@ -91,8 +91,8 @@ export default function Production_Maker({ productions, setProductions, alphabet
 
 
     return (
-        <div className={classes['container']}>
-            <h1>Production Editor (F)</h1>
+        <div className='flex flex-col gap-2 m-10' >
+            <h1 className='m-auto text-4xl'>Production(F)</h1>
             <CharPicker alphabet={alphabet} currentChar={preChar} setcurrentChar={setPreChar} />
             <PointSequenceEditor string={str} preChar={preChar} handleSequence={(points_: Point[]) => {
                 console.log("newStuff", points_)
@@ -100,6 +100,6 @@ export default function Production_Maker({ productions, setProductions, alphabet
             }
             } alphabet={alphabet} referenceToggle={true} />
 
-        </div>
+        </div >
     )
 }
