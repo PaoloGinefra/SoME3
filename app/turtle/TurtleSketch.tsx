@@ -40,6 +40,9 @@ const drawingRules: DrawingRule[] = [
 
 const DRAW_SPEED = 0.1
 
+const ALLOWED_CHARS = drawingRules.map((rule) => rule.targetChars).join('')
+const REPLACE_REGEX = new RegExp(`[^${ALLOWED_CHARS}]`) // matches any characters that are not in the allowed chars
+
 export default function ExampleSketch() {
   const [inputState, setInputState] = useState<Record<string, number>>({
     F: 50,
@@ -208,7 +211,9 @@ export default function ExampleSketch() {
           id="stringInput"
           type="text"
           value={inputString}
-          onChange={(e) => setInputString(e.target.value)}
+          onChange={(e) =>
+            setInputString(e.target.value.replace(REPLACE_REGEX, ''))
+          }
         />
         <br />
 
