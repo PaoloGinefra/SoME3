@@ -1,0 +1,15 @@
+.container {
+  margin: 2em;
+  padding: 2em;
+  border: 3px solid white;
+  overflow-wrap: break-word;
+}
+.container-bar {
+  font-size: 1.5em;
+  margin: 2em 2em 0;
+  display: flex;
+}
+.container-bar > button {
+  font-size: 1em;
+  margin: 0 0 0 1em;
+}

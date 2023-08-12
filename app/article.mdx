@@ -4,6 +4,7 @@ import AchievementToggle from './Achievements/AchievementToggle.tsx'
 import KochFlake from './Examples/KockFlakeExample.tsx'
 import SierpinskiTriangle from './Examples/SierpinskiTriangleExample.tsx'
 import L_Maker from './L_Maker/L_Maker.tsx'
+import TextLSystem from './TextLSystem/TextLSystem.tsx'
 
 import ChapterSeparator from './ChapterSeparator.tsx'
 
@@ -160,7 +161,7 @@ The process now becomes an iterative find and replace.
 We can get another string, “new”. Now we iterate through each character in “current” and we look for a match among the productions. If one is found we add to “new” the right side of the production, otherwise we bring along the character.
 Finally, we make “new” our “current” and start all over again until we reach the desired level of detail.
 
-[L-system non grafico]
+<TextLSystem/ >
 
 What we just described is called a Lyndelmier System from the bright botanist who first came up with it. Commonly abbreviated to L-systems they are an example of a broader class of computational objects called formal grammars.
 
