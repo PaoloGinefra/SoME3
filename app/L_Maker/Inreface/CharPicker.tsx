@@ -11,7 +11,7 @@ export default function CharPicker({ alphabet, currentChar, setcurrentChar }: Ch
             {
                 alphabet.split('').map((char, i) => {
                     return (
-                        <button key={i} style={{ borderRadius: '5px', padding: '8px', fontSize: '10px', "transform": (currentChar == char ? "scale(1.2)" : "scale(1)") }}
+                        <button key={i} style={{ borderRadius: '5px', padding: '8px', fontSize: '10px', "transform": (currentChar == char ? "scale(1.2)" : "") }}
                             onClick={() => setcurrentChar(char)}
                         >
                             {char}

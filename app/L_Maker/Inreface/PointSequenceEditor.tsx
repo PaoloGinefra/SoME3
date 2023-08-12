@@ -85,7 +85,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                     let id = getPointIdFromMouse()
                     console.log(id)
                     if (id != -1) {
-                        points.splice(id + (state.current.referenceToggle ? 2 : 0), 1)
+                        points.splice(id, 1)
                         handleSequence(points);
                     }
                 },
@@ -328,7 +328,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
             }
             p.background(251, 234, 205)
-            grid.draw(offset, scale)
+            grid.draw(offset.copy().mult(2), scale)
 
             p.translate(offset.x, offset.y)
             p.scale(scale)
@@ -425,7 +425,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
     return (
         <div className={classes['container']}>
-            <ModeButton mode={mode} setMode={setMode} />
+            <ModeButton Modes={Modes} mode={mode} setMode={setMode} />
             {mode == 'Color' ? <CharPicker alphabet={alphabet} currentChar={char} setcurrentChar={setChar} /> : null}
             {referenceToggle ?
                 <div>

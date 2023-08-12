@@ -10,7 +10,7 @@ uniform vec2 u_offset;
 uniform float u_scale;
 
 void main() {
-    vec2 offset = 2.0 * vec2(-u_offset.x, u_offset.y);
+    vec2 offset = vec2(-u_offset.x, u_offset.y);
     vec2 st = mod((gl_FragCoord.xy + offset)*u_scale, u_gridSize);
     st /= u_gridSize;
     float radius = distance(st, vec2(0.5));
