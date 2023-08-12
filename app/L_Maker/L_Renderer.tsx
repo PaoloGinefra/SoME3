@@ -26,7 +26,7 @@ export default function L_Renderer({ string, drawingRules, iteration, setIterati
     const [t, setT] = useState<number>(0)
 
     const sketch = useStatefulSketch({ string, drawingRules, t }, (state, p) => {
-        const w = 800
+        const w = p.windowWidth * 0.8
         const h = 500
         const gridSize = 10
 
@@ -82,12 +82,16 @@ export default function L_Renderer({ string, drawingRules, iteration, setIterati
     })
 
     return (
-        <div className={classes['container']}>
-            <h1>Rendered L-System</h1>
-            <div style={{ display: 'flex', flexDirection: 'row', gap: "100px" }}>
-                <div>
-                    <label htmlFor="sizeSlider">Iterations</label>
+        <div className='flex flex-col justify-center m-auto mt-2'>
+            <h1 className='text-4xl m-auto'>Result</h1>
+            <div className='m-auto'>
+
+                <SketchRenderer sketch={sketch} />
+            </div>
+            <div className='flex justify-center mt-2 gap-8'>
+                <div className='flex flex-col'>
                     <input
+                        className='m-auto w-40 h-6 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700'
                         id="sizeSlider"
                         type="range"
                         min={0}
@@ -95,10 +99,10 @@ export default function L_Renderer({ string, drawingRules, iteration, setIterati
                         value={iteration}
                         onChange={(e) => setIteration(parseInt(e.target.value))}
                     />
+                    <label className='m-auto' htmlFor="sizeSlider">Iterations: {iteration}</label>
                 </div>
-                <button onClick={() => { setT(0) }}>Animate</button>
+                <button className='px-2' onClick={() => { setT(0) }}>Animate</button>
             </div>
-            <SketchRenderer sketch={sketch} />
-        </div>
+        </div >
     )
 }

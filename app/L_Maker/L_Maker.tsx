@@ -111,7 +111,7 @@ export default function L_Maker() {
             <AlphabetEditor alphabet={alphabet} setAlphabet={setAlphabet} />
             <ModeButton Modes={Modes} mode={mode} setMode={setMode} />
             {mode == 'Color' ? <CharPicker alphabet={alphabet} currentChar={char} setcurrentChar={setChar} /> : null}
-            <div className='flex overflow-x-scroll gap-5 justify-center'>
+            <div className='flex gap-5 justify-center'>
                 <Axiom_Maker char={char} setChar={setChar} mode={mode} setMode={setMode} axiom={axiom} setAxiom={setAxiom} alphabet={alphabet} startingAxiom={startingAxiom} />
                 <Production_Maker char={char} setChar={setChar} mode={mode} setMode={setMode} productions={productions} setProductions={setProductions} alphabet={alphabet} />
             </div>

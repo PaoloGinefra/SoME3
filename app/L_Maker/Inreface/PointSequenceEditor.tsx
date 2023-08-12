@@ -439,7 +439,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
                 : null
             } */}
-            <div className=' border-none'>
+            <div className=' border-b-red-100'>
                 <SketchRenderer sketch={sketch} />
             </div>
         </div>
