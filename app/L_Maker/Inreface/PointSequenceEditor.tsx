@@ -24,6 +24,10 @@ interface PointSequenceEditor_State {
     alphabet: string;
     preChar?: string;
     referenceToggle: boolean;
+    mode: string;
+    setMode: (s: string) => void;
+    char: string;
+    setChar: (s: string) => void;
 }
 
 export interface Point {
@@ -33,9 +37,7 @@ export interface Point {
     char: string;
 }
 
-export default function PointSequenceEditor({ string, handleSequence, alphabet, preChar, referenceToggle }: PointSequenceEditor_State) {
-    const [mode, setMode] = useState<string>('Move');
-    const [char, setChar] = useState<string>('F');
+export default function PointSequenceEditor({ string, handleSequence, alphabet, preChar, referenceToggle, mode, setMode, char, setChar }: PointSequenceEditor_State) {
     const [referenceOn, setReferenceOn] = useState<boolean>(referenceToggle);
 
     const sketch = useStatefulSketch({ handleSequence, mode, string, char, alphabet, preChar, referenceOn, referenceToggle }, (state, p) => {
@@ -425,8 +427,6 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
     return (
         <div>
-            <ModeButton Modes={Modes} mode={mode} setMode={setMode} />
-            {mode == 'Color' ? <CharPicker alphabet={alphabet} currentChar={char} setcurrentChar={setChar} /> : null}
             {referenceToggle ?
                 <div>
                     <input

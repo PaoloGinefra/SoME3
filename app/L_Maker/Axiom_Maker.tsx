@@ -21,9 +21,13 @@ interface Axiom_Maker_State {
     setAxiom: (s: Symbol[]) => void;
     alphabet: string;
     startingAxiom: Symbol[];
+    mode: string;
+    setMode: (s: string) => void;
+    char: string;
+    setChar: (s: string) => void;
 }
 
-export default function Axiom_Maker({ axiom, setAxiom, alphabet, startingAxiom }: Axiom_Maker_State) {
+export default function Axiom_Maker({ axiom, setAxiom, alphabet, startingAxiom, mode, setMode, char, setChar }: Axiom_Maker_State) {
 
     function handleSequence(points: Point[]) {
         setAxiom(GPLS.pointSequence2String(points))
@@ -32,7 +36,7 @@ export default function Axiom_Maker({ axiom, setAxiom, alphabet, startingAxiom }
     return (
         <div className='flex flex-col gap-2 m-10'>
             <h1 className='m-auto text-4xl'>Axiom</h1>
-            <PointSequenceEditor string={startingAxiom} handleSequence={handleSequence} alphabet={alphabet} referenceToggle={false} />
+            <PointSequenceEditor char={char} setChar={setChar} mode={mode} setMode={setMode} string={startingAxiom} handleSequence={handleSequence} alphabet={alphabet} referenceToggle={false} />
         </div>
     )
 }
