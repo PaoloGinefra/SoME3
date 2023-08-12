@@ -22,9 +22,13 @@ interface Production_Maker_State {
     productions: Production[];
     setProductions: (p: Production[]) => void;
     alphabet: string;
+    mode: string;
+    setMode: (s: string) => void;
+    char: string;
+    setChar: (s: string) => void;
 }
 
-export default function Production_Maker({ productions, setProductions, alphabet }: Production_Maker_State) {
+export default function Production_Maker({ productions, setProductions, alphabet, mode, setMode, char, setChar }: Production_Maker_State) {
 
     const [preChar, setPreChar] = useState<string>('F');
     const [points, setPoints] = useState<Point[]>([]);
@@ -94,7 +98,7 @@ export default function Production_Maker({ productions, setProductions, alphabet
         <div className='flex flex-col gap-2 m-10' >
             <h1 className='m-auto text-4xl'>Production(F)</h1>
             <CharPicker alphabet={alphabet} currentChar={preChar} setcurrentChar={setPreChar} />
-            <PointSequenceEditor string={str} preChar={preChar} handleSequence={(points_: Point[]) => {
+            <PointSequenceEditor char={char} setChar={setChar} mode={mode} setMode={setMode} string={str} preChar={preChar} handleSequence={(points_: Point[]) => {
                 console.log("newStuff", points_)
                 setPoints([...points_])
             }

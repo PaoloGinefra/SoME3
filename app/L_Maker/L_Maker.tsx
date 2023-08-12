@@ -16,6 +16,10 @@ import Axiom_Maker from './Axiom_Maker'
 import Production_Maker from './Producion_Maker';
 import L_Renderer from './L_Renderer'
 import AlphabetEditor from './AlphabetEditor'
+import ModeButton from './Inreface/ModeButtons'
+import CharPicker from './Inreface/CharPicker'
+import Modes from './Inreface/Modes'
+
 
 export default function L_Maker() {
     const [alphabet, setAlphabet] = useState<string>('F');
@@ -56,6 +60,9 @@ export default function L_Maker() {
     const [iterations, setIterations] = useState<number>(5);
 
     const [startingAxiom, setStartingAxiom] = useState<Symbol[]>([]);
+
+    const [mode, setMode] = useState<string>('Move');
+    const [char, setChar] = useState<string>('F')
 
     useEffect(() => {
         let axiom = JSON.parse(localStorage.getItem('axiom') || '[]');
@@ -102,9 +109,11 @@ export default function L_Maker() {
             onClick={() => { }}//setIterations(iterations + 1)}
             onMouseLeave={() => setIterations(iterations)}>
             <AlphabetEditor alphabet={alphabet} setAlphabet={setAlphabet} />
+            <ModeButton Modes={Modes} mode={mode} setMode={setMode} />
+            {mode == 'Color' ? <CharPicker alphabet={alphabet} currentChar={char} setcurrentChar={setChar} /> : null}
             <div className='flex'>
-                <Axiom_Maker axiom={axiom} setAxiom={setAxiom} alphabet={alphabet} startingAxiom={startingAxiom} />
-                <Production_Maker productions={productions} setProductions={setProductions} alphabet={alphabet} />
+                <Axiom_Maker char={char} setChar={setChar} mode={mode} setMode={setMode} axiom={axiom} setAxiom={setAxiom} alphabet={alphabet} startingAxiom={startingAxiom} />
+                <Production_Maker char={char} setChar={setChar} mode={mode} setMode={setMode} productions={productions} setProductions={setProductions} alphabet={alphabet} />
             </div>
             <L_Renderer string={String_} drawingRules={drawingRules} iteration={iterations} setIteration={setIterations} />
         </ div >
