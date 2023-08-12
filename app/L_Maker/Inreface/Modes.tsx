@@ -8,5 +8,4 @@ let Modes: string[] = [
     'Stack pop',
     'Color',
 ]
-
 export default Modes;

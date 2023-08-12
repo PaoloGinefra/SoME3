@@ -34,7 +34,7 @@ export default function Axiom_Maker({ axiom, setAxiom, alphabet, startingAxiom, 
     }
 
     return (
-        <div className='flex flex-col gap-2 m-10'>
+        <div className='flex flex-col gap-2 max-w-40vw'>
             <h1 className='m-auto text-4xl'>Axiom</h1>
             <PointSequenceEditor char={char} setChar={setChar} mode={mode} setMode={setMode} string={startingAxiom} handleSequence={handleSequence} alphabet={alphabet} referenceToggle={false} />
         </div>

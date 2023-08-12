@@ -7,18 +7,18 @@ interface CharPicker_State {
 
 export default function CharPicker({ alphabet, currentChar, setcurrentChar }: CharPicker_State) {
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', margin: '20px' }}>
+        <select className="m-2 text-4xl rounded"
+            onChange={e => setcurrentChar(e.target.value)}
+        >
             {
                 alphabet.split('').map((char, i) => {
                     return (
-                        <button key={i} style={{ borderRadius: '5px', padding: '8px', fontSize: '10px', "transform": (currentChar == char ? "scale(1.2)" : "") }}
-                            onClick={() => setcurrentChar(char)}
-                        >
+                        <option key={i} className="text-2xl">
                             {char}
-                        </button>
+                        </option>
                     )
                 })
             }
-        </div>
+        </select>
     )
 }

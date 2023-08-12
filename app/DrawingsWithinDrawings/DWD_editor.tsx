@@ -80,7 +80,7 @@ export default function DWD_editor() {
 
 
             //Draw the background
-            p.background(bgColor)
+            p.background(0, 0, 0)
             //p.background(0, 0, 0,)
 
             //grid.draw()

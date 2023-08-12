@@ -427,7 +427,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
     return (
         <div>
-            {referenceToggle ?
+            {/* {referenceToggle ?
                 <div>
                     <input
                         type="checkbox"
@@ -438,8 +438,10 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                 </div>
 
                 : null
-            }
-            <SketchRenderer sketch={sketch} />
+            } */}
+            <div className=' border-none'>
+                <SketchRenderer sketch={sketch} />
+            </div>
         </div>
     )
 }
