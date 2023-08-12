@@ -85,7 +85,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                     let id = getPointIdFromMouse()
                     console.log(id)
                     if (id != -1) {
-                        points.splice(id + (state.current.referenceToggle ? 2 : 0), 1)
+                        points.splice(id, 1)
                         handleSequence(points);
                     }
                 },
