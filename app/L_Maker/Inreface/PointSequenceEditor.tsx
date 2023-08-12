@@ -328,7 +328,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
             }
             p.background(251, 234, 205)
-            grid.draw(offset, scale)
+            grid.draw(offset.copy().mult(2), scale)
 
             p.translate(offset.x, offset.y)
             p.scale(scale)
