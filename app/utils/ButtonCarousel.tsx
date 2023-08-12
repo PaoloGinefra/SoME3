@@ -14,7 +14,7 @@ export default function ButtonCarousel({ option, setOption, options, optionsName
                 style={{
                     "margin": "0.5em",
                     "padding": "0.5em",
-                    "transform": (op == option ? "scale(1.2)" : "scale(1)")
+                    "transform": (op == option ? "scale(1.2)" : "")
                 }}
             >{optionsNames[i]}</button>
         )}
