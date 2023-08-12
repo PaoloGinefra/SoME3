@@ -425,7 +425,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
     return (
         <div className={classes['container']}>
-            <ModeButton mode={mode} setMode={setMode} />
+            <ModeButton Modes={Modes} mode={mode} setMode={setMode} />
             {mode == 'Color' ? <CharPicker alphabet={alphabet} currentChar={char} setcurrentChar={setChar} /> : null}
             {referenceToggle ?
                 <div>

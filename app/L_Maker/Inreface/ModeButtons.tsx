@@ -1,12 +1,11 @@
-import Modes from "./Modes";
-
 interface ModeButton_State {
+    Modes: string[];
     mode: string;
     setMode: (modeName: string) => void;
 }
 
 
-export default function ModeButtons({ mode, setMode }: ModeButton_State) {
+export default function ModeButtons({ Modes, mode, setMode }: ModeButton_State) {
     return (
         <div style={{ display: "flex", flexDirection: "row" }}>
             {
