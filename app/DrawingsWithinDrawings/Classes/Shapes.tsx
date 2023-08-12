@@ -15,28 +15,37 @@ export default class Shape {
         this.scale = scale;
     }
 
-    draw() {
+    draw(context: drawContext_interface) {
         this.canvas.fill(255, 255, 255)
         this.canvas.circle(this.position.x, this.position.y, this.scale)
     }
 }
 
+interface drawContext_interface {
+    drawContour?: boolean,
+}
+
 export class Square extends Shape {
-    draw() {
+    draw(context: drawContext_interface) {
         this.canvas.fill(255, 255, 255)
-        this.canvas.square(this.position.x, this.position.y, this.scale)
+        this.canvas.push()
+        this.canvas.translate(this.position)
+        this.canvas.rotate(this.rotation)
+        this.canvas.rectMode(this.p.CENTER)
+        this.canvas.square(0, 0, this.scale)
+        this.canvas.pop()
     }
 }
 
 export class Circle extends Shape {
-    draw() {
+    draw(context: drawContext_interface) {
         this.canvas.fill(255, 255, 255)
         this.canvas.circle(this.position.x, this.position.y, this.scale)
     }
 }
 
 export class Triangle extends Shape {
-    draw() {
+    draw(context: drawContext_interface) {
         this.canvas.fill(255, 255, 255)
         this.canvas.push()
         this.canvas.translate(this.position)
@@ -47,15 +56,18 @@ export class Triangle extends Shape {
 }
 
 export class Line extends Shape {
-    draw() {
+    draw(context: drawContext_interface) {
         this.canvas.fill(255, 255, 255)
-        let tail = this.p.createVector(this.position.x + this.scale, this.position.y + this.scale).setHeading(this.rotation)
-        this.canvas.line(this.position.x, this.position.y, tail.x, tail.y)
+        this.canvas.push()
+        this.canvas.translate(this.position)
+        this.canvas.rotate(this.rotation)
+        this.canvas.line(0, 0, this.scale, 0)
+        this.canvas.pop()
     }
 }
 
 export class Canvas extends Shape {
-    draw() {
+    draw(context: drawContext_interface) {
         this.canvas.push()
         this.canvas.imageMode(this.p.CENTER)
         this.canvas.translate(this.position)
@@ -63,10 +75,17 @@ export class Canvas extends Shape {
         this.canvas.scale(this.scale / this.canvas.width)
         this.canvas.image(this.canvas, 0, 0)
 
-        this.canvas.rectMode(this.p.CENTER)
-        this.canvas.noFill()
-        this.canvas.stroke(255, 255, 255)
-        this.canvas.rect(0, 0, this.canvas.width, this.canvas.height)
+        if (context.drawContour) {
+            this.canvas.rectMode(this.p.CENTER)
+            this.canvas.noFill()
+            this.canvas.stroke(255, 255, 255)
+            this.canvas.scale(this.canvas.width / this.scale)
+            this.canvas.rect(0, 0, this.scale, this.canvas.height * this.scale / this.canvas.width)
+        }
         this.canvas.pop()
     }
 }
+
+
+export let Shapes: (typeof Shape)[] = [Square, Circle, Triangle, Line, Canvas]
+export let ShapesNames = Shapes.map((s) => s.name)
