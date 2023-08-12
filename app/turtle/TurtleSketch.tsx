@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Renderer } from 'p5'
+import { useEffect, useRef, useState } from 'react'
+import p5, { Renderer } from 'p5'
 
 import useStatefulSketch from '../p5/useStatefulSketch'
 import SketchRenderer from '../p5/SketchRenderer'
@@ -37,6 +37,8 @@ const drawingRules: DrawingRule[] = [
   },
 ]
 
+const DRAW_SPEED = 0.1
+
 export default function ExampleSketch() {
   const [inputState, setInputState] = useState<Record<string, number>>({
     F: 50,
@@ -58,11 +60,19 @@ export default function ExampleSketch() {
     .split('')
     .map((char) => ({ char, params: [lookup[char]] }))
 
+  const t = useRef(0)
+
+  const triggerRedraw = () => {
+    t.current = 0
+  }
+
+  useEffect(() => {
+    triggerRedraw()
+  }, [inputString])
+
   const sketch = useStatefulSketch({ string }, (state, p) => {
     const w = 700
     const h = 550
-
-    let t = 0
 
     let canvas: Renderer
 
@@ -79,11 +89,31 @@ export default function ExampleSketch() {
       p.translate(50, h - 50)
       p.push()
 
-      GPLS.drawString(p, state.current.string, drawingRules, t, true)
+      GPLS.drawString(
+        p,
+        state.current.string,
+        drawingRules,
+        t.current * DRAW_SPEED,
+        true,
+        1,
+        1
+      )
+
+      // draw turtle
+      // NOTE: this works because the drawing instructions for the various parts translate the vanvas while drawing
+      // TODO: consider adding turtle image
+      p.push()
+      p.ellipseMode(p.CENTER)
+      p.fill('green')
+      p.ellipse(0, 0, 25, 20)
+      p.fill('white')
+      p.ellipse(10, 5, 5, 5)
+      p.ellipse(10, -5, 5, 5)
+      p.pop()
 
       p.pop()
 
-      t += 0.01
+      t.current += 1
     }
   })
 
@@ -143,7 +173,7 @@ export default function ExampleSketch() {
         />
         <br />
 
-        <button>Draw</button>
+        <button onClick={() => triggerRedraw()}>Redraw</button>
       </fieldset>
 
       <SketchRenderer sketch={sketch} />

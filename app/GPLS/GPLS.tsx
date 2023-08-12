@@ -97,7 +97,7 @@ export default class GPLS {
                 }
             }
 
-            if (increasingOffest && (symbol.char == 'F' || symbol.char == '+'))
+            if (increasingOffest && (symbol.char == 'F' || symbol.char == '+' || symbol.char == '-'))
                 offset += offsetPerChar;
         }
     }
