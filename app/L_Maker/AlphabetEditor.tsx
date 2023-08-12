@@ -29,20 +29,9 @@ export default function AlphabetEditor({ alphabet, setAlphabet }: AlphabetEditor
         return output;
     }
     return (
-        <div className={classes['container']}>
-            <h1>Alphabet Editor</h1>
-            <input type="text" value={alphabet} onChange={(e) => setAlphabet(parseString(e.target.value))} />
-            <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', marginTop: '20px' }}>
-                {
-                    alphabet.split('').map((char, i) => {
-                        return (
-                            <div key={i} style={{ border: '3px solid white', borderRadius: '5px', padding: '10px' }}>
-                                <p>{char}</p>
-                            </div>
-                        )
-                    })
-                }
-            </div>
+        <div className='flex flex-col gap-4'>
+            <h1 className='m-auto text-4xl'>Alphabet</h1>
+            <input className='w-80  h-10 m-auto text-center rounded tracking-widest' type="text" value={alphabet} onChange={(e) => setAlphabet(parseString(e.target.value))} />
         </div>
     )
 }

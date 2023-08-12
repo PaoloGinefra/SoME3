@@ -30,8 +30,8 @@ export default function Axiom_Maker({ axiom, setAxiom, alphabet, startingAxiom }
     }
 
     return (
-        <div className={classes['container']}>
-            <h1>Axiom Editor</h1>
+        <div className='flex flex-col gap-2 m-10'>
+            <h1 className='m-auto text-4xl'>Axiom</h1>
             <PointSequenceEditor string={startingAxiom} handleSequence={handleSequence} alphabet={alphabet} referenceToggle={false} />
         </div>
     )

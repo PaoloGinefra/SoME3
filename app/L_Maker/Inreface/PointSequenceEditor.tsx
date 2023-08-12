@@ -39,7 +39,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
     const [referenceOn, setReferenceOn] = useState<boolean>(referenceToggle);
 
     const sketch = useStatefulSketch({ handleSequence, mode, string, char, alphabet, preChar, referenceOn, referenceToggle }, (state, p) => {
-        const w = 800
+        const w = p.windowWidth * 0.4;
         const h = 500
         const gridSize = 10
 
@@ -424,7 +424,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
     })
 
     return (
-        <div className={classes['container']}>
+        <div>
             <ModeButton Modes={Modes} mode={mode} setMode={setMode} />
             {mode == 'Color' ? <CharPicker alphabet={alphabet} currentChar={char} setcurrentChar={setChar} /> : null}
             {referenceToggle ?
