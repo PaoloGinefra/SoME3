@@ -23,6 +23,7 @@ export default class Shape {
 
 interface drawContext_interface {
     drawContour?: boolean,
+    leaf?: p5.Image
 }
 
 export class Square extends Shape {
@@ -71,6 +72,18 @@ export class Line extends Shape {
     }
 }
 
+export class Leaf extends Shape {
+    draw(context: drawContext_interface) {
+        this.canvas.push()
+        this.canvas.translate(this.position)
+        this.canvas.rotate(this.rotation)
+        this.canvas.imageMode(this.p.CENTER)
+        if (context.leaf != undefined)
+            this.canvas.image(context.leaf, 0, 0, this.scale, this.scale * context.leaf.height / context.leaf.width)
+        this.canvas.pop()
+    }
+}
+
 export class Canvas extends Shape {
     draw(context: drawContext_interface) {
         this.canvas.push()
@@ -93,5 +106,5 @@ export class Canvas extends Shape {
 }
 
 
-export let Shapes: (typeof Shape)[] = [Square, Circle, Triangle, Line, Canvas]
+export let Shapes: (typeof Shape)[] = [Square, Circle, Triangle, Line, Canvas, Leaf]
 export let ShapesNames = Shapes.map((s) => s.name)

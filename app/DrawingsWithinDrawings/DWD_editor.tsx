@@ -36,8 +36,11 @@ export default function DWD_editor() {
 
         let shapes: Shape[] = []
 
+        let leafImage: p5.Image
+
         p.preload = function () {
             grid.preload()
+            leafImage = p.loadImage('assets/DWD/leaf.svg')
         }
 
         p.setup = function () {
@@ -80,12 +83,20 @@ export default function DWD_editor() {
             Graphic.background(0, 0, 0, 10)
 
             //Graphic.background(0, 0, 0, 10)
-            shapes.forEach((s) => s.draw({ drawContour: state.current.showCanvasContour }))
+            shapes.forEach((s) => {
+                if (s instanceof Canvas)
+                    s.draw({ drawContour: state.current.showCanvasContour, leaf: leafImage })
+            })
+
+            shapes.forEach((s) => {
+                if (!(s instanceof Canvas))
+                    s.draw({ drawContour: state.current.showCanvasContour, leaf: leafImage })
+            })
 
             if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h) {
                 let brush = Shapes.find((s) => s.name == state.current.brushName) ?? Shapes[0]
                 let gost = new brush(p, Graphic, p.createVector(this.mouseX, this.mouseY), state.current.brushRotation, state.current.brushSize)
-                gost.draw({ drawContour: state.current.showCanvasContour })
+                gost.draw({ drawContour: state.current.showCanvasContour, leaf: leafImage })
             }
 
             //Draw the graphic on screen
