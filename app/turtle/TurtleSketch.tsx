@@ -8,32 +8,46 @@ import SketchRenderer from '../p5/SketchRenderer'
 
 import Grid from '../utils/Grid'
 
-type TurtleCmdDrawFunction = (p: p5, params: number[], t: number) => void
+interface TurtleState {
+  pos: { x: number; y: number }
+  rot: number
+}
+
+type TurtleCmdDrawFunction = (
+  p: p5,
+  s: TurtleState,
+  params: number[],
+  t: number
+) => void
 
 const turtleDrawFunctions: Record<string, TurtleCmdDrawFunction> = {
-  F: (p, params, t) => {
+  F: (p, s, params, t) => {
     const [len] = params
     p.stroke('#0070A9')
     p.strokeWeight(1)
     p.line(0, 0, len * t, 0)
+
     p.translate(len * t, 0)
+    s.pos.x += len * t
   },
 
-  '+': (p, params, t) => {
+  '+': (p, s, params, t) => {
     const [angle] = params
     p.rotate(angle * t)
+    s.rot += p.degrees(angle * t)
   },
 
-  '-': (p, params, t) => {
+  '-': (p, s, params, t) => {
     const [angle] = params
     p.rotate(-angle * t)
+    s.rot += p.degrees(-angle * t)
   },
 
-  '[': (p, params, t) => {
+  '[': (p, s, params, t) => {
     p.push()
   },
 
-  ']': (p, params, t) => {
+  ']': (p, s, params, t) => {
     p.pop()
   },
 }
@@ -57,32 +71,39 @@ function draw(
 ) {
   const cmdString = str.split('')
 
-  let turtleStep = 0
+  const s: TurtleState = {
+    pos: { x: 0, y: 0 },
+    rot: 0,
+  }
+  let i = 0
 
-  for (let i = 0; i < cmdString.length; i++) {
+  while (i < t && i < cmdString.length) {
     const cmd = cmdString[i]
 
     const cmdDrawFunct = turtleDrawFunctions[cmd]
     const cmdParams = paramsLookup[cmd]
     const cmdT = p.constrain(t - i, 0, 1)
-    cmdDrawFunct(p, cmdParams, cmdT)
+    cmdDrawFunct(p, s, cmdParams, cmdT)
 
-    if (t - i >= 1) {
-      turtleStep++
-    }
-
-    if (t - i >= 0 && t - i < 1) {
-      drawTurtle(p)
-    }
+    i += 1
   }
 
-  // enought time has passed to draw the entire path
-  // so draw the turtle at the end
-  if (turtleStep == cmdString.length) {
-    drawTurtle(p)
+  let state = s
+  let step = i
+  drawTurtle(p)
+
+  while (i < cmdString.length) {
+    const cmd = cmdString[i]
+
+    const cmdDrawFunct = turtleDrawFunctions[cmd]
+    const cmdParams = paramsLookup[cmd]
+    const cmdT = p.constrain(t - i, 0, 1)
+    cmdDrawFunct(p, s, cmdParams, cmdT)
+
+    i += 1
   }
 
-  return turtleStep
+  return [step, state] as const
 }
 
 const DRAW_SPEED = 0.02
@@ -116,9 +137,11 @@ export default function ExampleSketch({
 
   const [string, setInputString] = useState(defaultString)
 
+  const [stack, setStack] = useState<TurtleState[]>([])
   const t = useRef(0)
 
   const triggerRedraw = () => {
+    setStack([])
     t.current = 0
   }
 
@@ -126,88 +149,108 @@ export default function ExampleSketch({
     triggerRedraw()
   }, [string])
 
-  const sketch = useStatefulSketch({ string, paramsLookup }, (state, p) => {
-    const w = 700
-    const h = 550
+  const sketch = useStatefulSketch(
+    { string, paramsLookup, stack },
+    (state, p) => {
+      const w = 700
+      const h = 550
 
-    let canvas: Renderer
+      let canvas: Renderer
 
-    const grid = new Grid(w, h, 10, 0.1, 0.2, p)
-    let startingPoint: p5.Vector = p.createVector(w / 2, h / 2)
-    let offset = p.createVector(0, 0)
+      const grid = new Grid(w, h, 10, 0.1, 0.2, p)
+      let startingPoint: p5.Vector = p.createVector(w / 2, h / 2)
+      let offset = p.createVector(0, 0)
 
-    let touchPoint = p.createVector(0, 0)
-    let isHolding = false
+      let touchPoint = p.createVector(0, 0)
+      let isHolding = false
 
-    p.preload = function () {
-      grid.preload()
-    }
+      let prevStep = -1
 
-    p.setup = function () {
-      canvas = p.createCanvas(w, h)
-      grid.setup()
-
-      canvas.mousePressed(() => {
-        touchPoint = p.createVector(p.mouseX, p.mouseY)
-        isHolding = true
-      })
-
-      canvas.mouseReleased(() => {
-        isHolding = false
-      })
-
-      canvas.mouseOut(() => {
-        isHolding = false
-      })
-
-      canvas.doubleClicked(() => {
-        offset = p.createVector(0, 0)
-      })
-    }
-
-    p.draw = function () {
-      p.background(251, 234, 205)
-
-      p.push() // begin: grid
-
-      if (isHolding) {
-        offset.add(
-          p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y)
-        )
-        touchPoint = p.createVector(p.mouseX, p.mouseY)
+      p.preload = function () {
+        grid.preload()
       }
-      grid.draw(offset, 1)
-      p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y)
 
-      // turtle
-      p.push() // begin: path
-      const currentStep = draw(
-        p,
-        state.current.string,
-        state.current.paramsLookup,
-        t.current * DRAW_SPEED
-      )
-      p.pop() // end: path
+      p.setup = function () {
+        canvas = p.createCanvas(w, h)
+        grid.setup()
 
-      p.pop() // end: grid
+        canvas.mousePressed(() => {
+          touchPoint = p.createVector(p.mouseX, p.mouseY)
+          isHolding = true
+        })
 
-      const { string } = state.current
-      p.textFont('monospace', 24)
-      for (let i = 0; i < string.length; i++) {
-        p.push() // begin: letter
-        if (currentStep == i) {
-          p.textStyle(p.BOLD)
+        canvas.mouseReleased(() => {
+          isHolding = false
+        })
+
+        canvas.mouseOut(() => {
+          isHolding = false
+        })
+
+        canvas.doubleClicked(() => {
+          offset = p.createVector(0, 0)
+        })
+      }
+
+      p.draw = function () {
+        p.background(251, 234, 205)
+
+        p.push() // begin: grid
+
+        if (isHolding) {
+          offset.add(
+            p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y)
+          )
+          touchPoint = p.createVector(p.mouseX, p.mouseY)
         }
+        grid.draw(offset, 1)
+        p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y)
 
-        const letterWidth = 24 * (3 / 4)
-        const offs = letterWidth * (i - string.length / 2)
-        p.text(string[i], w / 2 + offs, 50)
-        p.pop() // end: letter
+        p.push()
+        const [currentStep, turtleState] = draw(
+          p,
+          state.current.string,
+          state.current.paramsLookup,
+          t.current * DRAW_SPEED
+        )
+        p.pop()
+
+        p.pop() // end: grid
+
+        // begin: top text
+        const { string } = state.current
+        p.textFont('monospace', 24)
+        for (let i = 0; i < string.length; i++) {
+          p.push() // begin: letter
+          if (currentStep == i) {
+            p.textStyle(p.BOLD)
+          }
+
+          const letterWidth = 24 * (3 / 4)
+          const offs = letterWidth * (i - string.length / 2)
+          p.text(string[i], w / 2 + offs, 50)
+          p.pop() // end: letter
+        }
+        // end: top text
+
+        // begin: stack visualization
+        if (currentStep != prevStep) {
+          prevStep = currentStep
+
+          let currentCmd = state.current.string[currentStep]
+          if (currentCmd == '[') {
+            setStack([turtleState, ...state.current.stack])
+          } else if (currentCmd == ']') {
+            const [_top, ...rest] = state.current.stack
+            setStack(rest)
+          }
+        }
+        // end: stack
+
+        t.current += 1
       }
-
-      t.current += 1
     }
-  })
+  )
 
   return (
     <div>
@@ -275,6 +318,16 @@ export default function ExampleSketch({
       </fieldset>
 
       <SketchRenderer sketch={sketch} />
+
+      <div>
+        {stack.map((s, i) => (
+          <div key={i} className="inline-block p-2 border-2 border-white">
+            <p>x: {Math.round(s.pos.x)}px</p>
+            <p>y: {Math.round(s.pos.y)}px</p>
+            <p>rot: {Math.round(s.rot)}°</p>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
