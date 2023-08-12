@@ -65,8 +65,6 @@ export default function DWD_editor() {
             while (undoCount > 0) {
                 shapes.pop()
                 undoCount--;
-
-                Graphic.clear(0, 0, 0, 0)
             }
             state.current.setUndoCount(0)
 

@@ -27,6 +27,7 @@ interface drawContext_interface {
 
 export class Square extends Shape {
     draw(context: drawContext_interface) {
+        this.canvas.noStroke()
         this.canvas.fill(255, 255, 255)
         this.canvas.push()
         this.canvas.translate(this.position)
@@ -39,6 +40,8 @@ export class Square extends Shape {
 
 export class Circle extends Shape {
     draw(context: drawContext_interface) {
+        this.canvas.noStroke()
+
         this.canvas.fill(255, 255, 255)
         this.canvas.circle(this.position.x, this.position.y, this.scale)
     }
@@ -46,6 +49,7 @@ export class Circle extends Shape {
 
 export class Triangle extends Shape {
     draw(context: drawContext_interface) {
+        this.canvas.noStroke()
         this.canvas.fill(255, 255, 255)
         this.canvas.push()
         this.canvas.translate(this.position)
