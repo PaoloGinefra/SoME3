@@ -112,7 +112,7 @@ export default function DWD_editor() {
             <input type="range" min="1" max={600} value={brushSize} onChange={(e) => setBrushSize(parseInt(e.target.value))} />
             <p>Size: {brushSize}</p>
 
-            <input type="range" min={-50} max={50} step={1} onChange={(e) => setBrushRotation(parseFloat(e.target.value) / 50 * 3.141)} />
+            <input type="range" min={-36} max={36} step={1} onChange={(e) => setBrushRotation(parseFloat(e.target.value) / 36 * 3.141)} />
             <p>Rotation: {Math.round(brushRotation * 180 / 3.141)} deg</p>
 
             <input type="checkbox" checked={showCanvasContour} onChange={(e) => setShowCanvasContour(e.target.checked)} />
