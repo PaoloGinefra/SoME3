@@ -24,26 +24,43 @@ const drawingRules: DrawingRule[] = [
   },
   {
     targetChars: '+',
-    drawing: (params, p, t: number = 1) => {
+    drawing: (params, p, t = 1) => {
       const [angle] = params
       p.rotate(angle * t)
     },
   },
   {
     targetChars: '-',
-    drawing: (params, p, t: number = 1) => {
+    drawing: (params, p, t = 1) => {
       const [angle] = params
       p.rotate(-angle * t)
     },
   },
+  {
+    targetChars: '[',
+    drawing: (params, p: p5, t = 1) => {
+      p.push()
+    },
+  },
+  {
+    targetChars: ']',
+    drawing: (params, p: p5, t = 1) => {
+      p.pop()
+    },
+  },
 ]
 
-const DRAW_SPEED = 0.1
+const DRAW_SPEED = 0.05
 
-const ALLOWED_CHARS = drawingRules.map((rule) => rule.targetChars).join('')
-const REPLACE_REGEX = new RegExp(`[^${ALLOWED_CHARS}]`) // matches any characters that are not in the allowed chars
+export interface ExampleSketchProps {
+  withStack: boolean
+  defaultString: string
+}
 
-export default function ExampleSketch() {
+export default function ExampleSketch({
+  withStack,
+  defaultString,
+}: ExampleSketchProps) {
   const [inputState, setInputState] = useState<Record<string, number>>({
     F: 50,
     '+': 60, // angles here are in degrees, later are converted into radians
@@ -53,18 +70,19 @@ export default function ExampleSketch() {
   const setParam = (ruleChar: string, value: number) =>
     setInputState({ ...inputState, [ruleChar]: value })
 
-  const [inputString, setInputString] = useState(
-    '+F--F++F--F++F--F++F--F++F--F++F--F++F--F++F'
-  )
+  const [inputString, setInputString] = useState(defaultString)
 
-  const lookup: Record<string, number> = {
-    ...inputState,
-    '+': inputState['+'] * (Math.PI / 180), // degree => radians
-    '-': inputState['-'] * (Math.PI / 180),
+  const paramsLookup: Record<string, number[]> = {
+    F: [inputState['F']],
+    '+': [inputState['+'] * (Math.PI / 180)], // degree => radians
+    '-': [inputState['-'] * (Math.PI / 180)],
+    '[': [],
+    ']': [],
   }
-  const string: Symbol[] = inputString
-    .split('')
-    .map((char) => ({ char, params: [lookup[char]] }))
+  const string: Symbol[] = inputString.split('').map((char) => ({
+    char,
+    params: paramsLookup[char],
+  }))
 
   const t = useRef(0)
 
@@ -138,7 +156,7 @@ export default function ExampleSketch() {
         t.current * DRAW_SPEED,
         true,
         1,
-        1
+        0 // pushing and popping from the stack takes 0 time
       )
 
       // draw turtle
@@ -211,9 +229,13 @@ export default function ExampleSketch() {
           id="stringInput"
           type="text"
           value={inputString}
-          onChange={(e) =>
-            setInputString(e.target.value.replace(REPLACE_REGEX, ''))
-          }
+          onChange={(e) => {
+            const regex = withStack
+              ? /[^F\+\-\[\]]/ // matches everything except for the characters F+-[]
+              : /[^F\+\-]/ // matches everything except for the characters F+-
+            const sanitizedInput = e.target.value.replace(regex, '')
+            setInputString(sanitizedInput)
+          }}
         />
         <br />
 
