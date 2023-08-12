@@ -57,7 +57,8 @@ export class Triangle extends Shape {
 
 export class Line extends Shape {
     draw(context: drawContext_interface) {
-        this.canvas.fill(255, 255, 255)
+        this.canvas.strokeWeight(10)
+        this.canvas.stroke(255, 255, 255)
         this.canvas.push()
         this.canvas.translate(this.position)
         this.canvas.rotate(this.rotation)
@@ -78,6 +79,7 @@ export class Canvas extends Shape {
         if (context.drawContour) {
             this.canvas.rectMode(this.p.CENTER)
             this.canvas.noFill()
+            this.canvas.strokeWeight(1)
             this.canvas.stroke(255, 255, 255)
             this.canvas.scale(this.canvas.width / this.scale)
             this.canvas.rect(0, 0, this.scale, this.canvas.height * this.scale / this.canvas.width)

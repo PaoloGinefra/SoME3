@@ -53,7 +53,6 @@ export default function DWD_editor() {
             // )
 
             canvas.mousePressed(() => {
-                Graphic.clear(0, 0, 0, 0)
                 let brush = Shapes.find((s) => s.name == state.current.brushName) ?? Shapes[0]
                 shapes.push(
                     new brush(p, Graphic, p.createVector(this.mouseX, this.mouseY), state.current.brushRotation, state.current.brushSize)
@@ -72,21 +71,28 @@ export default function DWD_editor() {
             state.current.setUndoCount(0)
 
 
+            //Draw the background
             p.background(bgColor)
-            grid.draw()
+            //p.background(0, 0, 0,)
+
+            //grid.draw()
+
+            //Graphic.background(0, 0, 0, 10)
+            //Graphic.tint(0, 0, 0, 100)
+            Graphic.background(0, 0, 0, 10)
 
             //Graphic.background(0, 0, 0, 10)
             shapes.forEach((s) => s.draw({ drawContour: state.current.showCanvasContour }))
 
+            if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h) {
+                let brush = Shapes.find((s) => s.name == state.current.brushName) ?? Shapes[0]
+                let gost = new brush(p, Graphic, p.createVector(this.mouseX, this.mouseY), state.current.brushRotation, state.current.brushSize)
+                gost.draw({ drawContour: state.current.showCanvasContour })
+            }
+
             //Draw the graphic on screen
             p.image(Graphic, 0, 0)
-            let brush = Shapes.find((s) => s.name == state.current.brushName) ?? Shapes[0]
 
-            ghostGrpahic.clear(0, 0, 0, 0)
-            let gost = new brush(p, ghostGrpahic, p.createVector(this.mouseX, this.mouseY), state.current.brushRotation, state.current.brushSize)
-            gost.draw({ drawContour: true })
-
-            p.image(ghostGrpahic, 0, 0)
         }
 
     })
