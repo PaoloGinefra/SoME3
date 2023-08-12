@@ -7,50 +7,85 @@ import useStatefulSketch from '../p5/useStatefulSketch'
 import SketchRenderer from '../p5/SketchRenderer'
 
 import Grid from '../utils/Grid'
-import { DrawingRule, Symbol } from '../GPLS/GPLS_interfaces'
-import GPLS from '../GPLS/GPLS'
 
-// basically the same drawing rules as Kock Flake
-const drawingRules: DrawingRule[] = [
-  {
-    targetChars: 'F',
-    drawing: (params, p, t = 1) => {
-      const [len] = params
-      p.stroke('#0070A9')
-      p.strokeWeight(1)
-      p.line(0, 0, len * t, 0)
-      p.translate(len * t, 0)
-    },
-  },
-  {
-    targetChars: '+',
-    drawing: (params, p, t = 1) => {
-      const [angle] = params
-      p.rotate(angle * t)
-    },
-  },
-  {
-    targetChars: '-',
-    drawing: (params, p, t = 1) => {
-      const [angle] = params
-      p.rotate(-angle * t)
-    },
-  },
-  {
-    targetChars: '[',
-    drawing: (params, p: p5, t = 1) => {
-      p.push()
-    },
-  },
-  {
-    targetChars: ']',
-    drawing: (params, p: p5, t = 1) => {
-      p.pop()
-    },
-  },
-]
+type TurtleCmdDrawFunction = (p: p5, params: number[], t: number) => void
 
-const DRAW_SPEED = 0.05
+const turtleDrawFunctions: Record<string, TurtleCmdDrawFunction> = {
+  F: (p, params, t) => {
+    const [len] = params
+    p.stroke('#0070A9')
+    p.strokeWeight(1)
+    p.line(0, 0, len * t, 0)
+    p.translate(len * t, 0)
+  },
+
+  '+': (p, params, t) => {
+    const [angle] = params
+    p.rotate(angle * t)
+  },
+
+  '-': (p, params, t) => {
+    const [angle] = params
+    p.rotate(-angle * t)
+  },
+
+  '[': (p, params, t) => {
+    p.push()
+  },
+
+  ']': (p, params, t) => {
+    p.pop()
+  },
+}
+
+function drawTurtle(p: p5) {
+  p.push()
+  p.ellipseMode(p.CENTER)
+  p.fill('green')
+  p.ellipse(0, 0, 25, 20)
+  p.fill('white')
+  p.ellipse(10, 5, 5, 5)
+  p.ellipse(10, -5, 5, 5)
+  p.pop()
+}
+
+function draw(
+  p: p5,
+  str: string,
+  paramsLookup: Record<string, number[]>,
+  t: number
+) {
+  const cmdString = str.split('')
+
+  let turtleStep = 0
+
+  for (let i = 0; i < cmdString.length; i++) {
+    const cmd = cmdString[i]
+
+    const cmdDrawFunct = turtleDrawFunctions[cmd]
+    const cmdParams = paramsLookup[cmd]
+    const cmdT = p.constrain(t - i, 0, 1)
+    cmdDrawFunct(p, cmdParams, cmdT)
+
+    if (t - i >= 1) {
+      turtleStep++
+    }
+
+    if (t - i >= 0 && t - i < 1) {
+      drawTurtle(p)
+    }
+  }
+
+  // enought time has passed to draw the entire path
+  // so draw the turtle at the end
+  if (turtleStep == cmdString.length) {
+    drawTurtle(p)
+  }
+
+  return turtleStep
+}
+
+const DRAW_SPEED = 0.02
 
 export interface ExampleSketchProps {
   withStack: boolean
@@ -66,11 +101,6 @@ export default function ExampleSketch({
     '+': 60, // angles here are in degrees, later are converted into radians
     '-': 60,
   })
-  const getParam = (ruleChar: string) => inputState[ruleChar]
-  const setParam = (ruleChar: string, value: number) =>
-    setInputState({ ...inputState, [ruleChar]: value })
-
-  const [inputString, setInputString] = useState(defaultString)
 
   const paramsLookup: Record<string, number[]> = {
     F: [inputState['F']],
@@ -79,10 +109,12 @@ export default function ExampleSketch({
     '[': [],
     ']': [],
   }
-  const string: Symbol[] = inputString.split('').map((char) => ({
-    char,
-    params: paramsLookup[char],
-  }))
+
+  const getParam = (ruleChar: string) => inputState[ruleChar]
+  const setParam = (ruleChar: string, value: number) =>
+    setInputState({ ...inputState, [ruleChar]: value })
+
+  const [string, setInputString] = useState(defaultString)
 
   const t = useRef(0)
 
@@ -92,9 +124,9 @@ export default function ExampleSketch({
 
   useEffect(() => {
     triggerRedraw()
-  }, [inputString])
+  }, [string])
 
-  const sketch = useStatefulSketch({ string }, (state, p) => {
+  const sketch = useStatefulSketch({ string, paramsLookup }, (state, p) => {
     const w = 700
     const h = 550
 
@@ -136,7 +168,8 @@ export default function ExampleSketch({
     p.draw = function () {
       p.background(251, 234, 205)
 
-      // grid
+      p.push() // begin: grid
+
       if (isHolding) {
         offset.add(
           p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y)
@@ -147,31 +180,30 @@ export default function ExampleSketch({
       p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y)
 
       // turtle
-      p.push()
-
-      GPLS.drawString(
+      p.push() // begin: path
+      const currentStep = draw(
         p,
         state.current.string,
-        drawingRules,
-        t.current * DRAW_SPEED,
-        true,
-        1,
-        0 // pushing and popping from the stack takes 0 time
+        state.current.paramsLookup,
+        t.current * DRAW_SPEED
       )
+      p.pop() // end: path
 
-      // draw turtle
-      // NOTE: this works because the drawing instructions for the various parts translate the vanvas while drawing
-      // TODO: consider adding turtle image
-      p.push()
-      p.ellipseMode(p.CENTER)
-      p.fill('green')
-      p.ellipse(0, 0, 25, 20)
-      p.fill('white')
-      p.ellipse(10, 5, 5, 5)
-      p.ellipse(10, -5, 5, 5)
-      p.pop()
+      p.pop() // end: grid
 
-      p.pop()
+      const { string } = state.current
+      p.textFont('monospace', 24)
+      for (let i = 0; i < string.length; i++) {
+        p.push() // begin: letter
+        if (currentStep == i) {
+          p.textStyle(p.BOLD)
+        }
+
+        const letterWidth = 24 * (3 / 4)
+        const offs = letterWidth * (i - string.length / 2)
+        p.text(string[i], w / 2 + offs, 50)
+        p.pop() // end: letter
+      }
 
       t.current += 1
     }
@@ -228,7 +260,7 @@ export default function ExampleSketch({
         <input
           id="stringInput"
           type="text"
-          value={inputString}
+          value={string}
           onChange={(e) => {
             const regex = withStack
               ? /[^F\+\-\[\]]/ // matches everything except for the characters F+-[]
