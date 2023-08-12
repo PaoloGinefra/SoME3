@@ -6,6 +6,7 @@ import p5, { Renderer } from 'p5'
 import useStatefulSketch from '../p5/useStatefulSketch'
 import SketchRenderer from '../p5/SketchRenderer'
 
+import Grid from '../utils/Grid'
 import { DrawingRule, Symbol } from '../GPLS/GPLS_interfaces'
 import GPLS from '../GPLS/GPLS'
 
@@ -42,14 +43,16 @@ const DRAW_SPEED = 0.1
 export default function ExampleSketch() {
   const [inputState, setInputState] = useState<Record<string, number>>({
     F: 50,
-    '+': 60, // NOTE: angles here are in degrees, later are converted into radians
+    '+': 60, // angles here are in degrees, later are converted into radians
     '-': 60,
   })
   const getParam = (ruleChar: string) => inputState[ruleChar]
   const setParam = (ruleChar: string, value: number) =>
     setInputState({ ...inputState, [ruleChar]: value })
 
-  const [inputString, setInputString] = useState('+F--F++F--F++F--F++F--F++F--F++F--F++F--F++F')
+  const [inputString, setInputString] = useState(
+    '+F--F++F--F++F--F++F--F++F--F++F--F++F--F++F'
+  )
 
   const lookup: Record<string, number> = {
     ...inputState,
@@ -76,17 +79,53 @@ export default function ExampleSketch() {
 
     let canvas: Renderer
 
-    p.preload = function () {}
+    const grid = new Grid(w, h, 10, 0.1, 0.2, p)
+    let startingPoint: p5.Vector = p.createVector(w / 2, h / 2)
+    let offset = p.createVector(0, 0)
+
+    let touchPoint = p.createVector(0, 0)
+    let isHolding = false
+
+    p.preload = function () {
+      grid.preload()
+    }
 
     p.setup = function () {
       canvas = p.createCanvas(w, h)
+      grid.setup()
+
+      canvas.mousePressed(() => {
+        touchPoint = p.createVector(p.mouseX, p.mouseY)
+        isHolding = true
+      })
+
+      canvas.mouseReleased(() => {
+        isHolding = false
+      })
+
+      canvas.mouseOut(() => {
+        isHolding = false
+      })
+
+      canvas.doubleClicked(() => {
+        offset = p.createVector(0, 0)
+      })
     }
 
     p.draw = function () {
       p.background(251, 234, 205)
 
-      // TODO: moveable grid
-      p.translate(50, h - 50)
+      // grid
+      if (isHolding) {
+        offset.add(
+          p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y)
+        )
+        touchPoint = p.createVector(p.mouseX, p.mouseY)
+      }
+      grid.draw(offset, 1)
+      p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y)
+
+      // turtle
       p.push()
 
       GPLS.drawString(
