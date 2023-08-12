@@ -73,7 +73,7 @@ export default function L_Renderer({ string, drawingRules, iteration, setIterati
             grid.draw(offset, scale)
             p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y);
             p.push()
-            GPLS.drawString(p, state.current.string, drawingRules, state.current.t);
+            GPLS.drawString(p, state.current.string, drawingRules, state.current.t * state.current.string.length / 100, true, 0.15, 0.001 * state.current.string.length);
 
             p.pop()
 
