@@ -111,8 +111,6 @@ function draw(
   return [i - 1, stack] as const
 }
 
-const DRAW_SPEED = 0.01
-
 export interface ExampleSketchProps {
   withStack: boolean
   defaultString: string
@@ -122,6 +120,9 @@ export default function ExampleSketch({
   withStack,
   defaultString,
 }: ExampleSketchProps) {
+  const [drawingSpeed, setDrawingSpeed] = useState(0.01)
+  const [pause, setPause] = useState(true)
+
   const [inputState, setInputState] = useState<Record<string, number>>({
     F: 50,
     '+': 60, // angles here are in degrees, later are converted into radians
@@ -152,99 +153,105 @@ export default function ExampleSketch({
     triggerRedraw()
   }, [string])
 
-  const sketch = useStatefulSketch({ string, paramsLookup }, (state, p) => {
-    const w = 700
-    const h = 550
+  const sketch = useStatefulSketch(
+    { pause, drawingSpeed, string, paramsLookup },
+    (state, p) => {
+      const w = 700
+      const h = 550
 
-    let canvas: Renderer
+      let canvas: Renderer
 
-    const grid = new Grid(w, h, 10, 0.1, 0.2, p)
-    let startingPoint: p5.Vector = p.createVector(w / 2, h / 2)
-    let offset = p.createVector(0, 0)
+      const grid = new Grid(w, h, 10, 0.1, 0.2, p)
+      let startingPoint: p5.Vector = p.createVector(w / 2, h / 2)
+      let offset = p.createVector(0, 0)
 
-    let touchPoint = p.createVector(0, 0)
-    let isHolding = false
+      let touchPoint = p.createVector(0, 0)
+      let isHolding = false
 
-    let prevStep = -1
+      let prevStep = -1
 
-    p.preload = function () {
-      grid.preload()
-    }
-
-    p.setup = function () {
-      canvas = p.createCanvas(w, h)
-      grid.setup()
-
-      canvas.mousePressed(() => {
-        touchPoint = p.createVector(p.mouseX, p.mouseY)
-        isHolding = true
-      })
-
-      canvas.mouseReleased(() => {
-        isHolding = false
-      })
-
-      canvas.mouseOut(() => {
-        isHolding = false
-      })
-
-      canvas.doubleClicked(() => {
-        offset = p.createVector(0, 0)
-      })
-    }
-
-    p.draw = function () {
-      p.background(251, 234, 205)
-
-      p.push() // begin: grid
-
-      if (isHolding) {
-        offset.add(
-          p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y)
-        )
-        touchPoint = p.createVector(p.mouseX, p.mouseY)
+      p.preload = function () {
+        grid.preload()
       }
-      grid.draw(offset, 1)
-      p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y)
 
-      const [currentStep, stack] = draw(
-        p,
-        state.current.string,
-        state.current.paramsLookup,
-        t.current * DRAW_SPEED
-      )
-      const turtleState = stack[stack.length - 1]
-      const turtleStack = stack.slice(0, -1)
+      p.setup = function () {
+        canvas = p.createCanvas(w, h)
+        grid.setup()
 
-      // begin: top text
-      const { string } = state.current
-      p.textFont('monospace', 24)
-      for (let i = currentStep; i < string.length; i++) {
-        p.push() // begin: letter
-        if (currentStep == i) {
-          p.textStyle(p.BOLD)
+        canvas.mousePressed(() => {
+          touchPoint = p.createVector(p.mouseX, p.mouseY)
+          isHolding = true
+        })
+
+        canvas.mouseReleased(() => {
+          isHolding = false
+        })
+
+        canvas.mouseOut(() => {
+          isHolding = false
+        })
+
+        canvas.doubleClicked(() => {
+          offset = p.createVector(0, 0)
+        })
+      }
+
+      p.draw = function () {
+        p.background(251, 234, 205)
+
+        p.push() // begin: grid
+
+        if (isHolding) {
+          offset.add(
+            p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y)
+          )
+          touchPoint = p.createVector(p.mouseX, p.mouseY)
+        }
+        grid.draw(offset, 1)
+        p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y)
+
+        const [currentStep, stack] = draw(
+          p,
+          state.current.string,
+          state.current.paramsLookup,
+          t.current
+        )
+        const turtleState = stack[stack.length - 1]
+        const turtleStack = stack.slice(0, -1)
+
+        // begin: top text
+        const { string } = state.current
+        p.textFont('monospace', 24)
+        for (let i = currentStep; i < string.length; i++) {
+          p.push() // begin: letter
+          if (currentStep == i) {
+            p.textStyle(p.BOLD)
+          }
+
+          const letterHeight = 24 * (6 / 5)
+          p.text(
+            string[i],
+            turtleState.pos.x,
+            turtleState.pos.y + (currentStep - i) * letterHeight - 24
+          )
+
+          p.pop() // end: letter
+        }
+        // end: top text
+
+        p.pop() // end: grid
+
+        if (currentStep != prevStep) {
+          prevStep = currentStep
+          setReactStack(turtleStack)
         }
 
-        const letterHeight = 24 * (6 / 5)
-        p.text(
-          string[i],
-          turtleState.pos.x,
-          turtleState.pos.y + (currentStep - i) * letterHeight - 24
-        )
-
-        p.pop() // end: letter
+        if (!state.current.pause) {
+          t.current += state.current.drawingSpeed
+        }
       }
-      // end: top text
-
-      p.pop() // end: grid
-
-      if (currentStep != prevStep) {
-        prevStep = currentStep
-        setReactStack(turtleStack)
-      }
-      t.current += 1
     }
-  })
+  )
 
   return (
     <div className="my-8 flex flex-col items-center">
@@ -288,6 +295,20 @@ export default function ExampleSketch({
         />
         <p className="inline-block">{getParam('-')}°</p>
 
+        <label className="inline-block w-44" htmlFor="rightSizeSlider">
+          Drawing speed
+        </label>
+        <input
+          id="rightSizeSlider"
+          type="range"
+          min={0.001}
+          max={0.2}
+          step={0.001}
+          value={drawingSpeed}
+          onChange={(e) => setDrawingSpeed(parseFloat(e.target.value))}
+        />
+        <p className="inline-block">{drawingSpeed}</p>
+
         <label className="inline-block w-44" htmlFor="stringInput">
           Input string
         </label>
@@ -304,7 +325,19 @@ export default function ExampleSketch({
           }}
         />
 
-        <button onClick={() => triggerRedraw()}>Redraw</button>
+        <div></div>
+
+        <button onClick={() => triggerRedraw()}>Reset</button>
+        <button onClick={() => setPause(!pause)}>
+          {pause ? 'Draw' : 'Pause'}
+        </button>
+        <button
+          onClick={() => {
+            t.current = string.length
+          }}
+        >
+          Skip
+        </button>
       </fieldset>
 
       <div className="flex justify-center">
