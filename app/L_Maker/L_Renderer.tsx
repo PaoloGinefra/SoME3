@@ -26,8 +26,8 @@ export default function L_Renderer({ string, drawingRules, iteration, setIterati
     const [t, setT] = useState<number>(0)
 
     const sketch = useStatefulSketch({ string, drawingRules, t }, (state, p) => {
-        const w = p.windowWidth * 0.8
-        const h = 500
+        let w = p.windowWidth * 0.8
+        let h = 500
         const gridSize = 10
 
         let canvas: Renderer
@@ -78,6 +78,11 @@ export default function L_Renderer({ string, drawingRules, iteration, setIterati
             p.pop()
 
             setT(state.current.t + p.deltaTime / 1000)
+        }
+
+        p.windowResized = function () {
+            w = p.windowWidth * 0.8
+            p.resizeCanvas(w, h)
         }
     })
 
