@@ -108,10 +108,10 @@ function draw(
 
   drawTurtle(p, stack[stack.length - 1])
 
-  return [i, stack] as const
+  return [i - 1, stack] as const
 }
 
-const DRAW_SPEED = 0.02
+const DRAW_SPEED = 0.01
 
 export interface ExampleSketchProps {
   withStack: boolean
@@ -219,15 +219,19 @@ export default function ExampleSketch({
       // begin: top text
       const { string } = state.current
       p.textFont('monospace', 24)
-      for (let i = 0; i < string.length; i++) {
+      for (let i = currentStep; i < string.length; i++) {
         p.push() // begin: letter
         if (currentStep == i) {
           p.textStyle(p.BOLD)
         }
 
-        const letterWidth = 24 * (3 / 4)
-        const offs = letterWidth * (i - string.length / 2)
-        p.text(string[i], turtleState.pos.x + offs, turtleState.pos.y - 24)
+        const letterHeight = 24 * (6 / 5)
+        p.text(
+          string[i],
+          turtleState.pos.x,
+          turtleState.pos.y + (currentStep - i) * letterHeight - 24
+        )
+
         p.pop() // end: letter
       }
       // end: top text
