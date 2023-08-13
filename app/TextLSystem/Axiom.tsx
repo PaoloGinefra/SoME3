@@ -15,25 +15,22 @@ export default function Alphabet({
   active,
 }: AxiomState) {
   return (
-    <div>
-      <div className={classes['container-bar']}>
-        <h3>Axioms</h3>
-      </div>
-      <div className={classes['container']}>
-        <input
-          disabled={active}
-          type="text"
-          value={axiom}
-          onChange={(e) => {
-            let output = e.target.value
-            output = output
-              .split('')
-              .filter((c) => alphabet.includes(c))
-              .join('')
-            setAxiom(output)
-          }}
-        />
-      </div>
+    <div className="flex flex-col gap-4 mb-4">
+      <h1 className="m-auto text-4xl">Axioms</h1>
+      <input
+        className="w-80  h-10 m-auto text-center rounded tracking-widest"
+        disabled={active}
+        type="text"
+        value={axiom}
+        onChange={(e) => {
+          let output = e.target.value
+          output = output
+            .split('')
+            .filter((c) => alphabet.includes(c))
+            .join('')
+          setAxiom(output)
+        }}
+      />
     </div>
   )
 }

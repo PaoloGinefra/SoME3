@@ -1,6 +1,8 @@
 import React from 'react'
 import Production from './Interface/Production'
-import classes from './TextLSystem.module.css'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ subsets: ['latin'] })
 
 interface ProductionState {
   productions: Production[]
@@ -16,16 +18,26 @@ export default function Productions({
   active,
 }: ProductionState) {
   return (
-    <div>
-      <div className={classes['container-bar']}>
-        <h3>Productions</h3>
-      </div>
-      <div className={classes['container']}>
-        <ul>
-          {alphabet?.split('').map((letter) => (
-            <li>
+    <div className="flex flex-col gap-4 mb-4">
+      <h1 className="m-auto text-4xl">Productions</h1>
+      <ul className="flex flex-col gap-4">
+        {!alphabet ? (
+          <li className="m-auto tracking-widest font-mono">
+            … →{' '}
+            <input
+              type="text"
+              disabled
+              className="w-80 h-10 px-2 text-left rounded"
+            />
+          </li>
+        ) : (
+          alphabet.split('').map((letter) => (
+            <li className="m-auto tracking-widest font-mono">
               {letter} →{' '}
               <input
+                className={
+                  'w-80 h-10 px-2 text-left rounded ' + inter.className
+                }
                 disabled={active}
                 type="text"
                 value={
@@ -50,9 +62,9 @@ export default function Productions({
                 }}
               ></input>
             </li>
-          ))}
-        </ul>
-      </div>
+          ))
+        )}
+      </ul>
     </div>
   )
 }
