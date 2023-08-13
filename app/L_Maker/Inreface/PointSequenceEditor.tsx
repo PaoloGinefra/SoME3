@@ -419,6 +419,9 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                 else if (state.current.mode == 'Stack pop') {
                     drawPop(p, { position: p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), push: false, pop: true, char: 'F' })
                 }
+                else if (state.current.mode == 'Color') {
+                    p.text(state.current.char ?? '', quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
+                }
             }
             pastString = [...state.current.string];
         }
@@ -427,18 +430,6 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
 
     return (
         <div>
-            {/* {referenceToggle ?
-                <div>
-                    <input
-                        type="checkbox"
-                        checked={referenceOn}
-                        onChange={() => setReferenceOn(!referenceOn)}
-                    />
-                    {preChar} Reference
-                </div>
-
-                : null
-            } */}
             <div className=' border-b-red-100'>
                 <SketchRenderer sketch={sketch} />
             </div>
