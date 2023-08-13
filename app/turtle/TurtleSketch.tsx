@@ -247,7 +247,7 @@ export default function ExampleSketch({
   })
 
   return (
-    <div>
+    <div className='my-8'>
       <fieldset>
         <label className="inline-block w-44" htmlFor="forwardSizeSlider">
           Forwards (F) amount
@@ -311,19 +311,21 @@ export default function ExampleSketch({
         <button onClick={() => triggerRedraw()}>Redraw</button>
       </fieldset>
 
-      <div className='flex'>
+      <div className="flex justify-center">
         <SketchRenderer sketch={sketch} />
 
-        <div className="mx-6 flex flex-col-reverse">
-          <p className='text-center font-bold'>Stack</p>
-          {reactStack.map((s, i) => (
-            <div key={i} className="inline-block p-2 border-2 border-white">
-              <p>x: {Math.round(s.pos.x)}px</p>
-              <p>y: {Math.round(s.pos.y)}px</p>
-              <p>rot: {Math.round(s.rot * (180 / Math.PI))}°</p>
-            </div>
-          ))}
-        </div>
+        {withStack && (
+          <div className="mx-6 flex flex-col-reverse">
+            <p className="text-center font-bold">Stack</p>
+            {reactStack.map((s, i) => (
+              <div key={i} className="inline-block p-2 border-2 border-white">
+                <p>x: {Math.round(s.pos.x)}px</p>
+                <p>y: {Math.round(s.pos.y)}px</p>
+                <p>rot: {Math.round(s.rot * (180 / Math.PI))}°</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
