@@ -11,6 +11,7 @@ export default function ButtonCarousel({ option, setOption, options, optionsName
     return <div className='m-auto'>
         {options.map((op, i) =>
             <button
+                key={i}
                 className='w-20 h-20 m-auto text-3xl'
                 onClick={() => setOption(op)}
                 style={{
