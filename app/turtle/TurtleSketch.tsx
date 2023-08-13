@@ -247,8 +247,8 @@ export default function ExampleSketch({
   })
 
   return (
-    <div className='my-8'>
-      <fieldset>
+    <div className="my-8 flex flex-col items-center">
+      <fieldset className="mb-8 grid grid-cols-3 gap-4">
         <label className="inline-block w-44" htmlFor="forwardSizeSlider">
           Forwards (F) amount
         </label>
@@ -261,7 +261,6 @@ export default function ExampleSketch({
           onChange={(e) => setParam('F', parseInt(e.target.value))}
         />
         <p className="inline-block">{getParam('F')} px</p>
-        <br />
 
         <label className="inline-block w-44" htmlFor="leftSizeSlider">
           Left (+) angle
@@ -275,7 +274,6 @@ export default function ExampleSketch({
           onChange={(e) => setParam('+', parseInt(e.target.value))}
         />
         <p className="inline-block">{getParam('+')}°</p>
-        <br />
 
         <label className="inline-block w-44" htmlFor="rightSizeSlider">
           Right (-) angle
@@ -289,7 +287,6 @@ export default function ExampleSketch({
           onChange={(e) => setParam('-', parseInt(e.target.value))}
         />
         <p className="inline-block">{getParam('-')}°</p>
-        <br />
 
         <label className="inline-block w-44" htmlFor="stringInput">
           Input string
@@ -306,7 +303,6 @@ export default function ExampleSketch({
             setInputString(sanitizedInput)
           }}
         />
-        <br />
 
         <button onClick={() => triggerRedraw()}>Redraw</button>
       </fieldset>
@@ -315,15 +311,19 @@ export default function ExampleSketch({
         <SketchRenderer sketch={sketch} />
 
         {withStack && (
-          <div className="mx-6 flex flex-col-reverse">
-            <p className="text-center font-bold">Stack</p>
-            {reactStack.map((s, i) => (
-              <div key={i} className="inline-block p-2 border-2 border-white">
-                <p>x: {Math.round(s.pos.x)}px</p>
-                <p>y: {Math.round(s.pos.y)}px</p>
-                <p>rot: {Math.round(s.rot * (180 / Math.PI))}°</p>
-              </div>
-            ))}
+          <div className="mx-6 w-[100px] max-h-[550px] flex flex-col-reverse">
+            <p className="bg-gray-200 text-gray-900 text-center font-bold">
+              Stack
+            </p>
+            <div className="w-full overflow-y-scroll">
+              {reactStack.map((s, i) => (
+                <div key={i} className="p-2 border-2 border-gray-200">
+                  <p>x: {Math.round(s.pos.x)}px</p>
+                  <p>y: {Math.round(s.pos.y)}px</p>
+                  <p>rot: {Math.round(s.rot * (180 / Math.PI))}°</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
