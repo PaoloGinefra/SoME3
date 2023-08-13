@@ -41,6 +41,7 @@ export default function DWD_editor() {
         p.windowResized = function () {
             p.resizeCanvas(p.windowWidth * 0.8, h)
             Graphic = p.createGraphics(p.windowWidth * 0.9, h)
+            Graphic.background(12)
         }
 
         p.preload = function () {
@@ -51,6 +52,7 @@ export default function DWD_editor() {
         p.setup = function () {
             canvas = p.createCanvas(w, h)
             Graphic = p.createGraphics(w, h)
+            Graphic.background(12)
             ghostGrpahic = p.createGraphics(w, h)
 
             grid.setup()
@@ -80,14 +82,14 @@ export default function DWD_editor() {
 
 
             //Draw the background
-            p.background(255)
+            p.background(0)
             //p.background(0, 0, 0,)
 
             //grid.draw()
 
             //Graphic.background(0, 0, 0, 10)
             //Graphic.tint(0, 0, 0, 100)
-            Graphic.background(0, 0, 0, 10)
+            Graphic.background(0, 10)
 
             //Graphic.background(0, 0, 0, 10)
             shapes.forEach((s) => {
