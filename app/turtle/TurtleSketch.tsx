@@ -15,45 +15,61 @@ interface TurtleState {
 
 type TurtleCmdDrawFunction = (
   p: p5,
-  s: TurtleState,
+  stack: TurtleState[],
   params: number[],
   t: number
 ) => void
 
 const turtleDrawFunctions: Record<string, TurtleCmdDrawFunction> = {
-  F: (p, s, params, t) => {
+  F: (p, stack, params, t) => {
+    const state = stack[stack.length - 1]
     const [len] = params
+
+    p.push()
+    p.translate(state.pos.x, state.pos.y)
+    p.rotate(state.rot)
+
     p.stroke('#0070A9')
     p.strokeWeight(1)
     p.line(0, 0, len * t, 0)
 
-    p.translate(len * t, 0)
-    s.pos.x += len * t
-  },
-
-  '+': (p, s, params, t) => {
-    const [angle] = params
-    p.rotate(angle * t)
-    s.rot += p.degrees(angle * t)
-  },
-
-  '-': (p, s, params, t) => {
-    const [angle] = params
-    p.rotate(-angle * t)
-    s.rot += p.degrees(-angle * t)
-  },
-
-  '[': (p, s, params, t) => {
-    p.push()
-  },
-
-  ']': (p, s, params, t) => {
     p.pop()
+
+    state.pos.x += len * t * Math.cos(state.rot)
+    state.pos.y += len * t * Math.sin(state.rot)
+  },
+
+  '+': (p, stack, params, t) => {
+    const state = stack[stack.length - 1]
+    const [angle] = params
+    state.rot += angle * t
+  },
+
+  '-': (p, stack, params, t) => {
+    const state = stack[stack.length - 1]
+    const [angle] = params
+    state.rot -= angle * t
+  },
+
+  '[': (p, stack, params, t) => {
+    const state = stack[stack.length - 1]
+    const copiedState = {
+      pos: { x: state.pos.x, y: state.pos.y },
+      rot: state.rot,
+    }
+    stack.push(copiedState)
+  },
+
+  ']': (p, stack, params, t) => {
+    stack.pop()
   },
 }
 
-function drawTurtle(p: p5) {
+function drawTurtle(p: p5, state: TurtleState) {
   p.push()
+  p.translate(state.pos.x, state.pos.y)
+  p.rotate(state.rot)
+
   p.ellipseMode(p.CENTER)
   p.fill('green')
   p.ellipse(0, 0, 25, 20)
@@ -71,10 +87,12 @@ function draw(
 ) {
   const cmdString = str.split('')
 
-  const s: TurtleState = {
-    pos: { x: 0, y: 0 },
-    rot: 0,
-  }
+  const stack: TurtleState[] = [
+    {
+      pos: { x: 0, y: 0 },
+      rot: 0,
+    },
+  ]
   let i = 0
 
   while (i < t && i < cmdString.length) {
@@ -83,27 +101,14 @@ function draw(
     const cmdDrawFunct = turtleDrawFunctions[cmd]
     const cmdParams = paramsLookup[cmd]
     const cmdT = p.constrain(t - i, 0, 1)
-    cmdDrawFunct(p, s, cmdParams, cmdT)
+    cmdDrawFunct(p, stack, cmdParams, cmdT)
 
     i += 1
   }
 
-  let state = s
-  let step = i
-  drawTurtle(p)
+  drawTurtle(p, stack[stack.length - 1])
 
-  while (i < cmdString.length) {
-    const cmd = cmdString[i]
-
-    const cmdDrawFunct = turtleDrawFunctions[cmd]
-    const cmdParams = paramsLookup[cmd]
-    const cmdT = p.constrain(t - i, 0, 1)
-    cmdDrawFunct(p, s, cmdParams, cmdT)
-
-    i += 1
-  }
-
-  return [step, state] as const
+  return [i, stack] as const
 }
 
 const DRAW_SPEED = 0.02
@@ -136,12 +141,10 @@ export default function ExampleSketch({
     setInputState({ ...inputState, [ruleChar]: value })
 
   const [string, setInputString] = useState(defaultString)
-
-  const [stack, setStack] = useState<TurtleState[]>([])
+  const [reactStack, setReactStack] = useState<TurtleState[]>([])
   const t = useRef(0)
 
   const triggerRedraw = () => {
-    setStack([])
     t.current = 0
   }
 
@@ -150,8 +153,7 @@ export default function ExampleSketch({
   }, [string])
 
   const sketch = useStatefulSketch(
-    { string, paramsLookup, stack },
-    (state, p) => {
+    { string, paramsLookup }, (state, p) => {
       const w = 700
       const h = 550
 
@@ -206,16 +208,14 @@ export default function ExampleSketch({
         grid.draw(offset, 1)
         p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y)
 
-        p.push()
-        const [currentStep, turtleState] = draw(
+        const [currentStep, stack] = draw(
           p,
           state.current.string,
           state.current.paramsLookup,
           t.current * DRAW_SPEED
         )
-        p.pop()
-
-        p.pop() // end: grid
+        const turtleState = stack[stack.length - 1]
+        const turtleStack = stack.slice(1)
 
         // begin: top text
         const { string } = state.current
@@ -228,29 +228,20 @@ export default function ExampleSketch({
 
           const letterWidth = 24 * (3 / 4)
           const offs = letterWidth * (i - string.length / 2)
-          p.text(string[i], w / 2 + offs, 50)
+          p.text(string[i], turtleState.pos.x + offs, turtleState.pos.y - 24)
           p.pop() // end: letter
         }
         // end: top text
 
-        // begin: stack visualization
+        p.pop() // end: grid
+
         if (currentStep != prevStep) {
           prevStep = currentStep
-
-          let currentCmd = state.current.string[currentStep]
-          if (currentCmd == '[') {
-            setStack([turtleState, ...state.current.stack])
-          } else if (currentCmd == ']') {
-            const [_top, ...rest] = state.current.stack
-            setStack(rest)
-          }
+          setReactStack(turtleStack)
         }
-        // end: stack
-
         t.current += 1
       }
-    }
-  )
+  })
 
   return (
     <div>
@@ -320,11 +311,11 @@ export default function ExampleSketch({
       <SketchRenderer sketch={sketch} />
 
       <div>
-        {stack.map((s, i) => (
+        {reactStack.map((s, i) => (
           <div key={i} className="inline-block p-2 border-2 border-white">
             <p>x: {Math.round(s.pos.x)}px</p>
             <p>y: {Math.round(s.pos.y)}px</p>
-            <p>rot: {Math.round(s.rot)}°</p>
+            <p>rot: {Math.round(s.rot * (180 / Math.PI))}°</p>
           </div>
         ))}
       </div>
