@@ -215,7 +215,7 @@ export default function ExampleSketch({
           t.current * DRAW_SPEED
         )
         const turtleState = stack[stack.length - 1]
-        const turtleStack = stack.slice(1)
+        const turtleStack = stack.slice(0, -1)
 
         // begin: top text
         const { string } = state.current
