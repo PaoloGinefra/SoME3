@@ -91,14 +91,14 @@ export default function DWD_editor() {
 
             //Graphic.background(0, 0, 0, 10)
             shapes.forEach((s) => {
-                if (s instanceof Canvas)
-                    s.draw({ drawContour: state.current.showCanvasContour, leaf: leafImage })
+                //if (s instanceof Canvas)
+                s.draw({ drawContour: state.current.showCanvasContour, leaf: leafImage })
             })
 
-            shapes.forEach((s) => {
-                if (!(s instanceof Canvas))
-                    s.draw({ drawContour: state.current.showCanvasContour, leaf: leafImage })
-            })
+            // shapes.forEach((s) => {
+            //     if (!(s instanceof Canvas))
+            //         s.draw({ drawContour: state.current.showCanvasContour, leaf: leafImage })
+            // })
 
             if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h) {
                 let brush = Shapes.find((s) => s.name == state.current.brushName) ?? Shapes[0]
@@ -124,7 +124,7 @@ export default function DWD_editor() {
             <div className='flex m-auto gap-3 flex-auto my-3'>
                 <div className='flex flex-col flex-auto'>
                     <input className='w-40 h-6 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700'
-                        type="range" min="1" max={600} value={brushSize} onChange={(e) => setBrushSize(parseInt(e.target.value))} />
+                        type="range" min="1" max={1500} value={brushSize} onChange={(e) => setBrushSize(parseInt(e.target.value))} />
                     <p className='relative bold text-center m-auto'>Size: {brushSize}</p>
                 </div>
 
