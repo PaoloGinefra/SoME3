@@ -20,6 +20,7 @@ import ModeButton from './Inreface/ModeButtons'
 import CharPicker from './Inreface/CharPicker'
 import Modes from './Inreface/Modes'
 import { modesIcons } from './Inreface/Modes'
+import DrawingStyles from './DrawingStyles'
 
 
 export default function L_Maker() {
@@ -29,12 +30,7 @@ export default function L_Maker() {
     const [drawingRules, setDrawingRules] = useState<DrawingRule[]>([
         {
             targetChars: alphabet,
-            drawing: (params: number[], p: p5, t: number = 1) => {
-                p.stroke(0, 0, 0, 255);
-                p.strokeWeight(1);
-                p.line(0, 0, params[0] * t, 0);
-                p.translate(params[0] * t, 0);
-            }
+            drawing: DrawingStyles[0]
         },
         {
             targetChars: '+',
