@@ -70,10 +70,10 @@ export default function L_Renderer({ string, drawingRules, iteration, setIterati
                 offset.add(p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y))
                 touchPoint = p.createVector(p.mouseX, p.mouseY)
             }
-            grid.draw(offset, scale)
+            grid.draw(offset.copy().mult(2), scale)
             p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y);
             p.push()
-            GPLS.drawString(p, state.current.string, drawingRules, state.current.t * state.current.string.length / 100, true, 0.15, 0.001 * state.current.string.length);
+            GPLS.drawString(p, state.current.string, drawingRules, state.current.t, true, 1 / state.current.string.length, 0.5);
 
             p.pop()
 
@@ -95,7 +95,7 @@ export default function L_Renderer({ string, drawingRules, iteration, setIterati
                         id="sizeSlider"
                         type="range"
                         min={0}
-                        max={5}
+                        max={8}
                         value={iteration}
                         onChange={(e) => setIteration(parseInt(e.target.value))}
                     />
