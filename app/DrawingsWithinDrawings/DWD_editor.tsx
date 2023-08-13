@@ -123,13 +123,13 @@ export default function DWD_editor() {
 
             <div className='flex m-auto gap-3 flex-auto my-3'>
                 <div className='flex flex-col flex-auto'>
-                    <input className='w-40 h-6 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700'
+                    <input className='w-40 h-6'
                         type="range" min="1" max={1500} value={brushSize} onChange={(e) => setBrushSize(parseInt(e.target.value))} />
                     <p className='relative bold text-center m-auto'>Size: {brushSize}</p>
                 </div>
 
                 <div className='flex flex-col flex-auto'>
-                    <input className='w-40 h-6 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700'
+                    <input className='w-40 h-6'
                         type="range" min={-36} max={36} step={1} onChange={(e) => setBrushRotation(parseFloat(e.target.value) / 36 * 3.141)} />
                     <p className='relative bold text-center m-auto'>Rotation: {Math.round(brushRotation * 180 / 3.141)} deg</p>
                 </div>

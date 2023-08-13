@@ -30,3 +30,11 @@ canvas {
   border-radius: 30px;
   overflow: hidden;
 }
+
+input[type="range"]{
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-color: rgb(55, 65, 81);
+  border-radius: 0.5rem;
+}
+

@@ -96,7 +96,7 @@ export default function L_Renderer({ string, drawingRules, iteration, setIterati
             <div className='flex justify-center mt-2 gap-8'>
                 <div className='flex flex-col'>
                     <input
-                        className='m-auto w-40 h-6 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700'
+                        className='m-auto w-40 h-6'
                         id="sizeSlider"
                         type="range"
                         min={0}
