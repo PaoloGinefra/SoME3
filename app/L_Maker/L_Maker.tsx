@@ -19,6 +19,8 @@ import AlphabetEditor from './AlphabetEditor'
 import ModeButton from './Inreface/ModeButtons'
 import CharPicker from './Inreface/CharPicker'
 import Modes from './Inreface/Modes'
+import { modesIcons } from './Inreface/Modes'
+import DrawingStyles from './DrawingStyles'
 
 
 export default function L_Maker() {
@@ -28,12 +30,7 @@ export default function L_Maker() {
     const [drawingRules, setDrawingRules] = useState<DrawingRule[]>([
         {
             targetChars: alphabet,
-            drawing: (params: number[], p: p5, t: number = 1) => {
-                p.stroke(0, 0, 0, 255);
-                p.strokeWeight(1);
-                p.line(0, 0, params[0] * t, 0);
-                p.translate(params[0] * t, 0);
-            }
+            drawing: DrawingStyles[0]
         },
         {
             targetChars: '+',
@@ -109,8 +106,12 @@ export default function L_Maker() {
             onClick={() => { }}//setIterations(iterations + 1)}
             onMouseLeave={() => setIterations(iterations)}>
             <AlphabetEditor alphabet={alphabet} setAlphabet={setAlphabet} />
-            <ModeButton Modes={Modes} mode={mode} setMode={setMode} />
-            {mode == 'Color' ? <CharPicker alphabet={alphabet} currentChar={char} setcurrentChar={setChar} /> : null}
+            <ModeButton Modes={Modes} mode={mode} setMode={setMode} modesIcons={[
+                ...modesIcons,
+                <div className='scale-[60%] w-8 flex justify-center'>
+                    <CharPicker alphabet={alphabet} currentChar={char} setcurrentChar={setChar} />
+                </div>
+            ]} />
             <div className='flex gap-5 justify-center'>
                 <Axiom_Maker char={char} setChar={setChar} mode={mode} setMode={setMode} axiom={axiom} setAxiom={setAxiom} alphabet={alphabet} startingAxiom={startingAxiom} />
                 <Production_Maker char={char} setChar={setChar} mode={mode} setMode={setMode} productions={productions} setProductions={setProductions} alphabet={alphabet} />

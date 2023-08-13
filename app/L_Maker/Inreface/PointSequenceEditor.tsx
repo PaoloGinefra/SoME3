@@ -41,8 +41,8 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
     const [referenceOn, setReferenceOn] = useState<boolean>(referenceToggle);
 
     const sketch = useStatefulSketch({ handleSequence, mode, string, char, alphabet, preChar, referenceOn, referenceToggle }, (state, p) => {
-        const w = p.windowWidth * 0.4;
-        const h = 500
+        let w = p.windowWidth * 0.4;
+        let h = 500
         const gridSize = 10
 
         let canvas: Renderer
@@ -419,26 +419,22 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                 else if (state.current.mode == 'Stack pop') {
                     drawPop(p, { position: p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), push: false, pop: true, char: 'F' })
                 }
+                else if (state.current.mode == 'Color') {
+                    p.text(state.current.char ?? '', quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y))
+                }
             }
             pastString = [...state.current.string];
+        }
+
+        p.windowResized = function () {
+            w = p.windowWidth * 0.4;
+            p.resizeCanvas(w, h)
         }
 
     })
 
     return (
         <div>
-            {/* {referenceToggle ?
-                <div>
-                    <input
-                        type="checkbox"
-                        checked={referenceOn}
-                        onChange={() => setReferenceOn(!referenceOn)}
-                    />
-                    {preChar} Reference
-                </div>
-
-                : null
-            } */}
             <div className=' border-b-red-100'>
                 <SketchRenderer sketch={sketch} />
             </div>
