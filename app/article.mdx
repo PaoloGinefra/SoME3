@@ -6,6 +6,7 @@ import SierpinskiTriangle from './Examples/SierpinskiTriangleExample.tsx'
 import L_Maker from './L_Maker/L_Maker.tsx'
 import TextLSystem from './TextLSystem/TextLSystem.tsx'
 import DWD_editor from './DrawingsWithinDrawings/DWD_editor.tsx'
+import TurtleSketch from './turtle/TurtleSketch.tsx'
 
 import ChapterSeparator from './ChapterSeparator.tsx'
 import Paragraph from './utils/Paragraph.tsx'
@@ -129,6 +130,8 @@ With this simple set of symbols, we can draw pretty much every abstracted plant 
 
 (Commentary on the branch drawing)
 
+<TurtleSketch withStack={false} defaultString="F+F-F" />
+
 As you can see the process is not particularly hard but a bit convoluted.
 Especially if you consider that going back to the beginning of an already drawn branch, to then draw the next, implies doubling the number of instructions.
 Since we know that the turtle can easily reach every point of the plane we can introduce two new symbols for the sake of simplicity: [ ].
@@ -142,6 +145,8 @@ Thus [ means add the current state to the stack and ] means read, process and re
 Now we can try again with the simple branch:
 Much cleaner now!
 Perfect! Now that all the pieces are in place we can tackle the self-similarity.
+
+<TurtleSketch withStack={true} defaultString="FF[+F[+F]]F-F" />
 
 </Paragraph>
 
