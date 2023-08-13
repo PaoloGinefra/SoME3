@@ -63,7 +63,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
         let offset = p.createVector(0, 0)
         let scale = 1
 
-        let refernceHead = p.createVector(w / 2, h / 2)
+        let refernceHead = p.createVector(w / 2 - 200, h / 2)
         let refernceTail = p.createVector(w / 2 + 200, h / 2)
 
         let points: Point[] = [];
