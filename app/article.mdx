@@ -9,11 +9,11 @@ import DWD_editor from './DrawingsWithinDrawings/DWD_editor.tsx'
 import TurtleSketch from './turtle/TurtleSketch.tsx'
 
 import ChapterSeparator from './ChapterSeparator.tsx'
-import Paragraph from './utils/Paragraph.tsx'
+import Prose from './utils/Prose.tsx'
 
+<Prose>
 # How to programmatically touch grass
 
-<Paragraph>
 Red Dead Redemption 2, Horizon Zero Dawn. How do these games manage to produce such realistic and beautiful landscapes?
 
 Enormous companies like Sony and Rockstar Games have entire teams dedicated to creating realistic models that can later be used in composing the gaming environment.
@@ -24,11 +24,11 @@ Today’s journey is about recreating that beauty Our tools will be math, comput
 
 The task at hand is quite different from your usual textbook problem. While still having chosen to focus on a specific topic, the ways to tackle it as is usually the case in these scenarios are endless and you can't expect a clear-cut solution. The path we will be exploring is just one among infinitely many and you to take this as a source of inspiration and to dig your own unique way.
 
-</Paragraph>
+</Prose>
 
 <ChapterSeparator />
 
-<Paragraph>
+<Prose>
 Whenever faced with such a broad task, the first thing to do is to shoot the messenger with a ton of questions.
 What do you mean by recreating plants? Which kind of plants? Should this be an exact recreation or can we get away with some artistic liberties?
 
@@ -36,10 +36,10 @@ In addition we need a flexible system to draw plants; one that would work both f
 .
 The result should be pretty convincing but there has to be room for artistic expression. We want to be able to create any plant, even those that come from an alien planet and have smiley faces as leaves.
 
-</Paragraph>
+</Prose>
 
 <ChapterSeparator />
-<Paragraph>
+<Prose>
 Okay, now that our goal is set we can properly start. The next phase is arguably the most important one: don’t panic!
 The infinitely many roads are all facing you and taking the first step can be daunting when you don’t know which one to choose. Staring them won’t get you anywhere though, so let’s just pick without the fear of retracing our steps.
 
@@ -60,11 +60,11 @@ Our first abstraction will be reducing each plant to its branches, and since we 
 [Applet from pic to lines]
 Now that we reduced the images to their essential components we need to find the red thread that connects them. Let’s look for patterns!
 
-</Paragraph>
+</Prose>
 
 <ChapterSeparator />
 
-<Paragraph>
+<Prose>
 
 Let’s take (List of chosen images) and observe it with a scientist’s spirit.
 
@@ -90,10 +90,10 @@ You may be spotting a problem though, yes we can use that definition by recursio
 
 But let’s keep that aside for the moment. Let us shave a bit of complexity away first and then go back to the general case later. Let’s look at a perfect self-similar plant!
 
-</Paragraph>
+</Prose>
 
 <ChapterSeparator />
-<Paragraph>
+<Prose>
 
 What would it look like? How would you draw it?
 
@@ -103,19 +103,19 @@ If we want to recreate them we may go back to the recurrent definition and liter
 
 (Some commentary on the applet for the video)
 
-</Paragraph>
+</Prose>
 
 <DWD_editor />
 
-<Paragraph>
+<Prose>
 
 This works pretty well for our perfect plant! But it still has its own problems. First of all, we don’t really have control over the copies, they are no more than that, and we don’t choose the depth of the recurrence. Furthermore, we don’t have a clear description of the plant at hand.
 We need to improve this!
 
-</Paragraph>
+</Prose>
 
 <ChapterSeparator />
-<Paragraph>
+<Prose>
 
 Let’s go back again to our abstracted plants. Can we abstract them even more? Is there a pattern between all of them?
 Despite all the case-specific intricacies, all the drawings are just made of straight segments.
@@ -130,8 +130,11 @@ With this simple set of symbols, we can draw pretty much every abstracted plant 
 
 (Commentary on the branch drawing)
 
+</Prose>
+
 <TurtleSketch withStack={false} defaultString="F+F-F" />
 
+<Prose>
 As you can see the process is not particularly hard but a bit convoluted.
 Especially if you consider that going back to the beginning of an already drawn branch, to then draw the next, implies doubling the number of instructions.
 Since we know that the turtle can easily reach every point of the plane we can introduce two new symbols for the sake of simplicity: [ ].
@@ -146,13 +149,13 @@ Now we can try again with the simple branch:
 Much cleaner now!
 Perfect! Now that all the pieces are in place we can tackle the self-similarity.
 
-<TurtleSketch withStack={true} defaultString="FF[+F[+F]]F-F" />
+</Prose>
 
-</Paragraph>
+<TurtleSketch withStack={true} defaultString="FF[+F[+F]]F-F" />
 
 <ChapterSeparator />
 
-<Paragraph>
+<Prose>
 
 We can go back yet again to the recurrent definition of the tree and upgrade it with the branch described earlier.
 Let’s begin by introducing a new symbol, a T, that stands for tree.
@@ -171,11 +174,11 @@ Amazing! That is basically a line binary tree!
 
 Now that we have proof that our discovery works for at least a kind of tree, it is time to formalize our method and explore its capabilities.
 
-</Paragraph>
+</Prose>
 
 <ChapterSeparator />
 
-<Paragraph>
+<Prose>
 
 It is safe to say that we can split the task between two different systems that work together: one for the generation of the strings and one for the drawings.
 
@@ -198,8 +201,11 @@ The process now becomes an iterative find and replace.
 We can get another string, “new”. Now we iterate through each character in “current” and we look for a match among the productions. If one is found we add to “new” the right side of the production, otherwise we bring along the character.
 Finally, we make “new” our “current” and start all over again until we reach the desired level of detail.
 
+</Prose>
+
 <TextLSystem/ >
 
+<Prose>
 What we just described is called a Lyndelmier System from the bright botanist who first came up with it. Commonly abbreviated to L-systems they are an example of a broader class of computational objects called formal grammars.
 
 If you think about it, we are assigning to each branching structure a sequence of characters, a sentence, and we are trying to generate only “meaningful” ones in the sense of actually representing a plant. It is not that different from the generation of a “meaningful” sentence in English, in the sense of conveying actual meaning. But while in English we are concerned with the meaning of each word, here we only care about the structure of the sentence, about its grammatical coherence. So we only need the grammar of this new weird language.
@@ -211,10 +217,10 @@ Once again we could be here talking for hours about L-systems and their huge amo
 
 For now, let’s just get back to an issue we left behind: the variation.
 
-</Paragraph>
+</Prose>
 
 <ChapterSeparator />
-<Paragraph>
+<Prose>
 We now need to exit the world of perfection and go back to reality. We can use a trick that seems to come so easily to nature: randomness.
 To achieve this we need to lose the determinism of our system, meaning that one set of alphabet, productions, and axiom will no longer always produce the same drawing. And the easiest way to do that is by allowing overlap in the productions.
 
@@ -227,13 +233,13 @@ And since we said that the details and artistic interpretations are easily intro
 
 Here you can experiment with the L-system as much as you want!
 
-</Paragraph>
+</Prose>
 
 <L_Maker />
 
 <ChapterSeparator />
-<Paragraph>
+<Prose>
 
 Our journey stops here at the moment. I hope you appreciated the journey where we touched on various strategies and ideas common to solving these kinds of open design problems and I hope you are left with little answers and many new questions in mind. I highly encourage you to start from the loose threads of this article as an excuse to dive deeper into this topic. Trust me, there is an infinite amount of wonders hidden between the leaves of a computer-generated plant!
 
-</Paragraph>
+</Prose>
