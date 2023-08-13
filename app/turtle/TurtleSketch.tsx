@@ -311,16 +311,19 @@ export default function ExampleSketch({
         <button onClick={() => triggerRedraw()}>Redraw</button>
       </fieldset>
 
-      <SketchRenderer sketch={sketch} />
+      <div className='flex'>
+        <SketchRenderer sketch={sketch} />
 
-      <div>
-        {reactStack.map((s, i) => (
-          <div key={i} className="inline-block p-2 border-2 border-white">
-            <p>x: {Math.round(s.pos.x)}px</p>
-            <p>y: {Math.round(s.pos.y)}px</p>
-            <p>rot: {Math.round(s.rot * (180 / Math.PI))}°</p>
-          </div>
-        ))}
+        <div className="mx-6 flex flex-col-reverse">
+          <p className='text-center font-bold'>Stack</p>
+          {reactStack.map((s, i) => (
+            <div key={i} className="inline-block p-2 border-2 border-white">
+              <p>x: {Math.round(s.pos.x)}px</p>
+              <p>y: {Math.round(s.pos.y)}px</p>
+              <p>rot: {Math.round(s.rot * (180 / Math.PI))}°</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
