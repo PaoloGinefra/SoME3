@@ -152,95 +152,94 @@ export default function ExampleSketch({
     triggerRedraw()
   }, [string])
 
-  const sketch = useStatefulSketch(
-    { string, paramsLookup }, (state, p) => {
-      const w = 700
-      const h = 550
+  const sketch = useStatefulSketch({ string, paramsLookup }, (state, p) => {
+    const w = 700
+    const h = 550
 
-      let canvas: Renderer
+    let canvas: Renderer
 
-      const grid = new Grid(w, h, 10, 0.1, 0.2, p)
-      let startingPoint: p5.Vector = p.createVector(w / 2, h / 2)
-      let offset = p.createVector(0, 0)
+    const grid = new Grid(w, h, 10, 0.1, 0.2, p)
+    let startingPoint: p5.Vector = p.createVector(w / 2, h / 2)
+    let offset = p.createVector(0, 0)
 
-      let touchPoint = p.createVector(0, 0)
-      let isHolding = false
+    let touchPoint = p.createVector(0, 0)
+    let isHolding = false
 
-      let prevStep = -1
+    let prevStep = -1
 
-      p.preload = function () {
-        grid.preload()
-      }
+    p.preload = function () {
+      grid.preload()
+    }
 
-      p.setup = function () {
-        canvas = p.createCanvas(w, h)
-        grid.setup()
+    p.setup = function () {
+      canvas = p.createCanvas(w, h)
+      grid.setup()
 
-        canvas.mousePressed(() => {
-          touchPoint = p.createVector(p.mouseX, p.mouseY)
-          isHolding = true
-        })
+      canvas.mousePressed(() => {
+        touchPoint = p.createVector(p.mouseX, p.mouseY)
+        isHolding = true
+      })
 
-        canvas.mouseReleased(() => {
-          isHolding = false
-        })
+      canvas.mouseReleased(() => {
+        isHolding = false
+      })
 
-        canvas.mouseOut(() => {
-          isHolding = false
-        })
+      canvas.mouseOut(() => {
+        isHolding = false
+      })
 
-        canvas.doubleClicked(() => {
-          offset = p.createVector(0, 0)
-        })
-      }
+      canvas.doubleClicked(() => {
+        offset = p.createVector(0, 0)
+      })
+    }
 
-      p.draw = function () {
-        p.background(251, 234, 205)
+    p.draw = function () {
+      p.background(251, 234, 205)
 
-        p.push() // begin: grid
+      p.push() // begin: grid
 
-        if (isHolding) {
-          offset.add(
-            p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y)
-          )
-          touchPoint = p.createVector(p.mouseX, p.mouseY)
-        }
-        grid.draw(offset, 1)
-        p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y)
-
-        const [currentStep, stack] = draw(
-          p,
-          state.current.string,
-          state.current.paramsLookup,
-          t.current * DRAW_SPEED
+      if (isHolding) {
+        offset.add(
+          p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y)
         )
-        const turtleState = stack[stack.length - 1]
-        const turtleStack = stack.slice(0, -1)
-
-        // begin: top text
-        const { string } = state.current
-        p.textFont('monospace', 24)
-        for (let i = 0; i < string.length; i++) {
-          p.push() // begin: letter
-          if (currentStep == i) {
-            p.textStyle(p.BOLD)
-          }
-
-          const letterWidth = 24 * (3 / 4)
-          const offs = letterWidth * (i - string.length / 2)
-          p.text(string[i], turtleState.pos.x + offs, turtleState.pos.y - 24)
-          p.pop() // end: letter
-        }
-        // end: top text
-
-        p.pop() // end: grid
-
-        if (currentStep != prevStep) {
-          prevStep = currentStep
-          setReactStack(turtleStack)
-        }
-        t.current += 1
+        touchPoint = p.createVector(p.mouseX, p.mouseY)
       }
+      grid.draw(offset, 1)
+      p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y)
+
+      const [currentStep, stack] = draw(
+        p,
+        state.current.string,
+        state.current.paramsLookup,
+        t.current * DRAW_SPEED
+      )
+      const turtleState = stack[stack.length - 1]
+      const turtleStack = stack.slice(0, -1)
+
+      // begin: top text
+      const { string } = state.current
+      p.textFont('monospace', 24)
+      for (let i = 0; i < string.length; i++) {
+        p.push() // begin: letter
+        if (currentStep == i) {
+          p.textStyle(p.BOLD)
+        }
+
+        const letterWidth = 24 * (3 / 4)
+        const offs = letterWidth * (i - string.length / 2)
+        p.text(string[i], turtleState.pos.x + offs, turtleState.pos.y - 24)
+        p.pop() // end: letter
+      }
+      // end: top text
+
+      p.pop() // end: grid
+
+      if (currentStep != prevStep) {
+        prevStep = currentStep
+        setReactStack(turtleStack)
+      }
+      t.current += 1
+    }
   })
 
   return (
