@@ -8,14 +8,16 @@ interface ProductionState {
   productions: Production[]
   setProductions: (p: Production[]) => void
   alphabet: string
-  active: boolean
+  counter: number
+  regenText: (thisProductions?: Array<Production>, thisAxiom?: string) => void
 }
 
 export default function Productions({
   productions,
   setProductions,
   alphabet,
-  active,
+  counter,
+  regenText,
 }: ProductionState) {
   return (
     <div className="flex flex-col gap-4 mb-4">
@@ -38,13 +40,11 @@ export default function Productions({
                 className={
                   'w-80 h-10 px-2 text-left rounded ' + inter.className
                 }
-                disabled={active}
                 type="text"
                 value={
                   productions.find((prod) => prod.preChar == letter)?.successor
                 }
                 onChange={(e) => {
-                  console.log(productions)
 
                   let output = e.target.value
                   output = output
@@ -53,12 +53,15 @@ export default function Productions({
                     .join('')
                   console.log(output)
                   e.target.value = output
-                  productions = productions.filter(
+                  const outputProductions = productions.filter(
                     (prod) => prod.preChar != letter
                   )
-                  productions.push({ preChar: letter, successor: output })
+                  outputProductions.push({ preChar: letter, successor: output })
+                  console.log(outputProductions);
+                  
+                  if (counter) regenText(outputProductions)
 
-                  setProductions(productions)
+                  setProductions(outputProductions)
                 }}
               ></input>
             </li>

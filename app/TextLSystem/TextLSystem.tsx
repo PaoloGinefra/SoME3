@@ -6,38 +6,48 @@ import Productions from './Productions'
 import Axiom from './Axiom'
 import Production from './Interface/Production'
 
-import classes from './TextLSystem.module.css'
-
 export default function TextLSystem() {
   const [alphabet, setAlphabet] = useState('')
   const [productions, setProductions] = useState(Array<Production>)
   const [axiom, setAxiom] = useState('')
-  const [active, setActive] = useState(false)
+  const [counter, setCounter] = useState(0)
   const [output, setOutput] = useState('')
 
+  function regenText(thisProductions = productions, thisAxiom = axiom): void {
+    let text = thisAxiom
+    for (let i = 0; i < counter; i++) {
+        text = applyProductions(text, thisProductions)
+    }
+    setOutput(text)
+  }
+
+  function applyProductions(text: string, thisProductions: Array<Production>) : string {
+    return text
+    .split('')
+    .map((letter) => {
+      const selectedProduction = thisProductions.find(
+        (prod) => prod.preChar == letter
+      )
+      if (selectedProduction && selectedProduction.successor)
+        return selectedProduction.successor
+      return letter
+    })
+    .join('')
+  }
+
   function nextText(): void {
-    if (!active) {
-      setActive(true)
+    if (!counter) {
       setOutput(axiom)
     } else {
       setOutput(
-        output
-          .split('')
-          .map((letter) => {
-            const selectedProduction = productions.find(
-              (prod) => prod.preChar == letter
-            )
-            if (selectedProduction && selectedProduction.successor)
-              return selectedProduction.successor
-            return letter
-          })
-          .join('')
+        applyProductions(output, productions)
       )
     }
+    setCounter(counter + 1)
   }
 
   function resetText(): void {
-    setActive(false)
+    setCounter(0)
     setOutput('')
   }
 
@@ -48,25 +58,28 @@ export default function TextLSystem() {
         setAlphabet={setAlphabet}
         productions={productions}
         setProductions={setProductions}
-        active={active}
+        counter={counter}
+        regenText={regenText}
       />
       <Productions
         productions={productions}
         setProductions={setProductions}
         alphabet={alphabet}
-        active={active}
+        counter={counter}
+        regenText={regenText}
       />
       <Axiom
         alphabet={alphabet}
         axiom={axiom}
         setAxiom={setAxiom}
-        active={active}
+        counter={counter}
+        regenText={regenText}
       />
       <div className="flex flex-col gap-4 mb-4">
         <h1 className="m-auto text-4xl">Output</h1>
-        <div className="m-auto text-4xl">
+        <div className="m-auto text-4xl flex">
           <button
-            title={active ? 'Next' : 'Start'}
+            title={counter ? 'Next' : 'Start'}
             className="mx-2 px-3 border-none"
             onClick={() => nextText()}
           >
@@ -81,8 +94,16 @@ export default function TextLSystem() {
           </button>
         </div>
       </div>
+      <div className='flex mx-16 flex-row-reverse'>
+        <h1
+          title="Iterations"
+          className="text-2xl align-center text-right border border-solid px-2 rounded"
+        >
+          {counter} ⏲
+        </h1>
+      </div>
       <div
-        className="break-words border-solid border-2 border-white rounded p-4 mx-32 my-4"
+        className="break-words border-solid border-2 border-white rounded p-4 mx-16 my-4"
         style={{ minHeight: '8em' }}
       >
         {output}
