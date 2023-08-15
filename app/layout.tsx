@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'How to programmatically touch grass',
-  description: 'A SoME3 entry',
+  description: 'A SoME3 entry on drawing plants programmatically.',
 }
 
 export default function RootLayout({
