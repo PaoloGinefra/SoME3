@@ -8,9 +8,10 @@ export default function Video({ url }: Video_interface) {
             className="m-auto my-10 rounded-lg"
             width="560"
             height="315"
-            src={url}
+            src={url + "&controls=0&autoplay=1&loop=1&modestbranding=1&mute=1"}
             title="YouTube video player"
-            allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; modestbranding"
         />
     )
 }
