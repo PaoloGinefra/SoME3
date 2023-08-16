@@ -9,15 +9,13 @@ import DWD_editor from './DrawingsWithinDrawings/DWD_editor.tsx'
 import TurtleSketch from './turtle/TurtleSketch.tsx'
 import TreesBlurSketch from './trees/TreesBlurSketch.tsx'
 import TreesSketch from './trees/TreesSketch.tsx'
-
 import ChapterSeparator from './ChapterSeparator.tsx'
 import Prose from './utils/Prose.tsx'
 import MobileModal from './utils/MobileModal'
-
 import Video from './utils/Video.tsx'
 import Gif from './utils/Gif.tsx'
-
 import Toggolable from './utils/Toggolable.tsx'
+import RoleList from './utils/Role.tsx'
 
 <MobileModal />
 
@@ -27,7 +25,7 @@ import Toggolable from './utils/Toggolable.tsx'
 
 </Prose>
 
-<Toggolable title="Introduction">
+<Toggolable title="Introduction" maxHeight={2500}>
 <Prose>
 As a math and computer science enthusiast, I’m often told to touch grass. I never fully understood what that means, but one thing I’m sure of is that I don’t want to go outside. However, why not kill two birds with one stone and simulate some plants on my PC?
 Today’s journey is about understanding how to make it possible using math, computer science, and a pinch of basic intuition.
@@ -72,7 +70,7 @@ The result should be pretty convincing but there has to be room for artistic exp
 </Prose>
 </Toggolable>
 
-<Toggolable title="Time to Abstract">
+<Toggolable title="Time to Abstract" maxHeight={2800}>
 <Prose>
 Okay, now that the goal is set, we can properly start. The next phase is arguably the most important one: don’t panic!
 The infinitely many roads are all facing you and taking the first step can be daunting. Staring them won’t get you anywhere though, so let’s just pick without the fear of retracing our steps.
@@ -113,7 +111,7 @@ This is not that different from what a painter or an illustrator would do.
 </Prose>
 </Toggolable>
 
-<Toggolable title="A closer look">
+<Toggolable title="A closer look" maxHeight={1300}>
 
 <Prose>
 To do this it could be useful to start analyzing the problem from the start, gathering some ideas;
@@ -303,7 +301,16 @@ This is the perfect way to regain those scenario-specific details we lost by blu
 </Prose>
 
 <Prose>
-Once again we could be here talking for hours about L-systems and their huge amount of variations, possibilities, applications, classifications, and whatnot and  once again I’ll leave that to your own curiosity and maybe a future article/video.
+  Once again we could be here talking for hours about L-systems and their huge
+  amount of variations, possibilities, applications, classifications, and
+  whatnot and once again I’ll leave that to your own curiosity and maybe a
+  future article/video.
+</Prose>
+
+</Toggolable>
+
+<Toggolable title="Computational gardening">
+<Prose>
 
 For now, you can try and experiment with a graphical version of what we discussed so far. Here you’ll be no longer restrained with a fixed amount of rotation and length per character so you can let your imagination roam free.
 
@@ -311,14 +318,12 @@ For now, you can try and experiment with a graphical version of what we discusse
 
 <L_Maker />
 
-<Prose>
-  Finally, let’s just get back to an issue we left behind: the variation.
-</Prose>
-
 </Toggolable>
 
 <Toggolable title="An old foe">
 <Prose>
+Finally, let’s just get back to an issue we left behind: the variation.
+
 We now need to exit the world of perfection and go back to reality. We can use a trick that seems to come so easily to nature: randomness.
 To achieve this we need to lose the determinism of our system, meaning that one set of alphabet, productions, and axioms will no longer always produce the same drawing. And the easiest way to do that is by allowing overlap in the productions.
 
@@ -352,6 +357,10 @@ I also hope that you are left with few answers but many new questions in mind an
 
 <Prose>
 We are a team of 5 Engineering of Computing Systems students (names and roles are in alphabetical order):
-
+- **Dario Crosa**: <RoleList roles={['Applet Development', 'Font End']}/>
+- **Lorenzo Bressi**:<RoleList roles={['Research', 'Writing']}/>
+- **Matteo Figini**:<RoleList roles={['Research', 'Writing']}/>
+- **Matteo Garzone**:<RoleList roles={['Applet Development', 'Research']}/>
+- **Paolo Ginefra**:<RoleList roles={['Applet Development', 'Font End', 'Project Management', 'Research', 'Writing']}/>
 </Prose>
 </Toggolable>

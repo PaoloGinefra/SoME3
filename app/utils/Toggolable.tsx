@@ -5,10 +5,11 @@ import Prose from './Prose';
 interface Props {
     title: string;
     children: React.ReactNode;
+    maxHeight: number;
     restProps?: any;
 }
 
-export default function Toggolable({ children, title, ...restProps }: Props) {
+export default function Toggolable({ children, title, maxHeight = 3000, ...restProps }: Props) {
     const [open, setOpen] = useState(false);
     return (
         <div className='mt-4'>
@@ -24,7 +25,7 @@ export default function Toggolable({ children, title, ...restProps }: Props) {
             </div>
             <div style={
                 {
-                    maxHeight: open ? '3000px' : '0px',
+                    maxHeight: open ? maxHeight.toString() + 'px' : '0px',
                     overflow: 'hidden',
                     transitionDuration: '1s',
                     transitionProperty: 'max-height',
