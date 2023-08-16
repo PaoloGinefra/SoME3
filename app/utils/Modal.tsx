@@ -34,13 +34,19 @@ export default function Modal({ children, open, onClose }: ModalProps) {
   })
 
   return (
-    <dialog ref={ref} className="w-11/12 max-w-4xl p-8 space-y-4 rounded-2xl">
-      <div>{children}</div>
-      <div>
-        <button onClick={() => onClose()} className="">
-          Close
-        </button>
-      </div>
-    </dialog>
+    <>
+      <dialog ref={ref} className=' overflow-hidden'>
+        <div className='fixed top-0 left-0 w-full h-full backdrop-blur-sm -z-10' />
+        <div className="w-11/12 max-w-4xl p-8 space-y-4 rounded-2xl border-2 m-auto bg-black">
+          <div>{children}</div>
+          <div className='fixed top-0 right-0 -translate-x-5 -translate-y-15'>
+            <button onClick={() => onClose()} className="">
+              ✖️
+            </button>
+          </div>
+        </div>
+
+      </dialog>
+    </>
   )
 }
