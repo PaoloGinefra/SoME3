@@ -68,4 +68,15 @@ export default class Grid {
         this.screen.rect(0, 0, this.w, this.h);
         this.p.image(this.screen, 0, 0);
     }
+
+    /**
+     * Resize the grid
+     * @param w new width
+     * @param h new heigth
+     */
+    resize(w: number, h: number) {
+        this.w = w;
+        this.h = h;
+        this.screen.resizeCanvas(w, h);
+    }
 }

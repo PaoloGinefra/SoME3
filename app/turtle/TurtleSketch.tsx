@@ -111,6 +111,13 @@ function draw(
   return [i - 1, stack] as const
 }
 
+function calculateDimensions(p: p5) {
+  const w = p.constrain(p.windowWidth * (8 / 12), 300, 1200)
+  const h = p.constrain(p.windowHeight * (6 / 12), 300, 1200)
+
+  return [w, h] as const
+}
+
 export interface ExampleSketchProps {
   withStack: boolean
   defaultString: string
@@ -156,8 +163,7 @@ export default function ExampleSketch({
   const sketch = useStatefulSketch(
     { pause, drawingSpeed, string, paramsLookup },
     (state, p) => {
-      const w = 700
-      const h = 550
+      let [w, h] = calculateDimensions(p)
 
       let canvas: Renderer
 
@@ -250,6 +256,12 @@ export default function ExampleSketch({
           t.current += state.current.drawingSpeed
         }
       }
+
+      p.windowResized = function () {
+        ;[w, h] = calculateDimensions(p)
+        p.resizeCanvas(w, h)
+        grid.resize(w, h)
+      }
     }
   )
 
@@ -340,15 +352,12 @@ export default function ExampleSketch({
         </button>
       </fieldset>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center flex-col items-start sm:flex-row sm:items-end">
         <SketchRenderer sketch={sketch} />
 
         {withStack && (
-          <div className="mx-6 w-[100px] max-h-[550px] flex flex-col-reverse">
-            <p className="bg-gray-200 text-gray-900 text-center font-bold">
-              Stack
-            </p>
-            <div className="w-full overflow-y-scroll">
+          <div className="my-6 sm:my-0 sm:mx-6 w-full sm:w-32">
+            <div className="w-full max-h-60 sm:max-h-full sm:h-[48vh] overflow-y-scroll flex flex-col-reverse">
               {reactStack.map((s, i) => (
                 <div key={i} className="p-2 border-2 border-gray-200">
                   <p>x: {Math.round(s.pos.x)}px</p>
@@ -357,6 +366,9 @@ export default function ExampleSketch({
                 </div>
               ))}
             </div>
+            <p className="bg-gray-200 text-gray-900 text-center font-bold">
+              Stack
+            </p>
           </div>
         )}
       </div>
