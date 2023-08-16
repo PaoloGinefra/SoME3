@@ -6,11 +6,12 @@ interface Props {
     title: string;
     children: React.ReactNode;
     maxHeight: number;
+    opened: boolean;
     restProps?: any;
 }
 
-export default function Toggolable({ children, title, maxHeight = 3000, ...restProps }: Props) {
-    const [open, setOpen] = useState(false);
+export default function Toggolable({ children, title, maxHeight = 3000, opened = false, ...restProps }: Props) {
+    const [open, setOpen] = useState(opened);
     return (
         <div className='mt-4'>
             <div className="cursor-pointer" onClick={() => setOpen(!open)}>
