@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Image, Renderer } from 'p5'
 
 import useStatefulSketch from '../p5/useStatefulSketch'
@@ -23,7 +23,7 @@ interface L_Renderer_State {
 }
 
 export default function L_Renderer({ string, drawingRules, iteration, setIteration }: L_Renderer_State) {
-    const [t, setT] = useState<number>(0)
+    const t = useRef(0);
 
     const sketch = useStatefulSketch({ string, drawingRules, t }, (state, p) => {
         let w = p.windowWidth * 0.8
@@ -73,11 +73,11 @@ export default function L_Renderer({ string, drawingRules, iteration, setIterati
             grid.draw(offset.copy().mult(2), scale)
             p.translate(startingPoint.x + offset.x, startingPoint.y + offset.y);
             p.push()
-            GPLS.drawString(p, state.current.string, drawingRules, state.current.t, true, 1 / state.current.string.length, 0.5);
+            GPLS.drawString(p, state.current.string, drawingRules, t.current, true, 1 / state.current.string.length, 0.5);
 
             p.pop()
 
-            setT(state.current.t + p.deltaTime / 1000)
+            t.current = t.current + p.deltaTime / 1000
         }
 
         p.windowResized = function () {
@@ -106,7 +106,7 @@ export default function L_Renderer({ string, drawingRules, iteration, setIterati
                     />
                     <label className='m-auto' htmlFor="sizeSlider">Iterations: {iteration}</label>
                 </div>
-                <button className='px-2' onClick={() => { setT(0) }}>Animate</button>
+                <button className='px-2' onClick={() => { t.current = 0 }}>Animate</button>
             </div>
         </div >
     )
