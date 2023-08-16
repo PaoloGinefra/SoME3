@@ -40,62 +40,53 @@ const TREES = [
 ]
 
 export default function TreesSketch() {
-  const [opacity, setOpacity] = useState(100)
-  const [selection, setSelection] = useState(0)
-
-  const tree = TREES[selection]
+  const [slider, setSlider] = useState(0)
 
   return (
-    <div className="my-8">
-      <fieldset className="mb-4">
-        <div>
-          <label htmlFor="treeSelect">Tree</label>
-          <select
-            id="treeSelect"
-            onChange={(e) => setSelection(parseInt(e.target.value))}
-          >
-            {TREES.map((item, i) => (
-              <option key={i} value={i}>
-                {item.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <span>Branches</span>
+    <div className="my-8 mx-auto space-y-4 max-w-screen-lg">
+      <fieldset>
+        <div className="flex justify-center space-x-2">
+          <span>With leaves</span>
           <input
             id="opacitySlider"
             type="range"
             min={0}
             max={100}
-            value={opacity}
-            onChange={(e) => setOpacity(parseInt(e.target.value))}
+            value={slider}
+            onChange={(e) => setSlider(parseInt(e.target.value))}
           />
-          <span>Leaves</span>
+          <span>Only branches</span>
         </div>
       </fieldset>
 
-      <div className="relative bg-white">
-        <img className="m-0 p-0" src={tree.img.branches} alt="" />
-        <img
-          className="m-0 p-0 absolute top-0 right-0"
-          style={{ opacity: opacity / 100 }}
-          src={tree.img.full}
-          alt=""
-        />
-      </div>
+      <div className="grid grid-rows-[1fr_auto] grid-flow-col auto-cols-fr gap-4">
+        {TREES.map((tree) => (
+          <>
+            <div className="relative block w-auto h-full rounded-md bg-neutral-700">
+              <img
+                className="m-0 p-0 block w-auto h-full object-cover rounded-md"
+                src={tree.img.branches}
+              />
+              <img
+                className="m-0 p-0 block w-auto h-full object-cover rounded-md absolute top-0"
+                style={{ opacity: (100 - slider) / 100 }}
+                src={tree.img.full}
+              />
+            </div>
 
-      <p className="text-sm">
-        Photo by{' '}
-        <a href={tree.attribution.author.link}>
-          {tree.attribution.author.name}
-        </a>{' '}
-        on{' '}
-        <a href={tree.attribution.platform.link}>
-          {tree.attribution.platform.name}
-        </a>
-      </p>
+            <p className="text-sm">
+              Photo by{' '}
+              <a className="underline" href={tree.attribution.author.link}>
+                {tree.attribution.author.name}
+              </a>{' '}
+              on{' '}
+              <a className="underline" href={tree.attribution.platform.link}>
+                {tree.attribution.platform.name}
+              </a>
+            </p>
+          </>
+        ))}
+      </div>
     </div>
   )
 }
