@@ -15,7 +15,9 @@ export default function Toggolable({ children, title, ...restProps }: Props) {
             <div className="cursor-pointer" onClick={() => setOpen(!open)}>
                 <Prose>
                     <h2 className='flex flex-row gap-2'>
-                        {open ? <AiOutlineUp /> : <AiOutlineDown />}
+                        <div className='my-auto'>
+                            {open ? <AiOutlineUp /> : <AiOutlineDown />}
+                        </div>
                         {title}
                     </h2>
                 </Prose>

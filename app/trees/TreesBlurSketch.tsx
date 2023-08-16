@@ -15,7 +15,7 @@ export default function TreesBlurSketch() {
             id="opacitySlider"
             type="range"
             min={0}
-            max={7}
+            max={20}
             value={slider}
             onChange={(e) => setSlider(parseInt(e.target.value))}
           />
@@ -28,7 +28,7 @@ export default function TreesBlurSketch() {
           <>
             <img
               className="m-0 p-0 block w-auto h-full object-cover rounded-md"
-              style={{filter: `blur(${slider}px)`}}
+              style={{ filter: `blur(${slider}px)` }}
               src={tree.img.full}
             />
 
