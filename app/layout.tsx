@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'How to programmatically touch grass',
-  description: 'A SoME3 entry on drawing plants programmatically.',
+  description: 'A SoME3 entry on drawing plants procedurally.',
   image: 'https://howtoprogrammaticallytouchgrass.vercel.app/og.png',
 }
 
