@@ -16,10 +16,18 @@ import MobileModal from './utils/MobileModal'
 import Video from './utils/Video.tsx'
 import Gif from './utils/Gif.tsx'
 
+import Toggolable from './utils/Toggolable.tsx'
+
 <MobileModal />
 
 <Prose>
+
 # How to programmatically touch grass
+
+</Prose>
+
+<Toggolable title="Introduction">
+<Prose>
 
 As a math and computer science enthusiast, I’m often told to touch grass. I never fully understood what that means, but one thing I’m sure of is that I don’t want to go outside. However, why not kill two birds with one stone and simulate some plants on my PC?
 Today’s journey is about understanding how to make it possible using math, computer science, and a pinch of basic intuition.
@@ -66,6 +74,9 @@ The result should be pretty convincing but there has to be room for artistic exp
 
 <ChapterSeparator />
 
+</Toggolable>
+
+<Toggolable title="Time to Abstract">
 <Prose>
 Okay, now that the goal is set, we can properly start. The next phase is arguably the most important one: don’t panic!
 The infinitely many roads are all facing you and taking the first step can be daunting. Staring them won’t get you anywhere though, so let’s just pick without the fear of retracing our steps.
@@ -100,8 +111,11 @@ Nice! Let’s focus on that then.
   Now that the image has been abstracted to its fundamental components we need
   to make it procedural and re-creatable by an algorithm.
 </Prose>
-
 <ChapterSeparator />
+
+</Toggolable>
+
+<Toggolable title="Self similarity">
 
 <Prose>
 To do this it could be useful to start analyzing the problem from the start, gathering some ideas;
@@ -148,6 +162,10 @@ Let’s look at a perfect self-similar plant!
 
 <ChapterSeparator />
 
+</Toggolable>
+
+<Toggolable title="In a perfet world">
+
 <Prose>
 What would it look like? How would you draw it?
 
@@ -189,6 +207,9 @@ This works pretty well for our perfect plant! But it still has its own problems.
 We need to improve this!
 
 </Prose>
+</Toggolable>
+
+<Toggolable title="Turtle time">
 
 <ChapterSeparator />
 <Prose>
@@ -231,6 +252,9 @@ Now we can try again with the simple branch:
 </Prose>
 
 <ChapterSeparator />
+</Toggolable>
+
+<Toggolable title="First try">
 
 <Prose>
 Let’s start by recovering the recurrent definition of tree “T = ½ T + ½ T” stated earlier (link) and formalizing it using the branch constructed in the preceding chapter, we obtain T = F[+T][-T].
@@ -252,6 +276,9 @@ Now that we have proof that our discovery works for at least a kind of tree, it 
 </Prose>
 
 <ChapterSeparator />
+</Toggolable>
+
+<Toggolable title="The L-system">
 
 <Prose>
 It is safe to say that we can split the task between two different systems that work together: one for the generation of the strings and one for the drawings.
@@ -302,6 +329,9 @@ For now, you can try and experiment with a graphical version of what we discusse
 </Prose>
 
 <ChapterSeparator />
+</Toggolable>
+
+<Toggolable title="Variation">
 <Prose>
 We now need to exit the world of perfection and go back to reality. We can use a trick that seems to come so easily to nature: randomness.
 To achieve this we need to lose the determinism of our system, meaning that one set of alphabet, productions, and axioms will no longer always produce the same drawing. And the easiest way to do that is by allowing overlap in the productions.
@@ -318,6 +348,9 @@ Here you can experiment with the L-system as much as you want!
 </Prose>
 
 <ChapterSeparator />
+</Toggolable>
+
+<Toggolable title="Conclusion">
 <Prose>
 
 Our journey stops here at the moment.
@@ -329,8 +362,12 @@ I also hope that you are left with few answers but many new questions in mind an
 </Prose>
 
 <ChapterSeparator />
+</Toggolable>
+
+<Toggolable title="Credits">
 
 <Prose>
 We are a team of 5 Engineering of Computing Systems students (names and roles are in alphabetical order):
 
 </Prose>
+</Toggolable>
