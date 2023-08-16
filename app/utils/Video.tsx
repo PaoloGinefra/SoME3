@@ -6,12 +6,12 @@ interface Video_interface {
 
 export default function Video({ url, width, height }: Video_interface) {
     return (
-        <div className=" max-w-[90%] overflow-hidden rounded-xl m-auto flex justify-center align-middle" style={{ aspectRatio: width / height }}>
+        <div className=" max-w-[90%] overflow-hidden rounded-xl m-auto flex justify-center align-middle">
 
             <iframe
                 className="m-auto my-10 rounded-lg"
                 width={width}
-                height="315"
+                height={height}
                 src={url + "&controls=0&autoplay=1&loop=1&modestbranding=1&mute=1"}
                 title="YouTube video player"
                 allowFullScreen
