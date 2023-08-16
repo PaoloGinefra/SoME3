@@ -3,40 +3,34 @@
 import { useState } from 'react'
 import { TREES } from './trees'
 
-export default function TreesSketch() {
+export default function TreesBlurSketch() {
   const [slider, setSlider] = useState(0)
 
   return (
     <div className="my-8 mx-auto space-y-4 max-w-screen-lg">
       <fieldset>
         <div className="flex justify-center space-x-2">
-          <span>With leaves</span>
+          <span>Not blurred</span>
           <input
             id="opacitySlider"
             type="range"
             min={0}
-            max={100}
+            max={7}
             value={slider}
             onChange={(e) => setSlider(parseInt(e.target.value))}
           />
-          <span>Only branches</span>
+          <span>Blurred</span>
         </div>
       </fieldset>
 
       <div className="grid grid-rows-[1fr_auto] grid-flow-col auto-cols-fr gap-4">
         {TREES.map((tree) => (
           <>
-            <div className="relative block w-auto h-full rounded-md bg-neutral-700">
-              <img
-                className="m-0 p-0 block w-auto h-full object-cover rounded-md"
-                src={tree.img.branches}
-              />
-              <img
-                className="m-0 p-0 block w-auto h-full object-cover rounded-md absolute top-0"
-                style={{ opacity: (100 - slider) / 100 }}
-                src={tree.img.full}
-              />
-            </div>
+            <img
+              className="m-0 p-0 block w-auto h-full object-cover rounded-md"
+              style={{filter: `blur(${slider}px)`}}
+              src={tree.img.full}
+            />
 
             <p className="text-sm">
               Photo by{' '}
