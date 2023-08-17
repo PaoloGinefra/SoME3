@@ -9,7 +9,7 @@ interface Props {
   restProps?: any
 }
 
-export default function Toggolable({
+export default function Toggleable({
   children,
   title,
   opened = true,

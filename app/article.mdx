@@ -14,7 +14,7 @@ import Prose from './utils/Prose.tsx'
 import MobileModal from './utils/MobileModal'
 import Video from './utils/Video.tsx'
 import Gif from './utils/Gif.tsx'
-import Toggolable from './utils/Toggolable.tsx'
+import Toggleable from './utils/Toggleable.tsx'
 import RoleList from './utils/Role.tsx'
 import Zoom from './TreeZoom/Zoom.tsx'
 import MultipleScales from './MultipleScales/MultipleScales.tsx'
@@ -27,7 +27,7 @@ import MultipleScales from './MultipleScales/MultipleScales.tsx'
 
 </Prose>
 
-<Toggolable title="Introduction" opened={true}>
+<Toggleable title="Introduction" opened={true}>
 <Prose>
 As a math and computer science enthusiast, I’m often told to touch grass. I never fully understood what that means, but one thing I’m sure of is that I don’t want to go outside. However, why not kill two birds with one stone and simulate some plants on my PC?
 Today’s journey is about understanding how to make it possible using math, computer science, and a pinch of basic intuition.
@@ -70,9 +70,9 @@ The result should be pretty convincing but there has to be room for artistic exp
   height={400}
 />
 </Prose>
-</Toggolable>
+</Toggleable>
 
-<Toggolable title="Time to Abstract">
+<Toggleable title="Time to Abstract">
 <Prose>
 Okay, now that the goal is set, we can properly start. The next phase is arguably the most important one: don’t panic!
 The infinitely many roads are all facing you and taking the first step can be daunting. Staring them won’t get you anywhere though, so let’s just pick without the fear of retracing our steps.
@@ -111,9 +111,9 @@ This is not that different from what a painter or an illustrator would do.
   Now that the image has been abstracted to its fundamental components we need
   to make it procedural and re-creatable by an algorithm.
 </Prose>
-</Toggolable>
+</Toggleable>
 
-<Toggolable title="A closer look">
+<Toggleable title="A closer look">
 
 <Prose>
 To do this it could be useful to start analyzing the problem from the start, gathering some ideas;
@@ -169,9 +169,9 @@ That is definitely a valid concern but for now, let’s try to tame the simplest
 Let’s look at a perfect self-similar plant!
 
 </Prose>
-</Toggolable>
+</Toggleable>
 
-<Toggolable title="In a perfect world">
+<Toggleable title="In a perfect world">
 
 <Prose>
 What would it look like? How would you draw it?
@@ -198,9 +198,9 @@ We need to improve this!
 
 </Prose>
 
-</Toggolable>
+</Toggleable>
 
-<Toggolable title="Turtle time">
+<Toggleable title="Turtle time">
 <Prose>
 Let’s go back again to our abstracted plants. Can we abstract them even more? Is there a pattern between all of them?
 Despite all the case-specific intricacies, we reduced every drawing to just being made by straight segments.
@@ -239,9 +239,9 @@ Now we can try again with the simple branch:
   Much cleaner now! Perfect! Now that we have the tool to draw with, we can
   tackle the self-similarity.
 </Prose>
-</Toggolable>
+</Toggleable>
 
-<Toggolable title="A binary comeback">
+<Toggleable title="A binary comeback">
 <Prose>
 Let’s start by recovering the recurrent definition of tree “T = ½ T + ½ T” stated earlier (link) and formalizing it using the branch constructed in the preceding chapter, we obtain T = F[+T][-T].
 
@@ -262,9 +262,9 @@ Now that we have proof that our discovery works for at least a kind of tree, it 
 
 </Prose>
 
-</Toggolable>
+</Toggleable>
 
-<Toggolable title="Beyond the example">
+<Toggleable title="Beyond the example">
 
 <Prose>
 It is safe to say that we can split the task between two different systems that work together: one for the generation of the strings and one for the drawings.
@@ -309,9 +309,9 @@ This is the perfect way to regain those scenario-specific details we lost by blu
 
 </Prose>
 
-</Toggolable>
+</Toggleable>
 
-<Toggolable title="Computational gardening">
+<Toggleable title="Computational gardening">
 <Prose>
 
 For now, you can try and experiment with a graphical version of what we discussed so far. Here you’ll be no longer restrained with a fixed amount of rotation and length per character so you can let your imagination roam free.
@@ -322,9 +322,9 @@ _In this applet all the symbols will be interpreted as lines. In the production 
 
 <L_Maker />
 
-</Toggolable>
+</Toggleable>
 
-<Toggolable title="An old foe">
+<Toggleable title="An old foe">
 <Prose>
 Finally, let’s just get back to an issue we left behind: the variation.
 
@@ -344,9 +344,9 @@ Here you can experiment with the L-system as much as you want!
 
 <TextLSystem stochastic={true} />
 
-</Toggolable>
+</Toggleable>
 
-<Toggolable title="The Faraway Journey, Farewell Friends">
+<Toggleable title="The Faraway Journey, Farewell Friends">
 <Prose>
 
 Our journey stops here at the moment.
@@ -357,9 +357,9 @@ I also hope that you are left with few answers but many new questions in mind an
 
 </Prose>
 
-</Toggolable>
+</Toggleable>
 
-<Toggolable title="Credits">
+<Toggleable title="Credits">
 
 <Prose>
 We are a team of 5 Engineering of Computing Systems students (names and roles are in alphabetical order):
@@ -369,4 +369,4 @@ We are a team of 5 Engineering of Computing Systems students (names and roles ar
 - **Matteo Garzone**:<RoleList roles={['Applet Development', 'Research']}/>
 - **Paolo Ginefra**:<RoleList roles={['Applet Development', 'Front End', 'Project Management', 'Research', 'Writing']}/>
 </Prose>
-</Toggolable>
+</Toggleable>
