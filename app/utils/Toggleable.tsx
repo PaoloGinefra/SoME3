@@ -19,7 +19,7 @@ export default function Toggleable({
 
   const ref = useRef<HTMLDivElement>(null)
   const [height, setHeight] = useState<number | null>(null)
-  const maxHeigth = !!height ? height + 'px' : 'none'
+  const maxHeigth = !!height ? (height + 3000) + 'px' : 'none'
 
   useEffect(() => {
     setHeight(ref.current!.scrollHeight)
@@ -42,7 +42,7 @@ export default function Toggleable({
         style={{
           maxHeight: open ? maxHeigth : '0px',
           overflow: 'hidden',
-          transitionDuration: '1s',
+          transitionDuration: '0.5s',
           transitionProperty: 'max-height',
           transitionTimingFunction: 'ease-in-out',
         }}

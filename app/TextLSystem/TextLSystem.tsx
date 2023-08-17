@@ -1,11 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Alphabet from './Alphabet'
 import Productions from './Productions'
 import Axiom from './Axiom'
 import Production from './Interface/Production'
 import StringRenderer from './Renderer'
+import { TbReload } from 'react-icons/tb'
+import { FaBackward, FaForward } from 'react-icons/fa'
+import { AiTwotoneDelete } from 'react-icons/ai'
 
 interface TextLSystemProps {
   stochastic: boolean,
@@ -20,6 +23,19 @@ export default function TextLSystem({ stochastic = false }) {
   const [output, setOutput] = useState('')
 
   const [proctionCounter, setProductionCounter] = useState({})
+
+  useEffect(() => {
+    setAlphabet('+-[]F')
+    setProductions([
+      { preChar: 'F', successors: ['F'] },
+      { preChar: '+', successors: ['+'] },
+      { preChar: '-', successors: ['-'] },
+      { preChar: '[', successors: ['['] },
+      { preChar: ']', successors: [']'] },
+    ])
+    setAxiom('F')
+    setProductionCounter({ 'F': 1, '+': 1, '-': 1, '[': 1, ']': 1 })
+  }, [])
 
   function regenText(thisProductions = productions, thisAxiom = axiom): void {
     let text = thisAxiom
@@ -43,6 +59,17 @@ export default function TextLSystem({ stochastic = false }) {
         return letter
       })
       .join('')
+  }
+
+  function lastText(): void {
+    if (counter > 1) {
+      setCounter(counter - 1)
+      let text = axiom
+      for (let i = 0; i < counter - 1; i++) {
+        text = applyProductions(text, productions)
+      }
+      setOutput(text)
+    }
   }
 
   function nextText(): void {
@@ -94,18 +121,57 @@ export default function TextLSystem({ stochastic = false }) {
         <h1 className="m-auto text-4xl">Output</h1>
         <div className="m-auto text-4xl flex">
           <button
+            title='Go back'
+            className="mx-2 px-3 border-none"
+            onClick={() => lastText()}
+            disabled={counter <= 1}
+          >
+            <FaBackward />
+          </button>
+
+          {stochastic ?
+            <button
+              title="Regen"
+              className="mx-2 px-3 border-none"
+              onClick={() => regenText()}
+            >
+              <TbReload />
+            </button> : null
+          }
+
+          <button
             title={counter ? 'Next' : 'Start'}
             className="mx-2 px-3 border-none"
             onClick={() => nextText()}
           >
-            ▶
+            <FaForward />
           </button>
+
           <button
             title="Reset"
             className="mx-2 px-3 border-none"
             onClick={() => resetText()}
           >
             ✖
+          </button>
+
+          <button
+            title="Clear"
+            className="mx-2 px-3 border-none"
+            onClick={() => {
+              setAlphabet('+-[]F')
+              setProductions([
+                { preChar: 'F', successors: ['F'] },
+                { preChar: '+', successors: ['+'] },
+                { preChar: '-', successors: ['-'] },
+                { preChar: '[', successors: ['['] },
+                { preChar: ']', successors: [']'] },
+              ])
+              setAxiom('F')
+              setProductionCounter({ 'F': 1, '+': 1, '-': 1, '[': 1, ']': 1 })
+            }}
+          >
+            <AiTwotoneDelete />
           </button>
         </div>
       </div>
@@ -116,6 +182,13 @@ export default function TextLSystem({ stochastic = false }) {
         >
           {counter} ⏲
         </h1>
+      </div>
+
+      <div
+        className="break-words border-solid border-2 border-white rounded p-4 mx-16 my-4 h-1 overflow-y-scroll text-justify"
+        style={{ minHeight: '8em' }}
+      >
+        {output}
       </div>
 
       {
@@ -129,12 +202,7 @@ export default function TextLSystem({ stochastic = false }) {
             </div>
           </div> : null
       }
-      <div
-        className="break-words border-solid border-2 border-white rounded p-4 mx-16 my-4 h-40 overflow-y-scroll text-justify"
-        style={{ minHeight: '8em' }}
-      >
-        {output}
-      </div>
+
 
 
     </div>

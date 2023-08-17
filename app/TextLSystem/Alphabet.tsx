@@ -45,7 +45,7 @@ export default function Alphabet({
           setAlphabet(alphabetOutput)
           alphabetOutput.split('').forEach((letter) => {
             if (!productions.some((p) => p.preChar == letter))
-              productions.push({ preChar: letter, successors: [''] })
+              productions.push({ preChar: letter, successors: [letter] })
             if (productionCounter[letter] === undefined)
               setProductionCounter({ ...productionCounter, [letter]: 1 })
           })

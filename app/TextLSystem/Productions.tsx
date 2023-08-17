@@ -29,7 +29,7 @@ export default function Productions({
   return (
     <div className="flex flex-col gap-4 mb-4">
       <h1 className="m-auto text-4xl">Productions</h1>
-      <ul className="flex flex-col gap-4">
+      <ul className="flex flex-col gap-4 max-h-[50vh] w-[80vw] overflow-y-scroll m-auto">
         {!alphabet ? (
           <li className="m-auto tracking-widest font-mono">
             … →{' '}
