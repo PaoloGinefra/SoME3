@@ -10,19 +10,23 @@ import type p5 from 'p5'
 import Grid from '../utils/Grid'
 import Shape, { Line } from './Classes/Shapes'
 import { Square, Canvas, Shapes, ShapesNames, ShapesEmojis } from './Classes/Shapes'
+import { FaUndo } from 'react-icons/fa'
+import { AiTwotoneDelete } from 'react-icons/ai'
 
 import ButtonCarousel from '../utils/ButtonCarousel'
 
 export default function DWD_editor() {
     const [brushName, setBrushName] = useState('Square');
-    const [brushSize, setBrushSize] = useState(50);
+    const [brushSize, setBrushSize] = useState(600);
     const [brushRotation, setBrushRotation] = useState(0);
 
-    const [showCanvasContour, setShowCanvasContour] = useState(false);
+    const [showCanvasContour, setShowCanvasContour] = useState(true);
 
     const [undoCount, setUndoCount] = useState(0);
 
-    const sketch = useStatefulSketch({ brushName, brushSize, brushRotation, showCanvasContour, undoCount, setUndoCount }, (state, p) => {
+    const [clear, setClear] = useState(false);
+
+    const sketch = useStatefulSketch({ brushName, brushSize, brushRotation, showCanvasContour, undoCount, setUndoCount, clear, setClear }, (state, p) => {
         let w = p.windowWidth * 0.8
         let h = 700
 
@@ -71,6 +75,12 @@ export default function DWD_editor() {
         }
 
         p.draw = function () {
+            if (state.current.clear) {
+                shapes = []
+                state.current.setClear(false)
+            }
+
+
             w = p.windowWidth
             h = p.windowHeight;
             let undoCount = state.current.undoCount
@@ -137,13 +147,24 @@ export default function DWD_editor() {
                 </div>
 
                 <div className='flex flex-col flex-auto'>
-                    <input className='w-5 h-6 m-auto bg-gray-700' type="checkbox" checked={showCanvasContour} onChange={(e) => setShowCanvasContour(e.target.checked)} />
-                    <p>Canvas contours</p>
+                    <input className='w-5 h-6 mx-auto bg-gray-700' type="checkbox" checked={showCanvasContour} onChange={(e) => setShowCanvasContour(e.target.checked)} />
+                    <p className='text-center m-auto'>Canvas contours</p>
+                </div>
+
+                <div className='flex flex-col flex-auto'>
+                    <button className="mx-auto h-6 py-0 my-0 font-bold border-0 text-slate-700 hover:text-white" onClick={() => setUndoCount(undoCount + 1)}>
+                        <FaUndo />
+                    </button>
+                    <p className='text-center m-auto'>Undo</p>
                 </div>
 
                 <div className='flex flex-col flex-auto '>
-                    <button className="m-auto font-bold h-6 w-10 border-0 text-gray-500 hover:text-white" onClick={() => setUndoCount(undoCount + 1)}>↩</button>
-                    <p>Undo</p>
+                    <button className="mx-auto m-0 p-0 font-bold border-0 text-2xl text-slate-700 hover:text-white" onClick={() =>
+                        setClear(true)
+                    }>
+                        <AiTwotoneDelete />
+                    </button>
+                    <p className='text-center'>Clear</p>
                 </div>
 
             </div>
