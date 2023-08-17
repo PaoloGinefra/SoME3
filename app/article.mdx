@@ -7,6 +7,7 @@ import L_Maker from './L_Maker/L_Maker.tsx'
 import TextLSystem from './TextLSystem/TextLSystem.tsx'
 import DWD_editor from './DrawingsWithinDrawings/DWD_editor.tsx'
 import TurtleSketch from './turtle/TurtleSketch.tsx'
+import { toCmdSeq } from './turtle/turtleCommands.ts'
 import TreesBlurSketch from './trees/TreesBlurSketch.tsx'
 import TreesSketch from './trees/TreesSketch.tsx'
 import ChapterSeparator from './ChapterSeparator.tsx'
@@ -27,7 +28,7 @@ import MultipleScales from './MultipleScales/MultipleScales.tsx'
 
 </Prose>
 
-<Toggleable title="Introduction" opened={true}>
+<Toggleable title="Introduction" maxHeight={2500} opened={true}>
 <Prose>
 As a math and computer science enthusiast, I’m often told to touch grass. I never fully understood what that means, but one thing I’m sure of is that I don’t want to go outside. However, why not kill two birds with one stone and simulate some plants on my PC?
 Today’s journey is about understanding how to make it possible using math, computer science, and a pinch of basic intuition.
@@ -72,7 +73,7 @@ The result should be pretty convincing but there has to be room for artistic exp
 </Prose>
 </Toggleable>
 
-<Toggleable title="Time to Abstract">
+<Toggleable title="Time to Abstract" maxHeight={3000}>
 <Prose>
 Okay, now that the goal is set, we can properly start. The next phase is arguably the most important one: don’t panic!
 The infinitely many roads are all facing you and taking the first step can be daunting. Staring them won’t get you anywhere though, so let’s just pick without the fear of retracing our steps.
@@ -113,7 +114,7 @@ This is not that different from what a painter or an illustrator would do.
 </Prose>
 </Toggleable>
 
-<Toggleable title="A closer look">
+<Toggleable title="A closer look" maxHeight={6000}>
 
 <Prose>
 To do this it could be useful to start analyzing the problem from the start, gathering some ideas;
@@ -200,7 +201,7 @@ We need to improve this!
 
 </Toggleable>
 
-<Toggleable title="Turtle time">
+<Toggleable title="Turtle time" maxHeight={5000}>
 <Prose>
 Let’s go back again to our abstracted plants. Can we abstract them even more? Is there a pattern between all of them?
 Despite all the case-specific intricacies, we reduced every drawing to just being made by straight segments.
@@ -218,7 +219,10 @@ Even with this limitation, we can draw pretty much every abstracted plant we enc
 
 </Prose>
 
-<TurtleSketch withStack={false} defaultString="FF+F-F" />
+<TurtleSketch
+  allowedCommands={toCmdSeq('Ff+-')}
+  defaultSeq={toCmdSeq('FF+F-F')}
+/>
 
 <Prose>
 As you can see the process is not particularly hard but a bit convoluted.
@@ -233,7 +237,10 @@ Now we can try again with the simple branch:
 
 </Prose>
 
-<TurtleSketch withStack={true} defaultString="FF[+F][-F]" />
+<TurtleSketch
+  allowedCommands={toCmdSeq('Ff+-[]')}
+  defaultSeq={toCmdSeq('FF[+F][-F]')}
+/>
 
 <Prose>
   Much cleaner now! Perfect! Now that we have the tool to draw with, we can
@@ -253,7 +260,7 @@ Now we can just start from a T and iteratively apply the assignment by substitut
 So we go from T to F[+T][-T] to F[+F[+T][-T]][-F[+T][-T]] and then to F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]] . We can draw the result using our trusted turtle and here it is.
 
 </Prose>
-<TurtleSketch withStack={true} defaultString="F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]]" />
+<TurtleSketch allowedCommands={toCmdSeq('Ff+-T[]')} defaultSeq={toCmdSeq("F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]]")} />
 
 <Prose>
 Amazing! That is basically a line binary tree!

@@ -76,9 +76,7 @@ export default function TextLSystem({ stochastic = false }) {
     if (!counter) {
       setOutput(axiom)
     } else {
-      setOutput(
-        applyProductions(output, productions)
-      )
+      setOutput(applyProductions(output, productions))
     }
     setCounter(counter + 1)
   }
@@ -175,7 +173,7 @@ export default function TextLSystem({ stochastic = false }) {
           </button>
         </div>
       </div>
-      <div className='flex mx-16 flex-row-reverse'>
+      <div className="flex flex-row-reverse min-[500px]:mx-16 max-[500px]:mx-8">
         <h1
           title="Iterations"
           className="text-2xl align-center text-right border border-solid px-2 rounded"
@@ -202,7 +200,6 @@ export default function TextLSystem({ stochastic = false }) {
             </div>
           </div> : null
       }
-
 
 
     </div>

@@ -1,9 +1,6 @@
 import React from 'react'
 import Production from './Interface/Production'
-import { Inter } from 'next/font/google'
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
-
-const inter = Inter({ subsets: ['latin'] })
 
 interface ProductionState {
   productions: Production[]
@@ -31,23 +28,22 @@ export default function Productions({
       <h1 className="m-auto text-4xl">Productions</h1>
       <ul className="flex flex-col gap-4 max-h-[50vh] w-[80vw] overflow-y-scroll m-auto">
         {!alphabet ? (
-          <li className="m-auto tracking-widest font-mono">
-            … →{' '}
+          <li className="w-80 m-auto tracking-widest flex items-center justify-stretch">
+            <p className="font-mono m-2">… →</p>
             <input
               type="text"
               disabled
-              className="w-80 h-10 px-2 text-left rounded"
+              className="grow h-10 px-2 text-left rounded"
             />
           </li>
         ) : (
           alphabet.split('').map((letter) => (
             Array.from({ length: productionCounter[letter] }).map((_, index) => (
-              <li className="m-auto tracking-widest font-mono">
-                {letter} →{' '}
+              <li className="-80 m-auto tracking-widest flex items-center justify-stretch">
+                <p className="font-mono m-2">{letter} →</p>
+
                 <input
-                  className={
-                    'w-80 h-10 px-2 text-left rounded ' + inter.className
-                  }
+                  className={'grow h-10 px-2 text-left rounded'}
                   type="text"
                   value={
                     productions.find((prod) => prod.preChar == letter)?.successors[index]
