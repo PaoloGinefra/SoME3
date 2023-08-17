@@ -116,7 +116,7 @@ export default function StringRenderer({ String }: StringRendererProps) {
                 setAnimate(false)
             }
 
-            if (isDown) {
+            if (isDown && this.mouseX > 0 && this.mouseX < w && this.mouseY > 0 && this.mouseY < h) {
                 pos_offset.add(p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y))
                 touchPoint = p.createVector(p.mouseX, p.mouseY)
             }
