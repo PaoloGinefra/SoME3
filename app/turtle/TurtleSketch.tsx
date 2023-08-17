@@ -8,70 +8,13 @@ import SketchRenderer from '../p5/SketchRenderer'
 
 import Grid from '../utils/Grid'
 
-interface TurtleState {
-  pos: { x: number; y: number }
-  rot: number
-}
-
-type TurtleCmdDrawFunction = (
-  p: p5,
-  stack: TurtleState[],
-  params: number[],
-  t: number
-) => void
-
-const turtleDrawFunctions: Record<string, TurtleCmdDrawFunction> = {
-  F: (p, stack, params, t) => {
-    const state = stack[stack.length - 1]
-    const [len] = params
-
-    p.push()
-    p.translate(state.pos.x, state.pos.y)
-    p.rotate(state.rot)
-
-    p.stroke('#0070A9')
-    p.strokeWeight(1)
-    p.line(0, 0, len * t, 0)
-
-    p.pop()
-
-    state.pos.x += len * t * Math.cos(state.rot)
-    state.pos.y += len * t * Math.sin(state.rot)
-  },
-
-  f: (p, stack, params, t) => {
-    const state = stack[stack.length - 1]
-    const [len] = params
-
-    state.pos.x += len * t * Math.cos(state.rot)
-    state.pos.y += len * t * Math.sin(state.rot)
-  },
-
-  '+': (p, stack, params, t) => {
-    const state = stack[stack.length - 1]
-    const [angle] = params
-    state.rot += angle * t
-  },
-
-  '-': (p, stack, params, t) => {
-    const state = stack[stack.length - 1]
-    const [angle] = params
-    state.rot -= angle * t
-  },
-
-  '[': (p, stack, params, t) => {
-    const state = stack[stack.length - 1]
-    const copiedState = {
-      pos: { x: state.pos.x, y: state.pos.y },
-      rot: state.rot,
-    }
-    stack.push(copiedState)
-  },
-
-  ']': (p, stack, params, t) => {
-    stack.pop()
-  },
-}
+import {
+  CmdChar,
+  TurtleCmds,
+  TurtleState,
+  CmdSeq,
+  isCmdSeq,
+} from './turtleCommands'
 
 function drawTurtle(p: p5, state: TurtleState) {
   p.push()
@@ -89,12 +32,10 @@ function drawTurtle(p: p5, state: TurtleState) {
 
 function draw(
   p: p5,
-  str: string,
-  paramsLookup: Record<string, number[]>,
+  cmdSeq: CmdSeq,
+  paramsLookup: { [key in CmdChar]: number[] },
   t: number
 ) {
-  const cmdString = str.split('')
-
   const stack: TurtleState[] = [
     {
       pos: { x: 0, y: 0 },
@@ -103,10 +44,10 @@ function draw(
   ]
   let i = 0
 
-  while (i < t && i < cmdString.length) {
-    const cmd = cmdString[i]
+  while (i < t && i < cmdSeq.length) {
+    const cmd = cmdSeq[i]
 
-    const cmdDrawFunct = turtleDrawFunctions[cmd]
+    const cmdDrawFunct = TurtleCmds[cmd]
     const cmdParams = paramsLookup[cmd]
     const cmdT = p.constrain(t - i, 0, 1)
     cmdDrawFunct(p, stack, cmdParams, cmdT)
@@ -127,13 +68,13 @@ function calculateDimensions(p: p5) {
 }
 
 export interface ExampleSketchProps {
-  withStack: boolean
-  defaultString: string
+  allowedCommands: CmdChar[]
+  defaultSeq: CmdSeq
 }
 
 export default function ExampleSketch({
-  withStack,
-  defaultString,
+  defaultSeq,
+  allowedCommands,
 }: ExampleSketchProps) {
   const [drawingSpeed, setDrawingSpeed] = useState(0.03)
   const [pause, setPause] = useState(true)
@@ -144,20 +85,21 @@ export default function ExampleSketch({
     '-': 60,
   })
 
-  const paramsLookup: Record<string, number[]> = {
+  const paramsLookup = {
     F: [inputState['F']],
     f: [inputState['F']],
     '+': [inputState['+'] * (Math.PI / 180)], // degree => radians
     '-': [inputState['-'] * (Math.PI / 180)],
+    T: [],
     '[': [],
     ']': [],
   }
 
-  const getParam = (ruleChar: string) => inputState[ruleChar]
-  const setParam = (ruleChar: string, value: number) =>
-    setInputState({ ...inputState, [ruleChar]: value })
+  const getParam = (cmdChar: string) => inputState[cmdChar]
+  const setParam = (cmdChar: string, value: number) =>
+    setInputState({ ...inputState, [cmdChar]: value })
 
-  const [string, setInputString] = useState(defaultString)
+  const [seq, setSeq] = useState(defaultSeq)
   const [reactStack, setReactStack] = useState<TurtleState[]>([])
   const t = useRef(0)
 
@@ -167,10 +109,10 @@ export default function ExampleSketch({
 
   useEffect(() => {
     triggerRedraw()
-  }, [string])
+  }, [seq])
 
   const sketch = useStatefulSketch(
-    { pause, drawingSpeed, string, paramsLookup },
+    { pause, drawingSpeed, seq, paramsLookup },
     (state, p) => {
       let [w, h] = calculateDimensions(p)
 
@@ -227,7 +169,7 @@ export default function ExampleSketch({
 
         const [currentStep, stack] = draw(
           p,
-          state.current.string,
+          state.current.seq,
           state.current.paramsLookup,
           t.current
         )
@@ -235,9 +177,9 @@ export default function ExampleSketch({
         const turtleStack = stack.slice(0, -1)
 
         // begin: top text
-        const { string } = state.current
+        const { seq } = state.current
         p.textFont('monospace', 24)
-        for (let i = currentStep; i < string.length; i++) {
+        for (let i = currentStep; i < seq.length; i++) {
           p.push() // begin: letter
           if (currentStep == i) {
             p.textStyle(p.BOLD)
@@ -245,7 +187,7 @@ export default function ExampleSketch({
 
           const letterHeight = 24 * (6 / 5)
           p.text(
-            string[i],
+            seq[i],
             turtleState.pos.x,
             turtleState.pos.y + (currentStep - i) * letterHeight - 24
           )
@@ -273,6 +215,9 @@ export default function ExampleSketch({
       }
     }
   )
+
+  const withStack =
+    allowedCommands.includes('[') || allowedCommands.includes(']')
 
   return (
     <div className="my-8 flex flex-col items-center">
@@ -330,19 +275,18 @@ export default function ExampleSketch({
         />
         <p className="inline-block">{drawingSpeed}</p>
 
-        <label className="inline-block w-44" htmlFor="stringInput">
-          Input string
+        <label className="inline-block w-44" htmlFor="seqInput">
+          Command sequence
         </label>
         <input
-          id="stringInput"
+          id="seqInput"
           type="text"
-          value={string}
+          value={seq.join('')}
           onChange={(e) => {
-            const regex = withStack
-              ? /[^Ff\+\-\[\]]/ // matches everything except for the characters F+-[]
-              : /[^Ff\+\-]/ // matches everything except for the characters F+-
-            const sanitizedInput = e.target.value.replace(regex, '')
-            setInputString(sanitizedInput)
+            const inputChars = e.target.value.split('')
+            if (isCmdSeq(inputChars)) {
+              setSeq(inputChars)
+            }
           }}
         />
 
@@ -354,7 +298,7 @@ export default function ExampleSketch({
         </button>
         <button
           onClick={() => {
-            t.current = string.length
+            t.current = seq.length
           }}
         >
           Skip
