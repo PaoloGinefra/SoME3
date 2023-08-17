@@ -39,6 +39,14 @@ const turtleDrawFunctions: Record<string, TurtleCmdDrawFunction> = {
     state.pos.y += len * t * Math.sin(state.rot)
   },
 
+  f: (p, stack, params, t) => {
+    const state = stack[stack.length - 1]
+    const [len] = params
+
+    state.pos.x += len * t * Math.cos(state.rot)
+    state.pos.y += len * t * Math.sin(state.rot)
+  },
+
   '+': (p, stack, params, t) => {
     const state = stack[stack.length - 1]
     const [angle] = params
@@ -127,7 +135,7 @@ export default function ExampleSketch({
   withStack,
   defaultString,
 }: ExampleSketchProps) {
-  const [drawingSpeed, setDrawingSpeed] = useState(0.01)
+  const [drawingSpeed, setDrawingSpeed] = useState(0.03)
   const [pause, setPause] = useState(true)
 
   const [inputState, setInputState] = useState<Record<string, number>>({
@@ -138,6 +146,7 @@ export default function ExampleSketch({
 
   const paramsLookup: Record<string, number[]> = {
     F: [inputState['F']],
+    f: [inputState['F']],
     '+': [inputState['+'] * (Math.PI / 180)], // degree => radians
     '-': [inputState['-'] * (Math.PI / 180)],
     '[': [],
@@ -330,8 +339,8 @@ export default function ExampleSketch({
           value={string}
           onChange={(e) => {
             const regex = withStack
-              ? /[^F\+\-\[\]]/ // matches everything except for the characters F+-[]
-              : /[^F\+\-]/ // matches everything except for the characters F+-
+              ? /[^Ff\+\-\[\]]/ // matches everything except for the characters F+-[]
+              : /[^Ff\+\-]/ // matches everything except for the characters F+-
             const sanitizedInput = e.target.value.replace(regex, '')
             setInputString(sanitizedInput)
           }}
