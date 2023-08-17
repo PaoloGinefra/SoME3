@@ -64,6 +64,7 @@ export default function Zoom() {
                         type="range"
                         min={0}
                         max={1}
+                        defaultValue={0}
                         step={0.001}
                         onChange={(e) => setState(getState(parseFloat(e.target.value), TREES[0].waypoints))}
                     />
