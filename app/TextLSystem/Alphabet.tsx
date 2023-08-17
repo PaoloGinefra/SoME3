@@ -9,6 +9,8 @@ interface AlphabetState {
   setProductions: (p: Production[]) => void
   counter: number
   regenText: (thisProductions?: Array<Production>, thisAxiom?: string) => void
+  productionCounter: { [key: string]: number }
+  setProductionCounter: (p: {}) => void
 }
 
 export default function Alphabet({
@@ -18,6 +20,8 @@ export default function Alphabet({
   setProductions,
   counter,
   regenText,
+  productionCounter,
+  setProductionCounter,
 }: AlphabetState) {
   return (
     <div className="flex flex-col gap-4 mb-4">
@@ -41,13 +45,17 @@ export default function Alphabet({
           setAlphabet(alphabetOutput)
           alphabetOutput.split('').forEach((letter) => {
             if (!productions.some((p) => p.preChar == letter))
-              productions.push({ preChar: letter, successor: '' })
+              productions.push({ preChar: letter, successors: [''] })
+            if (productionCounter[letter] === undefined)
+              setProductionCounter({ ...productionCounter, [letter]: 1 })
           })
+          console.log(productions)
+          console.log(productionCounter)
           productions.forEach((prod) => {
-            prod.successor = prod.successor
-              .split('')
-              .filter((ch) => alphabetOutput.includes(ch))
-              .join('')
+            prod.successors = prod.successors.map(s =>
+              s.split('')
+                .filter((ch) => alphabetOutput.includes(ch))
+                .join(''))
           })
           productions = productions.filter((prod) =>
             alphabetOutput.includes(prod.preChar)

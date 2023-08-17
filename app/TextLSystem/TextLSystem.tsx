@@ -6,12 +6,19 @@ import Productions from './Productions'
 import Axiom from './Axiom'
 import Production from './Interface/Production'
 
-export default function TextLSystem() {
+interface TextLSystemProps {
+  stochastic: boolean,
+}
+
+
+export default function TextLSystem({ stochastic = false }) {
   const [alphabet, setAlphabet] = useState('')
   const [productions, setProductions] = useState(Array<Production>)
   const [axiom, setAxiom] = useState('')
   const [counter, setCounter] = useState(0)
   const [output, setOutput] = useState('')
+
+  const [proctionCounter, setProductionCounter] = useState({})
 
   function regenText(thisProductions = productions, thisAxiom = axiom): void {
     let text = thisAxiom
@@ -21,18 +28,17 @@ export default function TextLSystem() {
     setOutput(text)
   }
 
-  function applyProductions(
-    text: string,
-    thisProductions: Array<Production>
-  ): string {
+  function applyProductions(text: string, thisProductions: Array<Production>): string {
     return text
       .split('')
       .map((letter) => {
         const selectedProduction = thisProductions.find(
           (prod) => prod.preChar == letter
         )
-        if (selectedProduction && selectedProduction.successor)
-          return selectedProduction.successor
+        if (selectedProduction && selectedProduction.successors) {
+          let i = Math.floor(Math.random() * selectedProduction.successors.length)
+          return selectedProduction.successors[i]
+        }
         return letter
       })
       .join('')
@@ -61,6 +67,8 @@ export default function TextLSystem() {
         setProductions={setProductions}
         counter={counter}
         regenText={regenText}
+        productionCounter={proctionCounter}
+        setProductionCounter={setProductionCounter}
       />
       <Productions
         productions={productions}
@@ -68,6 +76,9 @@ export default function TextLSystem() {
         alphabet={alphabet}
         counter={counter}
         regenText={regenText}
+        productionCounter={proctionCounter}
+        setProductionCounter={setProductionCounter}
+        stochastic={stochastic}
       />
       <Axiom
         alphabet={alphabet}
