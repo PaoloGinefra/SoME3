@@ -5,6 +5,7 @@ import Alphabet from './Alphabet'
 import Productions from './Productions'
 import Axiom from './Axiom'
 import Production from './Interface/Production'
+import StringRenderer from './Renderer'
 
 interface TextLSystemProps {
   stochastic: boolean,
@@ -116,12 +117,27 @@ export default function TextLSystem({ stochastic = false }) {
           {counter} ⏲
         </h1>
       </div>
+
+      {
+        stochastic ?
+          <div className='flex flex-col justify-center'>
+
+            <h1 className="m-auto text-4xl">Turtule Render</h1>
+
+            <div className='m-auto'>
+              <StringRenderer String={output} />
+            </div>
+          </div> : null
+      }
       <div
-        className="break-words border-solid border-2 border-white rounded p-4 mx-16 my-4"
+        className="break-words border-solid border-2 border-white rounded p-4 mx-16 my-4 h-40 overflow-y-scroll text-justify"
         style={{ minHeight: '8em' }}
       >
         {output}
       </div>
+
+
     </div>
+
   )
 }
