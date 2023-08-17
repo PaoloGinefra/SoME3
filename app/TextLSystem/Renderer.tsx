@@ -28,6 +28,7 @@ export default function StringRenderer({ String }: StringRendererProps) {
 
     const [bgColor, setBgColor] = useState({ rgb: { r: 0, g: 0, b: 0, a: 1 }, hex: '#FFFFFFFF' });
     const [lineColor, setlineColor] = useState({ rgb: { r: 255, g: 255, b: 255, a: 1 }, hex: '#FFFFFFFF' });
+    const [leafColor, setleafColor] = useState({ rgb: { r: 255, g: 255, b: 255, a: 1 }, hex: '#FFFFFFFF' });
 
     const [animate, setAnimate] = useState(false);
 
@@ -42,7 +43,7 @@ export default function StringRenderer({ String }: StringRendererProps) {
     ]
 
 
-    const sketch = useStatefulSketch({ length, rotation, String, bgColor, frwStr, penDownStr, posRotStr, negRotStr, pushStr, popStr, lineColor, lineWidth, leafStr, leafSize, animate, setAnimate }, (state, p) => {
+    const sketch = useStatefulSketch({ length, rotation, String, bgColor, frwStr, penDownStr, posRotStr, negRotStr, pushStr, popStr, lineColor, lineWidth, leafStr, leafSize, animate, setAnimate, leafColor }, (state, p) => {
         let w = p.windowWidth * 0.8
         const h = 700
 
@@ -87,6 +88,7 @@ export default function StringRenderer({ String }: StringRendererProps) {
             p.push()
             p.translate(state.current.leafSize / 2 * t, 0)
             p.rotate(p.PI / 2 * 0.8)
+            p.tint(state.current.leafColor.rgb.r, state.current.leafColor.rgb.g, state.current.leafColor.rgb.b, state.current.leafColor.rgb.a * 255)
             p.image(leafSprite, 0, 0, state.current.leafSize * t + 0.00001, state.current.leafSize * t + 0.00001)
             p.pop()
 
@@ -173,7 +175,7 @@ export default function StringRenderer({ String }: StringRendererProps) {
                         className='h-6'
                         type="range"
                         min={0}
-                        max={180}
+                        max={50}
                         step={0.01}
                         value={length}
                         onChange={(e) => setLenght(parseFloat(e.target.value))}
@@ -249,6 +251,14 @@ export default function StringRenderer({ String }: StringRendererProps) {
                     <ChromePicker
                         color={lineColor.rgb}
                         onChange={(color: any, event: any) => setlineColor(color)}
+                    />
+                </div>
+
+                <div className='flex flex-col gap-2'>
+                    <label className='m-auto mt-6' htmlFor="sizeSlider">Leaf Color</label>
+                    <ChromePicker
+                        color={leafColor.rgb}
+                        onChange={(color: any, event: any) => setleafColor(color)}
                     />
                 </div>
             </div>
