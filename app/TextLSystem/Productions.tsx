@@ -10,6 +10,9 @@ interface ProductionState {
   alphabet: string
   counter: number
   regenText: (thisProductions?: Array<Production>, thisAxiom?: string) => void
+  productionCounter: { [key: string]: number }
+  setProductionCounter: (p: {}) => void,
+  stochastic: boolean,
 }
 
 export default function Productions({
@@ -18,6 +21,9 @@ export default function Productions({
   alphabet,
   counter,
   regenText,
+  productionCounter,
+  setProductionCounter,
+  stochastic,
 }: ProductionState) {
   return (
     <div className="flex flex-col gap-4 mb-4">
@@ -34,37 +40,78 @@ export default function Productions({
           </li>
         ) : (
           alphabet.split('').map((letter) => (
-            <li className="m-auto tracking-widest font-mono">
-              {letter} →{' '}
-              <input
-                className={
-                  'w-80 h-10 px-2 text-left rounded ' + inter.className
-                }
-                type="text"
-                value={
-                  productions.find((prod) => prod.preChar == letter)?.successor
-                }
-                onChange={(e) => {
+            Array.from({ length: productionCounter[letter] }).map((_, index) => (
+              <li className="m-auto tracking-widest font-mono">
+                {letter} →{' '}
+                <input
+                  className={
+                    'w-80 h-10 px-2 text-left rounded ' + inter.className
+                  }
+                  type="text"
+                  value={
+                    productions.find((prod) => prod.preChar == letter)?.successors[index]
+                  }
+                  onChange={(e) => {
+                    let output = e.target.value
+                    output = output
+                      .split('')
+                      .filter((c) => alphabet.includes(c))
+                      .join('')
+                    console.log(output)
+                    e.target.value = output
 
-                  let output = e.target.value
-                  output = output
-                    .split('')
-                    .filter((c) => alphabet.includes(c))
-                    .join('')
-                  console.log(output)
-                  e.target.value = output
-                  const outputProductions = productions.filter(
-                    (prod) => prod.preChar != letter
-                  )
-                  outputProductions.push({ preChar: letter, successor: output })
-                  console.log(outputProductions);
-                  
-                  if (counter) regenText(outputProductions)
+                    const prod = productions.find((prod) => prod.preChar == letter)
+                    if (!prod) {
+                      productions.push({ preChar: letter, successors: [output] })
+                    }
+                    else {
+                      prod.successors[index] = output
+                    }
+                    console.log(productions);
 
-                  setProductions(outputProductions)
-                }}
-              ></input>
-            </li>
+                    if (counter) regenText(productions);
+
+                    setProductions([...productions]);
+                  }
+                  }
+                ></input>
+                {index == productionCounter[letter] - 1 && stochastic ?
+                  (
+                    <div className='flex justify-center my-3'>
+                      <button
+                        className="ml-2 px-2 py-1 text-sm"
+                        onClick={() => {
+                          setProductionCounter({
+                            ...productionCounter,
+                            [letter]: productionCounter[letter] + 1,
+                          })
+                          let prod = productions.find((prod) => prod.preChar == letter)
+                          if (prod)
+                            prod.successors.push('')
+
+                          if (counter) regenText(productions)
+                          setProductions(productions);
+                        }}> + </button>
+
+                      {
+                        productionCounter[letter] > 1 ?
+                          (<button
+                            className="ml-2 px-2 py-1 text-sm"
+                            onClick={() => {
+                              setProductionCounter({
+                                ...productionCounter,
+                                [letter]: productionCounter[letter] - 1,
+                              })
+                              productions.find((prod) => prod.preChar == letter)?.successors.pop()
+                              if (counter) regenText(productions)
+                              setProductions([...productions]);
+                            }}> - </button>) : null
+                      }
+                    </div>
+                  ) : null
+                }
+              </li>
+            ))
           ))
         )}
       </ul>
