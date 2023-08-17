@@ -127,7 +127,7 @@ export default function ExampleSketch({
   withStack,
   defaultString,
 }: ExampleSketchProps) {
-  const [drawingSpeed, setDrawingSpeed] = useState(0.01)
+  const [drawingSpeed, setDrawingSpeed] = useState(0.03)
   const [pause, setPause] = useState(true)
 
   const [inputState, setInputState] = useState<Record<string, number>>({
