@@ -11,7 +11,7 @@ interface RoleListProps {
 
 export function Role({ children, ...restProps }: RoleProps) {
     return (
-        <div className="bg-slate-700 font-bold italic rounded-md p-1">
+        <div className="bg-slate-700 font-bold italic rounded-md py-1 px-4">
             {children}
         </div>
     )
