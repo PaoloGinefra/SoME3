@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { TREES } from './trees'
 
 export default function TreesSketch() {
@@ -24,8 +24,8 @@ export default function TreesSketch() {
       </fieldset>
 
       <div className="grid grid-rows-[1fr_auto] grid-flow-col auto-cols-fr gap-4">
-        {TREES.map((tree) => (
-          <>
+        {TREES.map((tree, i) => (
+          <Fragment key={i}>
             <div className="relative block w-auto h-full rounded-md bg-neutral-700">
               <img
                 className="m-0 p-0 block w-auto h-full object-cover rounded-md"
@@ -48,7 +48,7 @@ export default function TreesSketch() {
                 {tree.attribution.platform.name}
               </a>
             </p>
-          </>
+          </Fragment>
         ))}
       </div>
     </div>

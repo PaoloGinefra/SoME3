@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { TREES } from './trees'
 
 export default function TreesBlurSketch() {
@@ -24,8 +24,8 @@ export default function TreesBlurSketch() {
       </fieldset>
 
       <div className="grid grid-rows-[1fr_auto] grid-flow-col auto-cols-fr gap-4">
-        {TREES.map((tree) => (
-          <>
+        {TREES.map((tree, i) => (
+          <Fragment key={i}>
             <img
               className="m-0 p-0 block w-auto h-full object-cover rounded-md"
               style={{ filter: `blur(${slider}px)` }}
@@ -42,7 +42,7 @@ export default function TreesBlurSketch() {
                 {tree.attribution.platform.name}
               </a>
             </p>
-          </>
+          </Fragment>
         ))}
       </div>
     </div>
