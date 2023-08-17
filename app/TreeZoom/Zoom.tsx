@@ -18,9 +18,8 @@ const TREES = [
         },
         waypoints: [
             { scale: 1, x: 0, y: 0, rot: 0 },
-            { scale: 2.5, x: -30, y: 15, rot: -90 },
-            { scale: 3.5, x: -35, y: 5, rot: -45 },
-            { scale: 5, x: -35, y: 10, rot: -45 },
+            { scale: 2.5, x: -25, y: 0, rot: -50 },
+            { scale: 4.5, x: -40, y: 5, rot: -45 },
             { scale: 15, x: -32.5, y: -17, rot: 25 },
         ]
     },
@@ -60,6 +59,7 @@ export default function Zoom() {
                 <div className="flex justify-center space-x-2">
                     <span>Zoom</span>
                     <input
+                        className="w-1/2"
                         id="opacitySlider"
                         type="range"
                         min={0}
