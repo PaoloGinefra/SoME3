@@ -16,6 +16,7 @@ import Video from './utils/Video.tsx'
 import Gif from './utils/Gif.tsx'
 import Toggolable from './utils/Toggolable.tsx'
 import RoleList from './utils/Role.tsx'
+import Zoom from './TreeZoom/Zoom.tsx'
 
 <MobileModal />
 
@@ -111,7 +112,7 @@ This is not that different from what a painter or an illustrator would do.
 </Prose>
 </Toggolable>
 
-<Toggolable title="A closer look" maxHeight={1300}>
+<Toggolable title="A closer look" maxHeight={3000}>
 
 <Prose>
 To do this it could be useful to start analyzing the problem from the start, gathering some ideas;
@@ -133,8 +134,16 @@ This weak influence of scale is no ordinary property because it comes with some 
 
 If we take a tree for example and we zoom in on one of its branches, the only thing that changes is the scale. But since we noticed that this is no determining factor, we should expect something not that different from any other abstracted tree. And sure enough there it is, a tree camouflaged as part of a bigger one.
 
+<Zoom />
+
 With some necessary formalities, this property takes the name of self-similarity.
 Much can be said about its implications and impact on mathematics. Nonetheless, for the sake of time, I’ll leave that to your own curiosity.
+
+<Gif
+  url="https://giphy.com/embed/5SxgjvUrLwdsxYrkB3"
+  width="480"
+  height="480"
+/>
 
 Coming back to our problem, our recent discovery allows us to describe a tree just as a bunch of smaller trees glued together! Amazing!
 
@@ -166,6 +175,12 @@ Well, firstly there are actually some almost self-similar plants in nature. Look
 [Images]
 If we want to recreate them we may go back to the recurrent definition and literally put a smaller copy of the whole drawing as a part of the drawing itself. Much like when you make two mirrors face each other, or a webcam pointed at his video output.
 
+<Gif
+  url="https://giphy.com/embed/3ov9jQX2Ow4bM5xxuM"
+  width="480"
+  height="390"
+/>
+
 Here you can play around with this concept. Try and build something that resembles a plant
 
 </Prose>
@@ -178,6 +193,9 @@ We need to improve this!
 
 </Prose>
 
+</Toggolable>
+
+<Toggolable title="Turtle time">
 <Prose>
 Let’s go back again to our abstracted plants. Can we abstract them even more? Is there a pattern between all of them?
 Despite all the case-specific intricacies, we reduced every drawing to just being made by straight segments.
@@ -189,30 +207,7 @@ Picture a turtle with a pen strapped on the back. The turtle can just move forwa
 Let’s give a name to those instructions: F means go forward with the pen down, + means rotate to the left, - means rotate to the right and f means forward with the pen up.
 
 To make things easier we can assign a fixed amount of movement and rotation per symbol. For instance, we can say that all translations are of 10 px while rotations happen in 10 deg steps.
-Even with this limitation, we can draw pretty much every abstracted plant we encountered so far. Let’s look at this simple branch for instance
-
-</Prose>
-
-<Prose>
-
-This works pretty well for our perfect plant! But it still has its own problems. First of all, we don’t really have control over the copies, they are no more than that, and we don’t choose the depth of the recurrence. Furthermore, we don’t have a clear description of the plant at hand.
-We need to improve this!
-
-</Prose>
-</Toggolable>
-
-<Toggolable title="Turtle time">
-<Prose>
-Let’s go back again to our abstracted plants. Can we abstract them even more? Is there a pattern between all of them?
-Despite all the case-specific intricacies, all the drawings are just made of straight segments.
-So we just need a way to make a computer draw that and yet again the possibilities are endless.
-For our objective, we’re going to use what is arguably the simplest way of drawing programmatically: Turtle graphics.
-
-Picture a turtle with a pen strapped on the back. The turtle can just move forward, rotate around its center and get the pen on and off the paper. Let’s give a name to those instructions: F means go forward with the pen down, + means rotate to the left, - means rotate to the right and f means forward with the pen up.
-
-To make things easier we can assign a fixed amount of movement and rotation per symbol. For instance, we can say that all translations are of 10 px while rotations happen in 10 deg steps.
-
-With this simple set of symbols, we can draw pretty much every abstracted plant we encountered so far. Let’s look at this simple branch for instance.
+Even with this limitation, we can draw pretty much every abstracted plant we encountered so far. Let’s look at this simple branch for instance.
 
 (Commentary on the branch drawing)
 
@@ -305,6 +300,7 @@ This is the perfect way to regain those scenario-specific details we lost by blu
   amount of variations, possibilities, applications, classifications, and
   whatnot and once again I’ll leave that to your own curiosity and maybe a
   future article/video.
+
 </Prose>
 
 </Toggolable>
