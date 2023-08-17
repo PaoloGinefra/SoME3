@@ -16,32 +16,33 @@ export default function TextLSystem() {
   function regenText(thisProductions = productions, thisAxiom = axiom): void {
     let text = thisAxiom
     for (let i = 0; i < counter; i++) {
-        text = applyProductions(text, thisProductions)
+      text = applyProductions(text, thisProductions)
     }
     setOutput(text)
   }
 
-  function applyProductions(text: string, thisProductions: Array<Production>) : string {
+  function applyProductions(
+    text: string,
+    thisProductions: Array<Production>
+  ): string {
     return text
-    .split('')
-    .map((letter) => {
-      const selectedProduction = thisProductions.find(
-        (prod) => prod.preChar == letter
-      )
-      if (selectedProduction && selectedProduction.successor)
-        return selectedProduction.successor
-      return letter
-    })
-    .join('')
+      .split('')
+      .map((letter) => {
+        const selectedProduction = thisProductions.find(
+          (prod) => prod.preChar == letter
+        )
+        if (selectedProduction && selectedProduction.successor)
+          return selectedProduction.successor
+        return letter
+      })
+      .join('')
   }
 
   function nextText(): void {
     if (!counter) {
       setOutput(axiom)
     } else {
-      setOutput(
-        applyProductions(output, productions)
-      )
+      setOutput(applyProductions(output, productions))
     }
     setCounter(counter + 1)
   }
@@ -94,7 +95,7 @@ export default function TextLSystem() {
           </button>
         </div>
       </div>
-      <div className='flex mx-16 flex-row-reverse'>
+      <div className="flex flex-row-reverse min-[500px]:mx-16 max-[500px]:mx-8">
         <h1
           title="Iterations"
           className="text-2xl align-center text-right border border-solid px-2 rounded"
@@ -103,7 +104,7 @@ export default function TextLSystem() {
         </h1>
       </div>
       <div
-        className="break-words border-solid border-2 border-white rounded p-4 mx-16 my-4"
+        className="break-words border-solid border-2 border-white rounded p-4 my-4 min-[500px]:mx-16 max-[500px]:mx-8"
         style={{ minHeight: '8em' }}
       >
         {output}
