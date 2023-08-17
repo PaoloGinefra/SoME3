@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai'
 import Prose from './Prose'
 
 interface Props {
   title: string
   children: React.ReactNode
+  maxHeight: number
   opened: boolean
   restProps?: any
 }
@@ -12,19 +13,11 @@ interface Props {
 export default function Toggleable({
   children,
   title,
+  maxHeight = 3000,
   opened = true,
   ...restProps
 }: Props) {
   const [open, setOpen] = useState(opened)
-
-  const ref = useRef<HTMLDivElement>(null)
-  const [height, setHeight] = useState<number | null>(null)
-  const maxHeigth = !!height ? height + 'px' : 'none'
-
-  useEffect(() => {
-    setHeight(ref.current!.scrollHeight)
-  }, [])
-
   return (
     <div className="mt-4">
       <div className="cursor-pointer" onClick={() => setOpen(!open)}>
@@ -38,9 +31,8 @@ export default function Toggleable({
         </Prose>
       </div>
       <div
-        ref={ref}
         style={{
-          maxHeight: open ? maxHeigth : '0px',
+          maxHeight: open ? maxHeight.toString() + 'px' : '0px',
           overflow: 'hidden',
           transitionDuration: '1s',
           transitionProperty: 'max-height',
