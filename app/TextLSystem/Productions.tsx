@@ -39,7 +39,7 @@ export default function Productions({
         ) : (
           alphabet.split('').map((letter) => (
             Array.from({ length: productionCounter[letter] }).map((_, index) => (
-              <li className="-80 m-auto tracking-widest flex items-center justify-stretch">
+              <li className="relative m-auto tracking-widest flex items-center justify-stretch">
                 <p className="font-mono m-2">{letter} →</p>
 
                 <input
@@ -74,7 +74,7 @@ export default function Productions({
                 ></input>
                 {index == productionCounter[letter] - 1 && stochastic ?
                   (
-                    <div className='flex justify-center my-3'>
+                    <div className='absolute right-0 flex justify-center my-3 translate-x-[100%]'>
                       <button
                         className="ml-2 px-2 py-1 text-sm"
                         onClick={() => {
