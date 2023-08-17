@@ -1,6 +1,7 @@
 import React from 'react'
 import Production from './Interface/Production'
 import { Inter } from 'next/font/google'
+import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -91,7 +92,7 @@ export default function Productions({
 
                           if (counter) regenText(productions)
                           setProductions(productions);
-                        }}> + </button>
+                        }}> <AiOutlineDown /> </button>
 
                       {
                         productionCounter[letter] > 1 ?
@@ -105,7 +106,7 @@ export default function Productions({
                               productions.find((prod) => prod.preChar == letter)?.successors.pop()
                               if (counter) regenText(productions)
                               setProductions([...productions]);
-                            }}> - </button>) : null
+                            }}> <AiOutlineUp /> </button>) : null
                       }
                     </div>
                   ) : null
