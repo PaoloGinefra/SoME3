@@ -51,6 +51,10 @@ export default function StringRenderer({ String }: StringRendererProps) {
 
         let t = 0;
 
+        let pos_offset = p.createVector(0, 0)
+        let isDown = false;
+        let touchPoint = p.createVector(0, 0)
+
         function penDown() {
             p.strokeWeight(state.current.lineWidth)
             p.strokeCap(p.ROUND)
@@ -88,6 +92,15 @@ export default function StringRenderer({ String }: StringRendererProps) {
 
         }
 
+        p.mousePressed = function () {
+            touchPoint = p.createVector(p.mouseX, p.mouseY)
+            isDown = true
+        }
+
+        p.mouseReleased = function () {
+            isDown = false
+        }
+
         p.preload = function () {
             leafSprite = p.loadImage('/assets/DWD/leaf.svg')
         }
@@ -103,10 +116,14 @@ export default function StringRenderer({ String }: StringRendererProps) {
                 setAnimate(false)
             }
 
-
+            if (isDown) {
+                pos_offset.add(p.createVector(p.mouseX - touchPoint.x, p.mouseY - touchPoint.y))
+                touchPoint = p.createVector(p.mouseX, p.mouseY)
+            }
 
             this.background(state.current.bgColor.rgb.r, state.current.bgColor.rgb.g, state.current.bgColor.rgb.b, state.current.bgColor.rgb.a * 255)
             p.translate(w / 2, h / 2);
+            p.translate(pos_offset.x, pos_offset.y)
 
             let offset = 0;
             state.current.String.split('').forEach(c => {
