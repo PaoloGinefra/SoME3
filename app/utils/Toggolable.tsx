@@ -10,7 +10,7 @@ interface Props {
     restProps?: any;
 }
 
-export default function Toggolable({ children, title, maxHeight = 3000, opened = false, ...restProps }: Props) {
+export default function Toggolable({ children, title, maxHeight = 3000, opened = true, ...restProps }: Props) {
     const [open, setOpen] = useState(opened);
     return (
         <div className='mt-4'>

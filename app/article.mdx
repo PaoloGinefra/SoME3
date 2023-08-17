@@ -113,7 +113,7 @@ This is not that different from what a painter or an illustrator would do.
 </Prose>
 </Toggolable>
 
-<Toggolable title="A closer look" maxHeight={3000}>
+<Toggolable title="A closer look" maxHeight={6000}>
 
 <Prose>
 To do this it could be useful to start analyzing the problem from the start, gathering some ideas;
@@ -160,7 +160,9 @@ T = ½ T + ½ T where for defining T we reference the definition itself.
 
 [animation of building the binary tree through recurrence]
 
-These types of definitions are called recurrences and both math and computer science are full of them.
+These types of definitions are called recursions and both math and computer science are full of them.
+
+<Gif url="https://giphy.com/embed/aaODAv1iuQdgI" width="471" height="480" />
 
 You may be spotting a problem though, the definition by recursion implies the creation of a perfect self-similar tree but that is not what’s outside in the nearest park.
 That is definitely a valid concern but for now, let’s try to tame the simplest case first. We can add back the complexity later.
@@ -205,18 +207,18 @@ Despite all the case-specific intricacies, we reduced every drawing to just bein
 
 Thanks to this simplification it is sufficient for us to use what is arguably the simplest way of drawing programmatically: Turtle graphics.
 
+<Gif url="https://giphy.com/embed/naXyAp2VYMR4k" width="300" height="300" />
+
 Picture a turtle with a pen strapped on the back. The turtle can just move forward, rotate around its center and get the pen on and off the paper. If you think about it for a moment, or even try to sketch something you’ll realize that these 4 elementary moves are sufficient to draw any picture.
 
-Let’s give a name to those instructions: F means go forward with the pen down, + means rotate to the left, - means rotate to the right and f means forward with the pen up.
+Let’s give a name to those instructions: **F** means go forward with the pen down, **+** means rotate to the left, **-** means rotate to the right and **f** means forward with the pen up.
 
 To make things easier we can assign a fixed amount of movement and rotation per symbol. For instance, we can say that all translations are of 10 px while rotations happen in 10 deg steps.
-Even with this limitation, we can draw pretty much every abstracted plant we encountered so far. Let’s look at this simple branch for instance.
-
-(Commentary on the branch drawing)
+Even with this limitation, we can draw pretty much every abstracted plant we encountered so far. Let’s try to replicate a simple branch for instance.
 
 </Prose>
 
-<TurtleSketch withStack={false} defaultString="F+F-F" />
+<TurtleSketch withStack={false} defaultString="FF+F-F" />
 
 <Prose>
 As you can see the process is not particularly hard but a bit convoluted.
@@ -231,7 +233,7 @@ Now we can try again with the simple branch:
 
 </Prose>
 
-<TurtleSketch withStack={true} defaultString="FF[+F[+F]]F-F" />
+<TurtleSketch withStack={true} defaultString="FF[+F][-F]" />
 
 <Prose>
   Much cleaner now! Perfect! Now that we have the tool to draw with, we can
