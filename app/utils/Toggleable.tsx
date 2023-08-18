@@ -32,7 +32,7 @@ export default function Toggleable({
       </div>
       <div
         style={{
-          maxHeight: open ? maxHeight.toString() + 'px' : '0px',
+          maxHeight: open ? maxHeight.toString() + 'vh' : '0vh',
           overflow: 'hidden',
           transitionDuration: '0.5s',
           transitionProperty: 'max-height',
