@@ -109,7 +109,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
                 },
                 'Color': () => {
                     let id = getPointIdFromMouse()
-                    if (id != -1) {
+                    if (id > -1 + (referenceToggle ? 2 : 0)) {
                         points[id].char = state.current.char
                         handleSequence(points);
                     }
@@ -187,7 +187,7 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
         }
 
         function getPointIdFromMouse() {
-            return points.findIndex(point => p.abs(point.position.x - quantizeCoord(p.mouseX - offset.x)) < gridSize / 2 && p.abs(point.position.y - quantizeCoord(p.mouseY - offset.y)) < gridSize / 2)
+            return points.findLastIndex(point => p.abs(point.position.x - quantizeCoord(p.mouseX - offset.x)) < gridSize / 2 && p.abs(point.position.y - quantizeCoord(p.mouseY - offset.y)) < gridSize / 2)
         }
 
         p.preload = function () {
@@ -391,8 +391,19 @@ export default function PointSequenceEditor({ string, handleSequence, alphabet, 
             }
 
             if (p.mouseX > 0 && p.mouseX < w && p.mouseY > 0 && p.mouseY < h && points.length > (referenceToggle ? 2 : 0) && state.current.mode == 'Add') {
+                let last = points[points.length - 1]
+                let lastIndex = points.length - 1
+                let i = last.pop ? 1 : 0
+                while (i > 0 && lastIndex > 0) {
+                    lastIndex--;
+                    i -= points[lastIndex].push ? 1 : 0;
+                    i += points[lastIndex].pop ? 1 : 0;
+                }
+
+                last = points[lastIndex]
+
                 //draw faded line between last point and mouse
-                drawLine(p, points[points.length - 1].position, p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), state.current.preChar ?? '')
+                drawLine(p, last.position, p.createVector(quantizeCoord(p.mouseX - offset.x), quantizeCoord(p.mouseY - offset.y)), state.current.preChar ?? '')
             }
             if (points.length > (referenceToggle ? 2 : 0))
                 drawPoint(p, points[points.length - 1])
