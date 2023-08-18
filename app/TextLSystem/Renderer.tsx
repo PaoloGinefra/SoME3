@@ -168,7 +168,9 @@ export default function StringRenderer({ String }: StringRendererProps) {
     return (
         <div className=''>
 
-            <SketchRenderer sketch={sketch} />
+            <div className='flex justify-center'>
+                <SketchRenderer sketch={sketch} />
+            </div>
             <div className='flex m-auto flex-wrap justify-center gap-5 mt-6'>
                 <div className='flex flex-col'>
                     <input

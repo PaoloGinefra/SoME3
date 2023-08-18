@@ -91,7 +91,7 @@ Extracting common rules and concepts from different instances is called an abstr
 As numbers are an essential abstraction to count, we need a common description of plants for our drawings.
 
 The process of abstraction usually starts by distinguishing what are case-specific details and what intrinsically define the objects at hand.
-To do this we can take some pictures of real plants we’d like to draw and literally blur the details by…. [blurring the pictures](maybe spoiler effect). Then we can toggle on and off different elements to see their role in defining the blurred picture.
+To do this we can take some pictures of real plants we’d like to draw and literally blur the details by…. blurring the pictures. Then we can toggle on and off different elements to see their role in defining the blurred picture.
 
 This is not that different from what a painter or an illustrator would do.
 
@@ -144,11 +144,7 @@ If we take a tree for example and we zoom in on one of its branches, the only th
 With some necessary formalities, this property takes the name of self-similarity.
 Much can be said about its implications and impact on mathematics. Nonetheless, for the sake of time, I’ll leave that to your own curiosity.
 
-<Gif
-  url="https://giphy.com/embed/5SxgjvUrLwdsxYrkB3"
-  width="480"
-  height="480"
-/>
+<Gif url="https://giphy.com/embed/aFTt8wvDtqKCQ" width="385" height="480" />
 
 Coming back to our problem, our recent discovery allows us to describe a tree just as a bunch of smaller trees glued together! Amazing!
 
@@ -191,7 +187,7 @@ If we want to recreate them we may go back to the recurrent definition and liter
   height="390"
 />
 
-Here you can play around with this concept. Try and build something that resembles a plant
+Here you can play around with this concept. Try and build something that resembles a fern or a Romanesco broccoli.
 
 </Prose>
 
@@ -233,6 +229,13 @@ As you can see the process is not particularly hard but a bit convoluted.
 Especially if you consider that going back to the beginning of an already drawn branch, to then draw the next, implies doubling the number of instructions.
 
 To unclutter this back-and-forth process we could keep track of the turtle’s movement using a stack: a way of organizing data that, just like a stack of plates, lets you add and remove elements only from the top.
+
+<Gif
+  url="https://giphy.com/embed/XbOm89GxrH04brxiQw"
+  width="480"
+  height="480"
+/>
+
 To represent these two actions we’ll introduce two new symbols: **[ ]**.
 
 When the turtle reads a **[** it will store its current position and orientation while upon reading a **]** it gets the position and orientation last stored, moves there with the pen up, aligns itself, and discards them.
@@ -254,9 +257,9 @@ Now we can try again with the simple branch:
 
 <Toggleable title="A binary comeback">
 <Prose>
-Let’s start by recovering the recurrent definition of tree “T = ½ T + ½ T” stated earlier (link) and formalizing it using the branch constructed in the preceding chapter, we obtain T = F[+T][-T].
+Let’s start by recovering the recurrent definition of tree “T = ½ T + ½ T” stated earlier and formalizing it using the branch constructed in the preceding chapter, we obtain T = F[+T][-T].
 
-The exact solution to this “equation” would require a shape that is infinitely self-similar. Not only would that be very difficult to define but we don’t even really care about it since all plants are finite. Instead, we can lose the symmetry of the equality and read it more like an assignment, and so substitute that ‘=’ with a ‘->’ to mark the difference.
+The exact solution to this “equation” would require a shape that is infinitely self-similar. Not only would that be very difficult to define but we don’t even really care about it since all plants are finite. Instead, we can lose the symmetry of the equality and read it more like an assignment, and so substitute that '**=**' with a '**->**' to mark the difference.
 
 **T ->F[+T][-T]**
 Now we can just start from a T and iteratively apply the assignment by substituting each T with the right side of the arrow. A literal find and replace.
@@ -305,18 +308,17 @@ Once we’ve processed each character we start all over again until the desired 
 
 What we just described is called a Lyndelmier System from the bright botanist who first came up with it. Commonly abbreviated to L-systems they are an example of a broader class of computational objects called formal grammars.
 
+<Gif url="https://giphy.com/embed/1405fIarqbN7hu" width="480" height="363" />
+
 If you think about it, we are assigning to each branching structure a sequence of characters, a sentence, and we are trying to generate only “meaningful” ones in the sense of actually representing a plant. It is not that different from the generation of a “meaningful” sentence in English, in the sense of conveying actual meaning. But while in English we are concerned with the meaning of each word, here we only care about the structure of the sentence, about its grammatical coherence. So we only need the grammar of this new weird language.
 
 The magic of separating the string generation from the drawing is that while the first system captures the essence of the structure the second one leaves a lot of room for artistic expression! We can add as many interpretations of the characters as we want, ranging from drawing a flower to producing a certain musical note to changing the color of the line or whatever; and we are not limited to the two dimensions either! We can just add more symbols and interpret them as different movements in space for instance.
 This is the perfect way to regain those scenario-specific details we lost by blurring the pictures at the beginning!
 
-</Prose>
-
-<Prose>
-  Once again we could be here talking for hours about L-systems and their huge
-  amount of variations, possibilities, applications, classifications, and
-  whatnot and once again I’ll leave that to your own curiosity and maybe a
-  future article/video.
+Once again we could be here talking for hours about L-systems and their huge
+amount of variations, possibilities, applications, classifications, and
+whatnot and once again I’ll leave that to your own curiosity and maybe a
+future article/video.
 
 </Prose>
 
@@ -340,6 +342,9 @@ _In this applet all the symbols will be interpreted as lines. In the production 
 Finally, let’s just get back to an issue we left behind: the variation.
 
 We now need to exit the world of perfection and go back to reality. We can use a trick that seems to come so easily to nature: randomness.
+
+<Gif url="https://giphy.com/embed/a8TIlyVS7JixO" width="480" height="445" />
+
 To achieve this we need to lose the determinism of our system, meaning that one set of alphabet, productions, and axioms will no longer always produce the same drawing. And the easiest way to do that is by allowing overlap in the productions.
 
 You see if there are multiple productions from the same character the procedure has to make a choice. You may go for the first match for instance, but much more interestingly you can make it randomly. You can make the computer just roll a die.
@@ -365,6 +370,8 @@ We successfully managed to make a computer programmatically tame the intricacies
 L-systems are just one among a myriad of different plant drawing algorithms, each with its own story, pros, and cons. What I’d like you to appreciate is how we got here. How we didn’t stop facing a task so broad and complex and how by iteratively going through simplifications and hopefully intuitive choices we produced a solution quite elegant in its simplicity.
 
 I also hope that you are left with few answers but many new questions in mind and I highly encourage you to take the loose threads of this article as an excuse to dive deeper into this topic. Trust me, there is an infinite amount of wonders hidden between the leaves of a computer-generated plant!
+
+<Gif url="https://giphy.com/embed/11AuX2SHScQumk" width="480" height="269" />
 
 </Prose>
 
