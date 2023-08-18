@@ -31,12 +31,12 @@ import SelfSimilarPlants from './SelfSimilarPlants/SelfSimilarPlants.tsx'
 
 <Toggleable title="Introduction" maxHeight={2500} opened={true}>
 <Prose>
-As a math and computer science enthusiast, I’m often told to touch grass. I never fully understood what that means, but one thing I’m sure of is that I don’t want to go outside. However, why not kill two birds with one stone and simulate some plants on my PC?
+As a math and computer science enthusiast, I’m often told to touch grass. I never fully understood what that meant, but one thing I’m sure of is that I don’t want to go outside. However, why not kill two birds with one stone and simulate some plants on my PC?
 Today’s journey is about understanding how to make it possible using math, computer science, and a pinch of basic intuition.
 
 <Gif url="https://giphy.com/embed/kRfIKQ6ADUJaM" width={480} height={264} />
 
-At first, it is natural to take inspiration from state-of-the-art virtual botanic sceneries like the ones in video games. The results are amazing but they take the combined effort of tons of talented artists and designers because they are usually based on skillfully human-crafted assets.
+At first, it is natural to take inspiration from state-of-the-art virtual botanic sceneries like the ones in video games. The results are amazing, but they take the combined effort of tons of talented artists and designers because they are usually based on skillfully human-crafted assets.
 
 </Prose>
 
@@ -52,7 +52,7 @@ Nah… the computer has to do all the heavy lifting for me.
 Furthermore, like many other things in life, I don’t really care about the 3rd dimension or photorealism. A 2D drawing will be more than enough.
 A procedural generation algorithm could be what I’m looking for.
 
-The task at hand is quite different from your usual textbook problem. While still focusing on a specific topic you can't expect a clear-cut solution. The path we will be exploring is just one among infinitely many and it is meant to be a source of inspiration for you to dig your own unique way.
+The task at hand is quite different from your usual textbook problem. While still focusing on a specific topic, you can't expect a clear-cut solution. The path we will be exploring is just one among infinitely many, and it is meant to be a source of inspiration for you to dig your own unique way.
 
 When facing such a broad problem, the first thing you do is shoot the messenger with a ton of questions:
 
@@ -60,11 +60,11 @@ When facing such a broad problem, the first thing you do is shoot the messenger 
 2. Which kind of plants?
 3. Should this be an exact recreation or can we get away with some artistic liberties?
 
-Well, as we said we will focus on drawings. The most important requirement is that the system must be flexible enough to draw any sort of plant: a tree, a fern, a blade of grass, a bush, and even algae.
+Well, as we said, we will focus on drawings. The most important requirement is that the system must be flexible enough to draw any sort of plant: a tree, a fern, a blade of grass, a bush, and even algae.
 
 <Gif url="https://giphy.com/embed/yFfPrA6TaURfa" width="480" height="269" />
 
-The result should be pretty convincing but there has to be room for artistic expression. We want to be able to create any plant, even those that come from an alien planet, and have smiley faces as leaves.
+The result should be pretty convincing, but there has to be room for artistic expression. We want to be able to create any plant, even those that come from an alien planet, and have smiley faces as leaves.
 
 <Gif
   url="https://giphy.com/embed/xUA7b1xHn1Jdy7Pk1q"
@@ -77,7 +77,7 @@ The result should be pretty convincing but there has to be room for artistic exp
 <Toggleable title="Time to Abstract" maxHeight={3000}>
 <Prose>
 Okay, now that the goal is set, we can properly start. The next phase is arguably the most important one: don’t panic!
-The infinitely many roads are all facing you and taking the first step can be daunting. Staring them won’t get you anywhere though, so let’s just pick without the fear of retracing our steps.
+The infinitely many roads are all facing you and taking the first step can be daunting. Staring at them won’t get you anywhere though, so let’s just pick without the fear of retracing our steps.
 
 Let’s start by thinking about our biggest requirement: flexibility.
 
@@ -104,7 +104,7 @@ This is not that different from what a painter or an illustrator would do.
   stuff; What’s left is the branching structure, thus it is the most impacting
   element of the picture. We’re also not interested in any kind of color or
   thickness for now, so we can get rid of those elements too by representing
-  everything with straight lines Nice! Let’s focus on that then.
+  everything with straight lines, Nice! Let’s focus on that then.
 </Prose>
 
 <TreesSketch />
@@ -118,7 +118,7 @@ This is not that different from what a painter or an illustrator would do.
 <Toggleable title="A closer look" maxHeight={6000}>
 
 <Prose>
-To do this it could be useful to start analyzing the problem from the start, gathering some ideas;
+To do this, it could be useful to start analyzing the problem from the start, gathering some ideas;
 
 Let’s take some pictures of plants and observe them with a scientist’s spirit.
 
@@ -127,17 +127,17 @@ Let’s take some pictures of plants and observe them with a scientist’s spiri
 <MultipleScales />
 
 <Prose>
-Okay, despite the differences our abstractions look all similar.
+Okay, despite the differences, our abstractions look all similar.
 But if you think about it, this time they are not just the details that change, there is something more fundamental going on. Can you spot it?
 
-They are all at different scales! It seems that with our abstraction goggles microalgae and secular redwoods are much alike.
+They are all at different scales! It seems that with our abstraction goggles, microalgae and secular redwoods are much alike.
 
 </Prose>
 
 <Prose>
 This weak influence of scale is no ordinary property because it comes with some heavy consequences.
 
-If we take a tree for example and we zoom in on one of its branches, the only thing that changes is the scale. But since we noticed that this is no determining factor, we should expect something not that different from any other abstracted tree. And sure enough there it is, a tree camouflaged as part of a bigger one.
+If we take a tree, for example, and we zoom in on one of its branches, the only thing that changes is the scale. But since we noticed that this is no determining factor, we should expect something not that different from any other abstracted tree. And sure enough there it is, a tree camouflaged as part of a bigger one.
 
 <Zoom />
 
@@ -156,12 +156,12 @@ As you can see the self similarity of this simple tree implies that each part of
 If we associate this base element with the symbol T we can arrive to a weird definition:
 T = ½ T + ½ T where for defining T we reference the definition itself.
 
-These types of definitions are called recursions and both math and computer science are full of them.
+These types of definitions are called recursions, and both math and computer science are full of them.
 
 <Gif url="https://giphy.com/embed/aaODAv1iuQdgI" width="471" height="480" />
 
-You may be spotting a problem though, the definition by recursion implies the creation of a perfect self-similar tree but that is not what’s outside in the nearest park.
-That is definitely a valid concern but for now, let’s try to tame the simplest case first. We can add back the complexity later.
+You may be spotting a problem though. The definition by recursion implies the creation of a perfect self-similar tree but that is not what’s outside in the nearest park.
+That is definitely a valid concern, but for now, let’s try to tame the simplest case first. We can add back the complexity later.
 Let’s look at a perfect self-similar plant!
 
 </Prose>
