@@ -107,9 +107,9 @@ export class Canvas extends Shape {
 }
 
 
-export let Shapes: (typeof Shape)[] = [Square, Circle, Triangle, Line, Canvas, Leaf]
+export let Shapes: (typeof Shape)[] = [Canvas, Square, Circle, Triangle, Line, Leaf]
 export let ShapesNames = Shapes.map((s) => s.name)
-export let ShapesEmojis = ['◻️', '⚪', '🛆', '⁄', '🖽',
+export let ShapesEmojis = ['🖽', '◻️', '⚪', '🛆', '⁄',
     <Image
         src="/assets/DWD/leaf.svg"
         className="m-auto"
