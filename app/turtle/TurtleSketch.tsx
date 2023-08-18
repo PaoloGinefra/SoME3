@@ -21,13 +21,14 @@ function drawTurtle(p: p5, state: TurtleState) {
   p.translate(state.pos.x, state.pos.y)
   p.rotate(state.rot)
 
-  p.ellipseMode(p.CENTER)
-  p.fill('green')
-  p.ellipse(0, 0, 25, 20)
-  p.fill('white')
-  p.ellipse(10, 5, 5, 5)
-  p.ellipse(10, -5, 5, 5)
+  p.textSize(24)
+  p.textAlign(p.CENTER)
+  p.text('🖋️🐢', 0, 0)
   p.pop()
+}
+
+function smoothStep(t: number) {
+  return t * t * (3 - 2 * t)
 }
 
 function draw(
@@ -49,7 +50,7 @@ function draw(
 
     const cmdDrawFunct = TurtleCmds[cmd]
     const cmdParams = paramsLookup[cmd]
-    const cmdT = p.constrain(t - i, 0, 1)
+    const cmdT = smoothStep(p.constrain(t - i, 0, 1))
     cmdDrawFunct(p, stack, cmdParams, cmdT)
 
     i += 1
@@ -154,7 +155,7 @@ export default function ExampleSketch({
       }
 
       p.draw = function () {
-        p.background(251, 234, 205)
+        p.background('#f8faff')
 
         p.push() // begin: grid
 
