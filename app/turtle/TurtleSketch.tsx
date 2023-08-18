@@ -22,7 +22,6 @@ function drawTurtle(p: p5, state: TurtleState) {
   p.rotate(state.rot)
 
   p.textSize(24)
-  p.textAlign(p.CENTER)
   p.text('🖋️🐢', 0, 0)
   p.pop()
 }
