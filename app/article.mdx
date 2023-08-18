@@ -19,6 +19,7 @@ import Toggleable from './utils/Toggleable.tsx'
 import RoleList from './utils/Role.tsx'
 import Zoom from './TreeZoom/Zoom.tsx'
 import MultipleScales from './MultipleScales/MultipleScales.tsx'
+import SelfSimilarPlants from './SelfSimilarPlants/SelfSimilarPlants.tsx'
 
 <MobileModal />
 
@@ -159,8 +160,6 @@ As you can see the self similarity of this simple tree implies that each part of
 If we associate this base element with the symbol T we can arrive to a weird definition:
 T = ½ T + ½ T where for defining T we reference the definition itself.
 
-[animation of building the binary tree through recurrence]
-
 These types of definitions are called recursions and both math and computer science are full of them.
 
 <Gif url="https://giphy.com/embed/aaODAv1iuQdgI" width="471" height="480" />
@@ -178,7 +177,12 @@ Let’s look at a perfect self-similar plant!
 What would it look like? How would you draw it?
 
 Well, firstly there are actually some almost self-similar plants in nature. Look at them!
-[Images]
+
+</Prose>
+
+<SelfSimilarPlants />
+
+<Prose>
 If we want to recreate them we may go back to the recurrent definition and literally put a smaller copy of the whole drawing as a part of the drawing itself. Much like when you make two mirrors face each other, or a webcam pointed at his video output.
 
 <Gif
