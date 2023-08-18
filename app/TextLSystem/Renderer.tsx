@@ -14,7 +14,7 @@ interface StringRendererProps {
 
 export default function StringRenderer({ String }: StringRendererProps) {
     const [length, setLenght] = useState(20);
-    const [rotation, setRotation] = useState(20);
+    const [posRotation, setPosRotation] = useState(20);
     const [lineWidth, setLineWidth] = useState(1);
     const [leafSize, setLeafSize] = useState(20);
 
@@ -43,7 +43,7 @@ export default function StringRenderer({ String }: StringRendererProps) {
     ]
 
 
-    const sketch = useStatefulSketch({ length, rotation, String, bgColor, frwStr, penDownStr, posRotStr, negRotStr, pushStr, popStr, lineColor, lineWidth, leafStr, leafSize, animate, setAnimate, leafColor }, (state, p) => {
+    const sketch = useStatefulSketch({ length, posRotation, String, bgColor, frwStr, penDownStr, posRotStr, negRotStr, pushStr, popStr, lineColor, lineWidth, leafStr, leafSize, animate, setAnimate, leafColor }, (state, p) => {
         let w = p.windowWidth * 0.8
         const h = 700
 
@@ -137,9 +137,9 @@ export default function StringRenderer({ String }: StringRendererProps) {
                 if (state.current.frwStr.includes(c))
                     drawLine(state.current.length, myTime)
                 if (state.current.posRotStr.includes(c))
-                    rotate(state.current.rotation, myTime)
+                    rotate(state.current.posRotation, myTime)
                 if (state.current.negRotStr.includes(c))
-                    rotate(-state.current.rotation, myTime)
+                    rotate(-state.current.posRotation, myTime)
                 if (state.current.pushStr.includes(c)) {
                     push()
                     offset += 0.01 * p.log(state.current.String.length)
@@ -169,7 +169,7 @@ export default function StringRenderer({ String }: StringRendererProps) {
         <div className=''>
 
             <SketchRenderer sketch={sketch} />
-            <div className='flex m-auto justify-center gap-5 mt-6'>
+            <div className='flex m-auto flex-wrap justify-center gap-5 mt-6'>
                 <div className='flex flex-col'>
                     <input
                         className='h-6'
@@ -182,7 +182,7 @@ export default function StringRenderer({ String }: StringRendererProps) {
                     />
                     <label className="inline-block w-44 m-auto text-center">
                         Forward length: <br />
-                        {length}
+                        {length + 'px'}
                     </label>
                 </div>
 
@@ -192,12 +192,12 @@ export default function StringRenderer({ String }: StringRendererProps) {
                         type="range"
                         min={0}
                         max={180}
-                        value={rotation}
-                        onChange={(e) => setRotation(parseFloat(e.target.value))}
+                        value={posRotation}
+                        onChange={(e) => setPosRotation(parseFloat(e.target.value))}
                     />
                     <label className="inline-block w-44 m-auto text-center">
                         Rotation step: <br />
-                        {rotation}
+                        {posRotation + '°'}
                     </label>
                 </div>
 
@@ -213,7 +213,7 @@ export default function StringRenderer({ String }: StringRendererProps) {
                     />
                     <label className="inline-block w-44 m-auto text-center">
                         Line width: <br />
-                        {lineWidth}
+                        {lineWidth + 'px'}
                     </label>
                 </div>
 
@@ -229,15 +229,15 @@ export default function StringRenderer({ String }: StringRendererProps) {
                     />
                     <label className="inline-block w-44 m-auto text-center">
                         Leaf size: <br />
-                        {leafSize}
+                        {leafSize + 'px'}
                     </label>
                 </div>
 
-                <button className='m-auto mt-6 px-2' onClick={() => setAnimate(true)}>Animate</button>
+                <button className='m-0 w-44' onClick={() => setAnimate(true)}>Animate</button>
 
             </div>
 
-            <div className='flex felx-row justify-center gap-4'>
+            <div className='flex felx-row flex-wrap justify-center gap-4'>
                 <div className='flex flex-col gap-2'>
                     <label className='m-auto mt-6' htmlFor="sizeSlider">Background Color</label>
                     <ChromePicker
@@ -264,7 +264,7 @@ export default function StringRenderer({ String }: StringRendererProps) {
             </div>
 
             <h1 className='text-4xl m-auto mt-6 text-center'>Drawing Rules</h1>
-            <div className='grid grid-flow-row grid-cols-3 justify-center m-auto mt-6 gap-4'>
+            <div className='flex flex-wrap justify-center m-auto mt-6 gap-4'>
                 {DrawingStrings.map((str, i) => (
                     <div className='flex flex-col gap-2 justify-center text-center'>
                         <label className='' htmlFor="sizeSlider">{str.name}</label>
