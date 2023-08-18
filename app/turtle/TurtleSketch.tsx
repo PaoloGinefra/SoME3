@@ -81,8 +81,8 @@ export default function ExampleSketch({
 
   const [inputState, setInputState] = useState<Record<string, number>>({
     F: 50,
-    '+': 60, // angles here are in degrees, later are converted into radians
-    '-': 60,
+    '+': 30, // angles here are in degrees, later are converted into radians
+    '-': 30,
   })
 
   const paramsLookup = {

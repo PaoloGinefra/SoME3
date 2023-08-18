@@ -233,9 +233,9 @@ As you can see the process is not particularly hard but a bit convoluted.
 Especially if you consider that going back to the beginning of an already drawn branch, to then draw the next, implies doubling the number of instructions.
 
 To unclutter this back-and-forth process we could keep track of the turtle’s movement using a stack: a way of organizing data that, just like a stack of plates, lets you add and remove elements only from the top.
-To represent these two actions we’ll introduce two new symbols: [ ].
+To represent these two actions we’ll introduce two new symbols: **[ ]**.
 
-When the turtle reads a [ it will store its current position and orientation while upon reading a ] it gets the position and orientation last stored, moves there with the pen up, aligns itself, and discards them.
+When the turtle reads a **[** it will store its current position and orientation while upon reading a **]** it gets the position and orientation last stored, moves there with the pen up, aligns itself, and discards them.
 
 Now we can try again with the simple branch:
 
@@ -258,10 +258,10 @@ Let’s start by recovering the recurrent definition of tree “T = ½ T + ½ T�
 
 The exact solution to this “equation” would require a shape that is infinitely self-similar. Not only would that be very difficult to define but we don’t even really care about it since all plants are finite. Instead, we can lose the symmetry of the equality and read it more like an assignment, and so substitute that ‘=’ with a ‘->’ to mark the difference.
 
-T ->F[+T][-T]
+**T ->F[+T][-T]**
 Now we can just start from a T and iteratively apply the assignment by substituting each T with the right side of the arrow. A literal find and replace.
 
-So we go from T to F[+T][-T] to F[+F[+T][-T]][-F[+T][-T]] and then to F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]] . We can draw the result using our trusted turtle and here it is.
+So we go from T to **F[+T][-T]** to **F[+F[+T][-T]][-F[+T][-T]]** and then to **F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]]** . We can draw the result using our trusted turtle and here it is.
 
 </Prose>
 <TurtleSketch allowedCommands={toCmdSeq('Ff+-T[]')} defaultSeq={toCmdSeq("F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]]")} />
