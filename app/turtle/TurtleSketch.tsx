@@ -211,7 +211,7 @@ export default function ExampleSketch({
       p.windowResized = function () {
         ;[w, h] = calculateDimensions(p)
         p.resizeCanvas(w, h)
-        grid.resize(w, h)
+        //grid.resize(w, h)
       }
     }
   )
