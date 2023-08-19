@@ -50,11 +50,11 @@ At first, it's natural to try taking inspiration from state-of-the-art virtual b
 Check out this view. It's definitely beyond what I can create artistically or handle on my own. 
 Nah… the computer has to do all the heavy lifting for me.
 Furthermore, like many other things in life, I don't really care about the 3rd dimension or photorealism. A 2D drawing will be more than enough.
-A procedural generation algorithm it's what I'm looking for.
+A procedural generation algorithm is what I'm looking for.
 
 The task at hand is quite different from your usual textbook problem. While still focusing on a specific topic you can't expect a clear-cut solution. The path we'll be exploring is just one among infinitely many and it is meant to be a source of inspiration for you to dig your own unique way.
 
-When facing such a broad problem, the typical first step is to shoot the messenger with a ton of questions:
+When facing such a broad problem, a good first step is to shoot the messenger with a ton of questions:
 
 1. What do you mean by recreating plants?
 2. Which kind of plants?
@@ -77,7 +77,7 @@ The result should be pretty convincing, but there has to be room for artistic ex
 <Toggleable title="Time to Abstract" maxHeight={3000}>
 <Prose>
 Okay, now that the goal is set, we can properly start. This phase is arguably the most important one: don't panic!
-The infinitely many roads are all facing us and taking the first step could feel daunting. Simply staring at them won't get us anywhere though, so let's just pick one without the fear of retracing our steps.
+The infinitely many roads are all facing us and taking the first step can be daunting. Simply staring at them won't get us anywhere though, so let's just pick one without the fear of retracing our steps.
 
 Let's start by tackling our biggest requirement: flexibility.
 
@@ -86,12 +86,12 @@ If you think about it, this is no novelty for any mathematician. Arguably, math 
 
 <Gif url="https://giphy.com/embed/ne3xrYlWtQFtC" width="480" height="205" />
 
-Let's take numbers for instance. They were first introduced to keep track of quantity. But how many fingers on our hands, liters of fuel needed for a trip to Mars, or the ratio between the circumference and the radius of a circle, are all widely different use cases.
+Let's take numbers for instance. They were first introduced to keep track of quantity. But the number of fingers on our hands, the liters of fuel needed for a trip to Mars, or the ratio between the circumference and the radius of a circle, are all widely different use cases.
 Extracting common rules and concepts from different instances is called an abstraction.
-As numbers serve as an essential abstraction for counting, similarly, we need a shared descriptor of plants for our drawings.
+As numbers are an essential abstraction for counting, similarly, we need a shared descriptor of plants for our drawings.
 
 The process of abstraction usually starts by distinguishing what are case-specific details and what intrinsically defines the objects at hand.
-In practice, we can take some pictures of real plants we'd like to draw and literally blur the details by... blurring the pictures. Then we can toggle on and off different elements to see their role in defining the blurred picture.
+In practice, we can take some pictures of real plants we'd like to draw and literally blur the details by... blurring the pictures. Then we can think about different elements individually and see their role in defining the blurred picture.
 
 This is not that different from what a painter or an illustrator would do.
 
@@ -100,9 +100,11 @@ This is not that different from what a painter or an illustrator would do.
 <TreesBlurSketch />
 
 <Prose>
-The first things to go away are leaves, flowers, fruits, berries, and all that stuff.   
-What's left is the branching structure, thus it's the most impacting element of the picture.   
-We're also not interested in any kind of color or thickness for now, so we can get rid of those elements too by representing everything with straight lines. Nice! Let's focus on that then.
+  The first things to go away are leaves, flowers, fruits, berries, and all that
+  stuff. What's left is the branching structure, thus it's the most impacting
+  element of the picture. We're also not interested in any kind of color or
+  thickness for now, so we can get rid of those elements too by representing
+  everything with straight lines. Nice! Let's focus on that then.
 </Prose>
 
 <TreesSketch />
@@ -124,7 +126,7 @@ Let's take some pictures of plants and observe them with from the eyes of a scie
 <MultipleScales />
 
 <Prose>
-Okay, despite the differences, our abstractions all look similar.
+Okay, despite the differences, the branching structures all look similar.
 This time, though, it's not just details that are changing, but something more fundamental. Can you spot what it is?
 
 They are all at different scales! To our abstraction goggles microalgae and secular redwoods are very much alike.
@@ -134,7 +136,7 @@ They are all at different scales! To our abstraction goggles microalgae and secu
 <Prose>
 This weak influence of scale is no ordinary property because it comes with some heavy consequences.
 
-If we take a tree, for example, and zoom in on one of its branches, the only thing that changes is scale. Since we noticed that it isn't a determining factor, we don't expect it to be much different for any other abstracted trees.   
+If we take a tree, for example, and zoom in on one of its branches, the only thing that changes is scale. Since we noticed that it isn't a determining factor, we don't expect it to be much different for any other abstracted trees.  
 And sure enough, there it is, a tree camouflaged as part of a bigger one.
 
 <Zoom />
@@ -149,11 +151,7 @@ Let's get back to our problem. Our recent discovery allows us to describe a tree
 </Prose>
 
 <Prose>
-As you can see the self similarity of this simple tree implies that each part of the tree can be described by the single component:
-
-[??Manca una foto??]
-
-If we associate this base element to the symbol T we get a weird definition:   
+Knowing that, If we associate this base element to the symbol T we get a weird definition:   
 T = ½ T + ½ T    
 What? We reference the definition itself when defining it?   
 What you see is a recursion. Both math and computer science are full of them.
@@ -162,6 +160,7 @@ What you see is a recursion. Both math and computer science are full of them.
 
 You may be spotting a problem though, the definition by recursion implies the creation of a perfect self-similar tree, but that's not what's outside in the nearest park.
 That's definitely a valid concern, but for now, let's try to tame the simpler case first. We can add back the complexity later.
+
 </Prose>
 </Toggleable>
 
@@ -208,27 +207,28 @@ Thanks to this simplification we can use what's arguably the simplest way of dra
 
 Picture a turtle with a pen strapped to its back. It can just move forward, rotate around its center and get the pen on and off the paper. If you think about it for a moment, or even try to sketch something you'll realize that these 4 elementary moves are sufficient to draw any picture.
 
-Let's give a name to those instructions: 
- - **F**: go forward with the pen down.
- - **+**: rotate to the left.
- - **-**: rotate to the right.
- - **f**: go forward with the pen up.
+Let's give a name to those instructions:
 
-To make things easier we can fix the amount of movement and rotation per symbol.   
-For instance, we can say that all translations are of 10 px and all rotations happen in 10 deg steps.   
+- **F**: go forward with the pen down.
+- **+**: rotate to the left.
+- **-**: rotate to the right.
+- **f**: go forward with the pen up.
+
+To make things easier we can fix the amount of movement and rotation per symbol.  
+For instance, we can say that all translations are of 10 px and all rotations happen in 10 deg steps.  
 Even with this limitation, we can draw pretty much every abstracted plant we encountered so far. Let's try replicating a simple branch for instance.
 
 </Prose>
 
 <TurtleSketch
   allowedCommands={toCmdSeq('Ff+-')}
-  defaultSeq={toCmdSeq('FF+F-F')}
+  defaultSeq={toCmdSeq('FF+F------f++++F')}
 />
 
 <Prose>
 As you can see the process is not particularly hard but a bit convoluted. Especially if you consider that going back to the beginning of an already drawn branch, to then draw the next, implies doubling the number of instructions.
 
-To unclutter the back-and-forth we could keep track of the turtle's movement using a stack: a way of organizing data that, just like a stack of plates, lets you add and remove elements only from the top.
+To unclutter this back-and-forth we can keep track of the turtle's movement using a stack: a way of organizing data that, just like a stack of plates, lets you add and remove elements only from the top.
 
 <Gif
   url="https://giphy.com/embed/XbOm89GxrH04brxiQw"
@@ -236,10 +236,11 @@ To unclutter the back-and-forth we could keep track of the turtle's movement usi
   height="480"
 />
 
-To represent these two actions we'll introduce two new symbols: **[** and **]**.   
-What will happen at a high level will be:
- - **[**: store the current position and orientation.
- - **]**: move up the pen, retrieve the last stored position and orientation, retrace your steps and orientation, move down the pen.
+To represent these two actions we'll introduce two new symbols: **[** and **]**.  
+Upon reading one of them, the turtle will:
+
+- **[**: store the current position and orientation;
+- **]**: move up the pen, retrieve the last stored position and orientation, get there and allign itself.
 
 Retrieving data from a stack "pops"(or in simpler terms "retrieves, uses, discards") it so we don't need to worry about duplication.
 
@@ -249,7 +250,7 @@ Let's try the simple branch again:
 
 <TurtleSketch
   allowedCommands={toCmdSeq('Ff+-[]')}
-  defaultSeq={toCmdSeq('FF[+F][-F]')}
+  defaultSeq={toCmdSeq('F[+F][-F]')}
 />
 
 <Prose>
@@ -262,15 +263,15 @@ Much cleaner now! Perfect! Now that we have the tool to draw with, we can tackle
 Let's start by recalling the recursive definition of tree stated earlier and formalizing it using the branch constructed in the previous chapter.   
 **T = ½ T + ½ T** becomes **T = F[+T][-T]**.
 
-The exact solution to this “equation” would require a shape that is infinitely self-similar. Not only would that be very difficult to define but we don't even really care about it since all plants are finite. Instead, we can lose the symmetry of the equality and read it as an assignment. Then '**=**' becomes '**->**'.   
-**T -> F[+T][-T]**   
+The exact solution to this “equation” would require a shape that is infinitely self-similar. Not only would that be very difficult to define but we don't even really care about it since all plants are finite. Instead, we can lose the symmetry of the equality and read it as an assignment. Then '**=**' becomes '**->**'.  
+**T -> F[+T][-T]**  
 Now we can just start from a T and iteratively apply the assignment by substituting each T with the right side of the arrow. A literal find and replace.
 
-For example: **T** becomes **F[+T][-T]** that becomes **F[+F[+T][-T]][-F[+T][-T]]** that then becomes **F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]]**.   
-We can draw the result using our trusted turtle and here it is.
+For example: **T** becomes **F[+T][-T]** that becomes **F[+F[+T][-T]][-F[+T][-T]]** that then becomes **F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]]**.  
+We can draw the result using our trusted turtle by simply ignoring the **T**s and here it is.
 
 </Prose>
-<TurtleSketch allowedCommands={toCmdSeq('Ff+-T[]')} defaultSeq={toCmdSeq("F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]]")} />
+<TurtleSketch allowedCommands={toCmdSeq('Ff+-T[]')} defaultSeq={toCmdSeq("F[+F[+F][-F]][-F[+F][-F]]")} />
 
 <Prose>
 Amazing! That's basically a line binary tree!
@@ -286,24 +287,24 @@ Now that we have proof that our discovery works for at least a kind of tree, it 
 <Prose>
 It is safe to say that we can split the task between two different systems that work together: one for the generation of the strings and one for the drawings.
 
-The latter is easy, we can use any basic turtle engine.   
+The latter is easy, we can use any basic turtle engine.  
 For the former, we need to think back at what we did and try to formalize the process.
 
-We started by defining a set of symbols: F, +, -, f.   
-We can call this set of characters we expect to manage, an alphabet.
+We started by defining a set of symbols: F, +, -, f.  
+We can call this set of characters we expect to manage, an **alphabet**.
 
-Then we defined a “relation” between our characters.   
-We said that every T will turn in F[+T][-T].   
-We called it an assignment, but production is a more suitable term, since the value of T isn't actually changed.
+Then we defined a “relation” between our characters.  
+We said that every T will turn in F[+T][-T].  
+We called it an assignment, but **production** is a more suitable term, since the value of T isn't actually changed.
 
 In our simple example, we needed just one production but there is nothing against having multiple ones. We just need to be careful and avoid overlaps. Each character should be associated with just one production. At least for now ;)
 
 Then we chose a character to start from, the initial T.
-Since it's kind of inexplicably there at the beginning we can call it an axiom and once again we shouldn't limit ourselves to just one character. It may also be a string.
+Since it's kind of inexplicably there at the beginning we can call it an **axiom** and once again we shouldn't limit ourselves to just one character. It may also be a string.
 
 Once defined T as the axiom, i.e. the start, the process becomes an iterative find and replace.
 
-We iterate through each character of the string and look for a match among the productions. If one is found we substitute the right side of the production with the character we were considering, otherwise we just leave it there and proceed with the next one.   
+We iterate through each character of the string and look for a match among the productions. If one is found we substitute the right side of the production with the character we were considering, otherwise we just leave it there and proceed with the next one.  
 Once we've processed each character we start all over again until the desired level of detail is reached.
 
 </Prose>
@@ -312,18 +313,18 @@ Once we've processed each character we start all over again until the desired le
 
 <Prose>
 
-What we just described is a Lindenmayer System. It gets its name from the bright botanist who first came up with it, Aristid Lindenmayer.   
+What we just described is a Lindenmayer System. It gets its name from the bright botanist who first came up with it, Aristid Lindenmayer.  
 Commonly abbreviated to L-systems, they are an example of a broader class of computational objects called formal grammars.
 
 <Gif url="https://giphy.com/embed/1405fIarqbN7hu" width="480" height="363" />
 
-If you think about it, we are assigning to each branching structure a sequence of characters and we are trying to generate only “meaningful” ones since we want those representing a plant.   
-It is not that different from the generation of a “meaningful” sentence in English, in the sense of conveying actual meaning. 
-While in English it's way more complex, for example would be concerned about the meaning of each word, here we only care about the structure, as if we only cared for the grammatical coherence of an English senctece.   
+If you think about it, we are assigning to each branching structure a sequence of characters and we are trying to generate only “meaningful” ones since we want those representing a plant.  
+It is not that different from the generation of a “meaningful” sentence in English, in the sense of conveying actual meaning.
+While in English it's way more complex, for example would be concerned about the meaning of each word, here we only care about the structure, as if we only cared for the grammatical coherence of an English senctece.  
 So what we actually need is only the grammar of this new weird language.
 
-The magic of separating the string generation from the drawing is that while the first system captures the essence of the structure the second one leaves a lot of room for artistic expression!   
-We can assign the characters whatever interpretation we may think of, ranging from drawing a flower, to producing a certain musical note, to changing the color of the line, or whatever you can come up with.   
+The magic of separating the string generation from the drawing is that while the first system captures the essence of the structure the second one leaves a lot of room for artistic expression!  
+We can assign the characters whatever interpretation we may think of, ranging from drawing a flower, to producing a certain musical note, to changing the color of the line, or whatever you can come up with.  
 We are not limited by 2 dimensions either! We can just add more symbols and interpret them as different movements in space for instance.
 This is the perfect way to bring back those scenario-specific details we lost by blurring the pictures at the beginning!
 
@@ -336,7 +337,7 @@ Once again we could be here talking for hours about L-systems and their huge amo
 <Toggleable title="Computational gardening">
 <Prose>
 
-For now, you can try and experiment with a graphical version of what we discussed so far.   
+For now, you can try and experiment with a graphical version of what we discussed so far.  
 Here you'll be no longer restrained by a fixed amount of rotation and length per character so you can let your imagination roam free.
 
 _In this applet all the symbols are interpreted as lines. In the production editor you have a yellow reference to indicate the symbol that is being replaced._
@@ -359,12 +360,12 @@ To achieve this we need to lose the determinism of our system, meaning that one 
 
 You see if there are multiple productions from the same character the procedure has to make a choice. You may go for the first match for instance, but much more interestingly you can make it randomly. You can make the computer just roll a die.
 
-In this way, we break the stiffness of self-similarity and allow an exponentially increasing amount of organic results.
+In this way, we break the stiffness of self-similarity and allow an exponentially increasing amount of organic results. What we've built is called a stochastic L-system.
 
-Our branching structure is officially tamed!   
+Our branching structure is officially tamed!  
 And since we said that the details and artistic interpretations are easily introduceable in the drawing system we are finally all done!
 
-Here you can experiment with the L-system as much as you want!
+Here you can experiment with stochastic L-systems as much as you want!
 
 </Prose>
 
@@ -390,11 +391,27 @@ I also hope that you are left with few answers but many new questions in mind an
 <Toggleable title="Credits">
 
 <Prose>
-We are a team of 5 Engineering of Computing Systems students (names and roles are in alphabetical order):
-- **Dario Crosa**: <RoleList roles={['Applet Development', 'Front End']}/>
-- **Lorenzo Bressi**:<RoleList roles={['Research', 'Writing']}/>
-- **Matteo Figini**:<RoleList roles={['Research', 'Writing']}/>
-- **Matteo Garzone**:<RoleList roles={['Applet Development', 'Research']}/>
-- **Paolo Ginefra**:<RoleList roles={['Applet Development', 'Front End', 'Project Management', 'Research', 'Writing']}/>
+  We are a team of 5 Engineering of Computing Systems students (names and roles
+  are in alphabetical order):
+  - **Dario Crosa**:{' '} <RoleList roles={['Applet Development', 'Front End']} />
+  - **Lorenzo Bressi**: <RoleList roles={['Research', 'Writing']} />
+  - **Matteo Figini**: <RoleList roles={['Research', 'Writing']} />
+  - **Matteo Garzone**: <RoleList roles={['Applet Development', 'Research']} />
+  - **Paolo Ginefra**: <RoleList
+        roles={[
+          'Applet Development',
+          'Front End',
+          'Project Management',
+          'Research',
+          'Writing',
+        ]}
+      />
+
+
+  Special thanks go to:
+  - Professor **Alessandro Barenghi** for pointing us in the right direction during the topic decision process;
+  - **Federico Grandi** for helping us choose the right technologies;
+  - Professor **Przemysław Prusinkiewicz** for answering some of our questions regarding L-systems;
 </Prose>
+
 </Toggleable>
