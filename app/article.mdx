@@ -36,7 +36,7 @@ Today's journey is about understanding how to make it possible using math, compu
 
 <Gif url="https://giphy.com/embed/kRfIKQ6ADUJaM" width={480} height={264} />
 
-At first, it is natural to take inspiration from state-of-the-art virtual botanic sceneries like the ones in video games. The results are amazing, but they take the combined effort of tons of talented artists and designers because they are usually based on skillfully human-crafted assets.
+At first, it's natural to try taking inspiration from state-of-the-art virtual botanic sceneries like the ones in video games. The results are amazing but they take the combined effort of tons of talented artists and designers because they are usually based on skillfully human-crafted assets.
 
 </Prose>
 
@@ -47,18 +47,18 @@ At first, it is natural to take inspiration from state-of-the-art virtual botani
 />
 
 <Prose>
-Look at this view. That's without a doubt out of my league, from both artistic capabilities and manpower. 
+Check out this view. It's definitely beyond what I can create artistically or handle on my own. 
 Nah… the computer has to do all the heavy lifting for me.
 Furthermore, like many other things in life, I don't really care about the 3rd dimension or photorealism. A 2D drawing will be more than enough.
-A procedural generation algorithm could be what I'm looking for.
+A procedural generation algorithm it's what I'm looking for.
 
-The task at hand is quite different from your usual textbook problem. While still focusing on a specific topic, you can't expect a clear-cut solution. The path we'll be exploring is just one among infinitely many, and it is meant to be a source of inspiration for you to dig your own unique way.
+The task at hand is quite different from your usual textbook problem. While still focusing on a specific topic you can't expect a clear-cut solution. The path we'll be exploring is just one among infinitely many and it is meant to be a source of inspiration for you to dig your own unique way.
 
-When facing such a broad problem, the first thing you do is shoot the messenger with a ton of questions:
+When facing such a broad problem, the typical first step is to shoot the messenger with a ton of questions:
 
 1. What do you mean by recreating plants?
 2. Which kind of plants?
-3. Should this be an exact recreation or can we get away with some artistic liberties?
+3. Should this be a faithful recreation or can we get away with some artistic liberties?
 
 Well, as we said, we'll focus on drawings. The most important requirement is that the system must be flexible enough to draw any sort of plant: a tree, a fern, a blade of grass, a bush, and even algae.
 
@@ -76,22 +76,22 @@ The result should be pretty convincing, but there has to be room for artistic ex
 
 <Toggleable title="Time to Abstract" maxHeight={3000}>
 <Prose>
-Okay, now that the goal is set, we can properly start. The next phase is arguably the most important one: don't panic!
-The infinitely many roads are all facing you and taking the first step can be daunting. Staring at them won't get you anywhere though, so let's just pick one without the fear of retracing our steps.
+Okay, now that the goal is set, we can properly start. This phase is arguably the most important one: don't panic!
+The infinitely many roads are all facing us and taking the first step could feel daunting. Simply staring at them won't get us anywhere though, so let's just pick one without the fear of retracing our steps.
 
-Let's start by thinking about our biggest requirement: flexibility.
+Let's start by tackling our biggest requirement: flexibility.
 
 A lot of different scenarios, one system to draw them all.
 If you think about it, this is no novelty for any mathematician. Arguably, math is built for this.
 
 <Gif url="https://giphy.com/embed/ne3xrYlWtQFtC" width="480" height="205" />
 
-Let's take numbers for instance. They were first introduced to keep track of quantity. But the number of fingers on our hands, how many liters of fuel we need to get to Mars and the ratio between the circumference and the radius of a circle are widely different use cases.
+Let's take numbers for instance. They were first introduced to keep track of quantity. But how many fingers on our hands, liters of fuel needed for a trip to Mars, or the ratio between the circumference and the radius of a circle, are all widely different use cases.
 Extracting common rules and concepts from different instances is called an abstraction.
-As numbers are an essential abstraction to count, we need a common description of plants for our drawings.
+As numbers serve as an essential abstraction for counting, similarly, we need a shared descriptor of plants for our drawings.
 
-The process of abstraction usually starts by distinguishing what are case-specific details and what intrinsically define the objects at hand.
-To do this we can take some pictures of real plants we'd like to draw and literally blur the details by... blurring the pictures. Then we can toggle on and off different elements to see their role in defining the blurred picture.
+The process of abstraction usually starts by distinguishing what are case-specific details and what intrinsically defines the objects at hand.
+In practice, we can take some pictures of real plants we'd like to draw and literally blur the details by... blurring the pictures. Then we can toggle on and off different elements to see their role in defining the blurred picture.
 
 This is not that different from what a painter or an illustrator would do.
 
@@ -115,9 +115,9 @@ Now that the image has been abstracted to its fundamental components we need to 
 <Toggleable title="A closer look" maxHeight={6000}>
 
 <Prose>
-To do this, it could be useful to start analyzing the problem from the start, gathering some ideas.
+It can be useful to start analyzing the problem from the start and gather some ideas.
 
-Let's take some pictures of plants and observe them with a scientist's spirit.
+Let's take some pictures of plants and observe them with from the eyes of a scientist.
 
 </Prose>
 
@@ -125,16 +125,17 @@ Let's take some pictures of plants and observe them with a scientist's spirit.
 
 <Prose>
 Okay, despite the differences, our abstractions all look similar.
-But if you think about it, this time they are not just the details that change, there is something more fundamental going on. Can you spot it?
+This time, though, it's not just details that are changing, but something more fundamental. Can you spot what it is?
 
-They are all at different scales! It seems that with our abstraction goggles, microalgae and secular redwoods are much alike.
+They are all at different scales! To our abstraction goggles microalgae and secular redwoods are very much alike.
 
 </Prose>
 
 <Prose>
 This weak influence of scale is no ordinary property because it comes with some heavy consequences.
 
-If we take a tree, for example, and we zoom in on one of its branches, the only thing that changes is the scale. But since we noticed that this is no determining factor, we should expect something not that different from any other abstracted tree. And sure enough there it is, a tree camouflaged as part of a bigger one.
+If we take a tree, for example, and zoom in on one of its branches, the only thing that changes is scale. Since we noticed that it isn't a determining factor, we don't expect it to be much different for any other abstracted trees.   
+And sure enough, there it is, a tree camouflaged as part of a bigger one.
 
 <Zoom />
 
@@ -143,31 +144,32 @@ Much can be said about its implications and impact on mathematics. Nonetheless, 
 
 <Gif url="https://giphy.com/embed/aFTt8wvDtqKCQ" width="385" height="480" />
 
-Coming back to our problem, our recent discovery allows us to describe a tree just as a bunch of smaller trees glued together! Amazing!
+Let's get back to our problem. Our recent discovery allows us to describe a tree just as a bunch of smaller trees glued together! Amazing!
 
 </Prose>
 
 <Prose>
-As you can see the self similarity of this simple tree implies that each part of the tree can be described by the single component.
+As you can see the self similarity of this simple tree implies that each part of the tree can be described by the single component:
+
+[??Manca una foto??]
 
 If we associate this base element to the symbol T we get a weird definition:   
-T = ½ T + ½ T where for defining T we reference the definition itself.
-
-These types of definitions are called recursions, and both math and computer science are full of them.
+T = ½ T + ½ T    
+What? We reference the definition itself when defining it?   
+What you see is a recursion. Both math and computer science are full of them.
 
 <Gif url="https://giphy.com/embed/aaODAv1iuQdgI" width="471" height="480" />
 
-You may be spotting a problem though. The definition by recursion implies the creation of a perfect self-similar tree, but that's not what's outside in the nearest park.
+You may be spotting a problem though, the definition by recursion implies the creation of a perfect self-similar tree, but that's not what's outside in the nearest park.
 That's definitely a valid concern, but for now, let's try to tame the simpler case first. We can add back the complexity later.
-
-Let's look at a perfect self-similar plant!
-
 </Prose>
 </Toggleable>
 
 <Toggleable title="In a perfect world">
 
 <Prose>
+Let's look at a perfect self-similar plant!
+
 What would it look like? How would you draw it?
 
 Well, firstly there are actually some almost self-similar plants in nature. Look at them!
@@ -179,13 +181,7 @@ Well, firstly there are actually some almost self-similar plants in nature. Look
 <Prose>
 If we want to recreate them we may go back to the recursive definition and literally put a smaller copy of the whole drawing as a part of the drawing itself. Much like when you make two mirrors face each other, or a webcam pointed at his video output.
 
-<Gif
-  url="https://giphy.com/embed/3ov9jQX2Ow4bM5xxuM"
-  width="480"
-  height="390"
-/>
-
-Here you can play around with this concept. Try and build something that resembles a fern or a Romanesco broccoli.
+You can play around with this concept here. Try building something that resembles a fern or a Romanesco broccoli.
 
 </Prose>
 
@@ -206,15 +202,20 @@ We need to improve this!
 Let's go back again to our abstracted plants. Can we abstract them even more? Is there a pattern between all of them?   
 Despite all the case-specific intricacies, we reduced every drawing to just being made of straight segments.
 
-Thanks to this simplification it is sufficient for us to use what is arguably the simplest way of drawing programmatically: Turtle graphics.
+Thanks to this simplification we can use what's arguably the simplest way of drawing programmatically: Turtle graphics.
 
 <Gif url="https://giphy.com/embed/naXyAp2VYMR4k" width="300" height="300" />
 
-Picture a turtle with a pen strapped to its back. The turtle can just move forward, rotate around its center and get the pen on and off the paper. If you think about it for a moment, or even try to sketch something you'll realize that these 4 elementary moves are sufficient to draw any picture.
+Picture a turtle with a pen strapped to its back. It can just move forward, rotate around its center and get the pen on and off the paper. If you think about it for a moment, or even try to sketch something you'll realize that these 4 elementary moves are sufficient to draw any picture.
 
-Let's give a name to those instructions: **F** means go forward with the pen down, **+** means rotate to the left, **-** means rotate to the right and **f** means forward with the pen up.
+Let's give a name to those instructions: 
+ - **F**: go forward with the pen down.
+ - **+**: rotate to the left.
+ - **-**: rotate to the right.
+ - **f**: go forward with the pen up.
 
-To make things easier we can assign a fixed amount of movement and rotation per symbol. For instance, we can say that all translations are of 10 px while rotations happen in 10 deg steps.
+To make things easier we can fix the amount of movement and rotation per symbol.   
+For instance, we can say that all translations are of 10 px and all rotations happen in 10 deg steps.   
 Even with this limitation, we can draw pretty much every abstracted plant we encountered so far. Let's try replicating a simple branch for instance.
 
 </Prose>
@@ -227,7 +228,7 @@ Even with this limitation, we can draw pretty much every abstracted plant we enc
 <Prose>
 As you can see the process is not particularly hard but a bit convoluted. Especially if you consider that going back to the beginning of an already drawn branch, to then draw the next, implies doubling the number of instructions.
 
-To unclutter this back-and-forth process we could keep track of the turtle's movement using a stack: a way of organizing data that, just like a stack of plates, lets you add and remove elements only from the top.
+To unclutter the back-and-forth we could keep track of the turtle's movement using a stack: a way of organizing data that, just like a stack of plates, lets you add and remove elements only from the top.
 
 <Gif
   url="https://giphy.com/embed/XbOm89GxrH04brxiQw"
@@ -235,11 +236,14 @@ To unclutter this back-and-forth process we could keep track of the turtle's mov
   height="480"
 />
 
-To represent these two actions we'll introduce two new symbols: **[ ]**.
+To represent these two actions we'll introduce two new symbols: **[** and **]**.   
+What will happen at a high level will be:
+ - **[**: store the current position and orientation.
+ - **]**: move up the pen, retrieve the last stored position and orientation, retrace your steps and orientation, move down the pen.
 
-When the turtle reads a **[** it will store its current position and orientation while upon reading a **]** it gets the position and orientation last stored, moves there with the pen up, aligns itself, and discards them.
+Retrieving data from a stack "pops"(or in simpler terms "retrieves, uses, discards") it so we don't need to worry about duplication.
 
-Now we can try again with the simple branch:
+Let's try the simple branch again:
 
 </Prose>
 
@@ -255,14 +259,15 @@ Much cleaner now! Perfect! Now that we have the tool to draw with, we can tackle
 
 <Toggleable title="A binary comeback">
 <Prose>
-Let's start by recalling the recursive definition of tree “T = ½ T + ½ T” stated earlier and formalizing it using the branch constructed in the previous chapter, we obtain T = F[+T][-T].
+Let's start by recalling the recursive definition of tree stated earlier and formalizing it using the branch constructed in the previous chapter.   
+**T = ½ T + ½ T** becomes **T = F[+T][-T]**.
 
-The exact solution to this “equation” would require a shape that is infinitely self-similar. Not only would that be very difficult to define but we don't even really care about it since all plants are finite. Instead, we can lose the symmetry of the equality and read it more like an assignment, and so substitute that '**=**' with a '**->**' to mark the difference.
-
-**T -> F[+T][-T]**
+The exact solution to this “equation” would require a shape that is infinitely self-similar. Not only would that be very difficult to define but we don't even really care about it since all plants are finite. Instead, we can lose the symmetry of the equality and read it as an assignment. Then '**=**' becomes '**->**'.   
+**T -> F[+T][-T]**   
 Now we can just start from a T and iteratively apply the assignment by substituting each T with the right side of the arrow. A literal find and replace.
 
-So we go from T to **F[+T][-T]** to **F[+F[+T][-T]][-F[+T][-T]]** and then to **F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]]** . We can draw the result using our trusted turtle and here it is.
+For example: **T** becomes **F[+T][-T]** that becomes **F[+F[+T][-T]][-F[+T][-T]]** that then becomes **F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]]**.   
+We can draw the result using our trusted turtle and here it is.
 
 </Prose>
 <TurtleSketch allowedCommands={toCmdSeq('Ff+-T[]')} defaultSeq={toCmdSeq("F[+F[+F[+T][-T]][-F[+T][-T]]][-F[+F[+T][-T]][-F[+T][-T]]]")} />
@@ -312,9 +317,14 @@ Commonly abbreviated to L-systems, they are an example of a broader class of com
 
 <Gif url="https://giphy.com/embed/1405fIarqbN7hu" width="480" height="363" />
 
-If you think about it, we are assigning to each branching structure a sequence of characters, a sentence, and we are trying to generate only “meaningful” ones in the sense of actually representing a plant. It is not that different from the generation of a “meaningful” sentence in English, in the sense of conveying actual meaning. But while in English we are concerned with the meaning of each word, here we only care about the structure of the sentence, about its grammatical coherence. So we only need the grammar of this new weird language.
+If you think about it, we are assigning to each branching structure a sequence of characters and we are trying to generate only “meaningful” ones since we want those representing a plant.   
+It is not that different from the generation of a “meaningful” sentence in English, in the sense of conveying actual meaning. 
+While in English it's way more complex, for example would be concerned about the meaning of each word, here we only care about the structure, as if we only cared for the grammatical coherence of an English senctece.   
+So what we actually need is only the grammar of this new weird language.
 
-The magic of separating the string generation from the drawing is that while the first system captures the essence of the structure the second one leaves a lot of room for artistic expression! We can add as many interpretations of the characters as we want, ranging from drawing a flower to producing a certain musical note to changing the color of the line or whatever; and we are not limited to the two dimensions either! We can just add more symbols and interpret them as different movements in space for instance.
+The magic of separating the string generation from the drawing is that while the first system captures the essence of the structure the second one leaves a lot of room for artistic expression!   
+We can assign the characters whatever interpretation we may think of, ranging from drawing a flower, to producing a certain musical note, to changing the color of the line, or whatever you can come up with.   
+We are not limited by 2 dimensions either! We can just add more symbols and interpret them as different movements in space for instance.
 This is the perfect way to bring back those scenario-specific details we lost by blurring the pictures at the beginning!
 
 Once again we could be here talking for hours about L-systems and their huge amount of variations, possibilities, applications, classifications, and whatnot and once again I'll leave that to your own curiosity and maybe a future article/video.
