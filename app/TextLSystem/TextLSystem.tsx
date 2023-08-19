@@ -193,7 +193,7 @@ export default function TextLSystem({ stochastic = false }) {
         stochastic ?
           <div className='flex flex-col justify-center'>
 
-            <h1 className="m-auto text-4xl">Turtule Render</h1>
+            <h1 className="m-auto text-4xl">Turtle Render</h1>
 
             <div className='m-auto'>
               <StringRenderer String={output} />
